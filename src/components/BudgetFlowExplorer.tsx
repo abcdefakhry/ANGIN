@@ -8,6 +8,7 @@ import {
   Clock, 
   Sparkles, 
   ArrowRight,
+  ArrowLeft,
   RotateCcw,
   Layers,
   Info,
@@ -69,8 +70,25 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
   }, [selectedSector]);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
       
+      {/* 0. TOP ACTION / BACK BUTTON */}
+      {onNavigateHome && (
+        <div className="flex items-center justify-between pb-1">
+          <button
+            onClick={onNavigateHome}
+            className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200/90 px-4 py-2 rounded-xl text-xs font-bold transition shadow-2xs cursor-pointer group min-h-[40px]"
+          >
+            <ArrowLeft className="w-4 h-4 text-emerald-600 group-hover:-translate-x-1 transition-transform" />
+            <span>Kembali ke Beranda &amp; Kalkulator Pajak</span>
+          </button>
+
+          <span className="text-xs text-slate-400 font-medium hidden sm:inline">
+            Eksplorasi Transparansi APBD DKI Jakarta 2026
+          </span>
+        </div>
+      )}
+
       {/* 1. TOP MACRO BANNER: TOTAL APBD & SERAPAN ANGGARAN */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs relative overflow-hidden">
         {/* Decorative subtle background aura */}
@@ -78,19 +96,9 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
           <div>
-            <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                <span>Dokumen Resmi APBD DKI Jakarta • Tahun Anggaran 2026</span>
-              </span>
-              {onNavigateHome && (
-                <button
-                  onClick={onNavigateHome}
-                  className="text-xs text-slate-500 hover:text-slate-800 font-semibold underline underline-offset-2 transition cursor-pointer"
-                >
-                  ← Kembali ke Kalkulator
-                </button>
-              )}
+            <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full mb-3">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+              <span>Dokumen Resmi APBD DKI Jakarta • Tahun Anggaran 2026</span>
             </div>
 
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
@@ -103,9 +111,8 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
 
           {/* Quick Macro Card */}
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 flex-shrink-0 min-w-[280px]">
-            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              <span>Total APBD DKI 2026</span>
-              <span className="text-emerald-700 font-black">100% SINKRON</span>
+            <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Total APBD DKI 2026
             </div>
             <div className="text-2xl sm:text-3xl font-black text-emerald-700 tracking-tight">
               Rp 84,2 Triliun

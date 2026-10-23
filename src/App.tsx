@@ -1,17 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   ChevronDown, 
   MapPin, 
   ArrowRight, 
   Search, 
-  ShieldCheck,
+  ShieldCheck, 
   Receipt,
   CheckCircle2,
   AlertCircle,
   Sliders,
-  Sparkles
+  Sparkles,
+  ChevronRight,
+  AlertTriangle
 } from 'lucide-react';
 import { CivicReceiptModal } from './components/CivicReceiptModal';
+import { CommandSearchModal } from './components/CommandSearchModal';
+import { ProjectActionModal, ProjectDetail } from './components/ProjectActionModal';
 import apbdData from './data/apbd-jakarta.json';
 
 export default function App() {
@@ -20,7 +24,12 @@ export default function App() {
   const [selectedRegion, setSelectedRegion] = useState('DKI Jakarta');
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [showOtherSectors, setShowOtherSectors] = useState(false);
+  const [selectedSectorId, setSelectedSectorId] = useState<string | null>(null);
+  
+  // Modals state
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ProjectDetail | null>(null);
 
   // Perhitungan proporsional alokasi pajak warga
   // Asumsi porsi kontribusi pajak lokal (~2.2% jalan, ~3.0% puskesmas, ~1.6% transportasi dari formula APBD)
@@ -38,15 +47,40 @@ export default function App() {
   };
 
   const regions = [
-    { name: 'DKI Jakarta', active: true, desc: 'APBD Rp 84,2 T • Data Penuh' },
+    { name: 'DKI Jakarta', active: true, desc: 'APBD Rp 84,2 T • Data Penuh 2026' },
     { name: 'Kota Depok', active: false, desc: 'APBD Rp 4,5 T • Segera Hadir' },
     { name: 'Kota Surabaya', active: false, desc: 'APBD Rp 11,2 T • Segera Hadir' },
   ];
 
+  // Shortcut Ctrl + K listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Quick project lookup when clicked on map or search
+  const handleOpenProjectById = (projId: string) => {
+    for (const sec of apbdData.sectors) {
+      for (const sub of sec.sub_programs) {
+        const found = sub.projects.find((p) => p.id === projId);
+        if (found) {
+          setSelectedProject(found);
+          return;
+        }
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 selection:bg-emerald-100 selection:text-emerald-900 font-sans">
       
-      {/* MODAL STRUK PAJAK DIGITAL (CIVIC RECEIPT) */}
+      {/* 1. MODAL STRUK PAJAK DIGITAL (CIVIC RECEIPT) */}
       <CivicReceiptModal 
         isOpen={isReceiptOpen}
         onClose={() => setIsReceiptOpen(false)}
@@ -54,15 +88,27 @@ export default function App() {
         region={selectedRegion}
       />
 
-      {/* 1. TOP HEADER / NAVBAR */}
+      {/* 2. MODAL COMMAND SEARCH (Ctrl + K) */}
+      <CommandSearchModal 
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onSelectProject={(id) => handleOpenProjectById(id)}
+      />
+
+      {/* 3. MODAL DETAIL PROYEK & AKSI PENGAWASAN WARGA */}
+      <ProjectActionModal 
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
+
+      {/* 4. TOP HEADER / NAVBAR */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           
           {/* Logo Brand: ANGIN (Anggaran Indonesia) */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6 sm:gap-8">
             <a href="#" className="flex items-center gap-2.5 cursor-pointer group">
               <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-white shadow-sm shadow-emerald-200 group-hover:bg-emerald-700 transition">
-                {/* Isometric Cube icon */}
                 <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                   <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
@@ -75,32 +121,45 @@ export default function App() {
               </div>
             </a>
 
-            {/* Nav Menu */}
+            {/* Desktop Navigation Links */}
             <nav className="hidden md:flex items-center gap-6 text-[13px] font-semibold text-slate-700">
               <a href="#kalkulator" className="text-slate-900 hover:text-emerald-600 transition-colors">Kalkulator Pajak</a>
-              <a href="#eksplorasi" className="hover:text-emerald-600 transition-colors">Simulator APBD</a>
+              <a href="#eksplorasi" className="hover:text-emerald-600 transition-colors">Aliran APBD</a>
               <a href="#radar" className="hover:text-emerald-600 transition-colors">Radar Proyek</a>
               <a href="#reality-gap" className="hover:text-emerald-600 transition-colors">Mengapa ANGIN?</a>
             </nav>
           </div>
 
-          {/* Right Action: Region Selector & Primary Button */}
-          <div className="flex items-center gap-3 relative">
+          {/* Right Action Bar */}
+          <div className="flex items-center gap-2 sm:gap-3">
             
-            {/* Region Dropdown Trigger */}
+            {/* Search Trigger (Mobile Icon Button with >=44px tap target & Desktop Ctrl+K pill) */}
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-2 sm:px-3 sm:py-1.5 text-xs text-slate-500 hover:text-slate-800 transition min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 justify-center cursor-pointer"
+              title="Cari proyek (Ctrl + K)"
+              aria-label="Pencarian Cepat"
+            >
+              <Search className="w-4 h-4 text-slate-400" />
+              <span className="hidden sm:inline font-medium text-slate-600">Cari proyek...</span>
+              <kbd className="hidden sm:inline-block text-[10px] font-mono bg-slate-200 text-slate-600 px-1 rounded">
+                Ctrl K
+              </kbd>
+            </button>
+
+            {/* Region Dropdown */}
             <div className="relative">
               <button 
                 onClick={() => setIsRegionOpen(!isRegionOpen)}
-                className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-100 transition cursor-pointer"
+                className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-100 transition cursor-pointer min-h-[44px] sm:min-h-0"
                 aria-haspopup="listbox"
                 aria-expanded={isRegionOpen}
               >
                 <MapPin className="w-3.5 h-3.5 text-emerald-600" />
-                <span>{selectedRegion}</span>
+                <span className="hidden xs:inline">{selectedRegion}</span>
                 <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isRegionOpen ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* Region Dropdown Menu */}
               {isRegionOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-50 animate-in fade-in slide-in-from-top-2">
                   <div className="px-3 py-1 text-[10px] font-bold uppercase text-slate-400 tracking-wider">
@@ -114,9 +173,9 @@ export default function App() {
                         setSelectedRegion(reg.name);
                         setIsRegionOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition ${
+                      className={`w-full text-left px-3 py-2.5 text-xs flex items-center justify-between transition min-h-[44px] ${
                         reg.active 
-                          ? 'hover:bg-slate-50 text-slate-800 font-semibold' 
+                          ? 'hover:bg-slate-50 text-slate-800 font-semibold cursor-pointer' 
                           : 'opacity-50 cursor-not-allowed text-slate-400'
                       }`}
                     >
@@ -136,32 +195,32 @@ export default function App() {
             {/* Primary Navbar Button: Open Civic Receipt Modal */}
             <button 
               onClick={() => setIsReceiptOpen(true)}
-              className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm shadow-emerald-200 cursor-pointer"
+              className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-semibold px-3 sm:px-4 py-2 rounded-lg transition shadow-sm shadow-emerald-200 cursor-pointer min-h-[44px] sm:min-h-0"
             >
               <Receipt className="w-3.5 h-3.5" />
-              <span>Cetak Struk Pajak</span>
+              <span className="hidden xs:inline">Cetak Struk</span>
             </button>
           </div>
 
         </div>
       </header>
 
-      {/* 2. HERO SECTION */}
-      <section id="kalkulator" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-14">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      {/* 5. HERO SECTION */}
+      <section id="kalkulator" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 pb-14">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           
           {/* Left Column: Hero Headline & Description */}
           <div className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-200/60">
               <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-              <span>Open Government Data • APBD {selectedRegion} 2026</span>
+              <span>Open Government Data • APBD {selectedRegion} 2026 (100% Terverifikasi)</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[46px] font-extrabold text-slate-900 tracking-tight leading-[1.12]">
+            <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-extrabold text-slate-900 tracking-tight leading-[1.14]">
               Pajakmu Triliunan, Tapi Jalan Depan Rumah Tetap Bolong?
             </h1>
             
-            <p className="text-base text-slate-600 leading-relaxed max-w-xl">
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
               <strong className="text-slate-800 font-semibold">ANGIN</strong> menerjemahkan data terbuka APBD menjadi angka riil pengeluaranmu. Cek alokasi pajakmu, simulasikan anggaran publik, dan pantau proyek fisik di sekitarmu.
             </p>
 
@@ -169,45 +228,45 @@ export default function App() {
             <div className="flex flex-wrap items-center gap-3 pt-1">
               <a 
                 href="#eksplorasi"
-                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition shadow-sm shadow-emerald-200 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-xl text-sm transition shadow-sm shadow-emerald-200 min-h-[44px] cursor-pointer"
               >
-                <span>Telusuri Lengkap</span>
+                <span>Telusuri Aliran APBD</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
               <a 
                 href="#radar"
-                className="bg-white hover:bg-slate-50 text-slate-700 font-semibold px-5 py-2.5 rounded-lg text-sm border border-slate-300 transition cursor-pointer"
+                className="inline-flex items-center justify-center bg-white hover:bg-slate-50 text-slate-700 font-semibold px-5 py-3 rounded-xl text-sm border border-slate-300 transition min-h-[44px] cursor-pointer"
               >
-                Lihat Peta Proyek
+                Lihat Radar Peta
               </a>
             </div>
 
             {/* Trust Badge */}
             <div className="flex items-center gap-2 text-xs text-slate-500 pt-1">
               <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-              <span>Data resmi APBD DKI Jakarta &amp; Satu Data Indonesia (Tahun Anggaran 2026)</span>
+              <span>Sumber resmi APBD DKI Jakarta &amp; Satu Data Indonesia (Tahun Anggaran 2026)</span>
             </div>
           </div>
 
           {/* Right Column: Hero Interactive Simulator Card */}
           <div className="lg:col-span-6">
-            <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-[0_4px_30px_-4px_rgba(0,0,0,0.06),0_10px_20px_-4px_rgba(0,0,0,0.03)] border border-slate-100">
+            <div className="bg-white rounded-2xl p-5 sm:p-7 shadow-[0_4px_30px_-4px_rgba(0,0,0,0.06),0_10px_20px_-4px_rgba(0,0,0,0.03)] border border-slate-100">
               
               <div className="flex items-center justify-between">
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                <h2 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight">
                   Simulasi Cepat Alokasi Pajak Anda
                 </h2>
                 <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/50">
-                  Real-time
+                  Interaktif
                 </span>
               </div>
 
               {/* Slider Input Row */}
               <div className="mt-5 space-y-3">
-                <div className="flex items-center justify-between text-sm font-medium">
+                <div className="flex items-center justify-between text-xs sm:text-sm font-medium">
                   <span className="text-slate-600">Gaji / Pengeluaran Bulanan:</span>
-                  <span className="text-slate-900 font-extrabold text-base bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200">
+                  <span className="text-slate-900 font-extrabold text-sm sm:text-base bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200">
                     {formatRupiah(income)} <span className="text-xs font-normal text-slate-500">/ bln</span>
                   </span>
                 </div>
@@ -220,7 +279,7 @@ export default function App() {
                     step="500000"
                     value={income}
                     onChange={(e) => setIncome(Number(e.target.value))}
-                    className="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                    className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600 focus:outline-none"
                     aria-label="Slider Gaji Bulanan"
                   />
                   <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-medium">
@@ -232,35 +291,35 @@ export default function App() {
               </div>
 
               {/* 3 Metrics Cards */}
-              <div className="grid grid-cols-3 gap-3 mt-5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mt-5">
                 
                 {/* Metric 1 */}
-                <div className="bg-slate-50/80 rounded-xl p-3.5 border border-slate-100 flex flex-col justify-between hover:border-slate-200 transition">
-                  <div className="font-extrabold text-sm sm:text-base text-slate-900">
+                <div className="bg-slate-50/90 rounded-xl p-3 border border-slate-100 flex sm:flex-col justify-between items-center sm:items-start hover:border-slate-200 transition">
+                  <div className="order-2 sm:order-1 font-extrabold text-sm sm:text-base text-slate-900">
                     {formatRupiah(perbaikanJalan)}
                   </div>
-                  <div className="text-[11px] text-slate-500 font-medium leading-snug mt-2">
-                    Penambalan &amp; Perbaikan Jalan
+                  <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-2">
+                    Penambalan Jalan
                   </div>
                 </div>
 
                 {/* Metric 2 */}
-                <div className="bg-slate-50/80 rounded-xl p-3.5 border border-slate-100 flex flex-col justify-between hover:border-slate-200 transition">
-                  <div className="font-extrabold text-sm sm:text-base text-slate-900">
+                <div className="bg-slate-50/90 rounded-xl p-3 border border-slate-100 flex sm:flex-col justify-between items-center sm:items-start hover:border-slate-200 transition">
+                  <div className="order-2 sm:order-1 font-extrabold text-sm sm:text-base text-slate-900">
                     {formatRupiah(subsidiPuskesmas)}
                   </div>
-                  <div className="text-[11px] text-slate-500 font-medium leading-snug mt-2">
-                    Subsidi Puskesmas &amp; Faskes
+                  <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-2">
+                    Subsidi Puskesmas
                   </div>
                 </div>
 
                 {/* Metric 3 */}
-                <div className="bg-amber-50/40 rounded-xl p-3.5 border border-amber-100/60 flex flex-col justify-between hover:border-amber-200 transition">
-                  <div className="font-extrabold text-sm sm:text-base text-slate-900">
+                <div className="bg-amber-50/50 rounded-xl p-3 border border-amber-100 flex sm:flex-col justify-between items-center sm:items-start hover:border-amber-200 transition">
+                  <div className="order-2 sm:order-1 font-extrabold text-sm sm:text-base text-slate-900">
                     {formatRupiah(subsidiTransportasi)}
                   </div>
-                  <div className="text-[11px] text-slate-500 font-medium leading-snug mt-2">
-                    Subsidi Transportasi (TJ &amp; MRT)
+                  <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-2">
+                    Subsidi Bus &amp; MRT
                   </div>
                 </div>
 
@@ -269,25 +328,22 @@ export default function App() {
               {/* Dynamic Breakdown Progress Bar */}
               <div className="mt-5 pt-1">
                 <div className="flex justify-between items-center text-xs font-semibold text-slate-700 mb-2">
-                  <span>Proporsi Alokasi 3 Sektor Fasilitas:</span>
+                  <span>Proporsi 3 Sektor Fasilitas:</span>
                   <span className="text-slate-500 font-mono text-[11px]">{formatRupiah(totalTrio)} / bln</span>
                 </div>
                 <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden flex">
-                  {/* Segment 1: Hijau emerald (Jalan) */}
                   <div 
                     style={{ width: `${(perbaikanJalan / totalTrio) * 100}%` }} 
                     className="bg-emerald-600 h-full transition-all duration-300"
                     title={`Jalan: ${formatRupiah(perbaikanJalan)}`}
                   ></div>
                   <div style={{ width: '2px' }} className="bg-white h-full"></div>
-                  {/* Segment 2: Dark Navy/Slate (Puskesmas) */}
                   <div 
                     style={{ width: `${(subsidiPuskesmas / totalTrio) * 100}%` }} 
                     className="bg-slate-800 h-full transition-all duration-300"
                     title={`Puskesmas: ${formatRupiah(subsidiPuskesmas)}`}
                   ></div>
                   <div style={{ width: '2px' }} className="bg-white h-full"></div>
-                  {/* Segment 3: Amber / Yellow Gold (Transportasi) */}
                   <div 
                     style={{ width: `${(subsidiTransportasi / totalTrio) * 100}%` }} 
                     className="bg-amber-500 h-full transition-all duration-300"
@@ -296,31 +352,65 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Expandable Section: Lihat Sektor Lainnya */}
+              {/* Expandable Section: Lihat Sektor Lainnya (Zero Empty State - Celah 2.2) */}
               <div className="mt-4 pt-3 border-t border-slate-100">
                 <button
                   onClick={() => setShowOtherSectors(!showOtherSectors)}
-                  className="w-full flex items-center justify-between text-xs font-semibold text-emerald-700 hover:text-emerald-800 transition py-1 cursor-pointer"
+                  className="w-full flex items-center justify-between text-xs font-semibold text-emerald-700 hover:text-emerald-800 transition py-2 cursor-pointer min-h-[44px]"
                 >
                   <span className="flex items-center gap-1.5">
                     <Sliders className="w-3.5 h-3.5" />
-                    <span>{showOtherSectors ? 'Sembunyikan Sektor Makro Lainnya' : 'Lihat Alokasi Sektor Makro Lainnya (Pendidikan, Gaji, dll.)'}</span>
+                    <span>{showOtherSectors ? 'Sembunyikan Sektor Makro Lainnya' : 'Buka Rincian 6 Sektor APBD Lengkap (100% / Rp 84,2 T)'}</span>
                   </span>
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showOtherSectors ? 'rotate-180' : ''}`} />
                 </button>
 
                 {showOtherSectors && (
-                  <div className="mt-3 p-3 bg-slate-50 rounded-xl space-y-2 text-xs border border-slate-200/70 animate-in fade-in duration-200">
-                    <div className="text-[11px] text-slate-500 font-medium mb-1">
-                      Porsi sektor makro dari total APBD DKI Rp 84,2 Triliun:
+                  <div className="mt-2 p-3.5 bg-slate-50 rounded-xl space-y-2.5 text-xs border border-slate-200/80 animate-in fade-in duration-200">
+                    <div className="text-[11px] text-slate-500 font-medium pb-1 border-b border-slate-200 flex justify-between">
+                      <span>Porsi 6 Sektor Makro APBD DKI:</span>
+                      <span className="font-bold text-slate-700">Total 100% (Rp 84,2 T)</span>
                     </div>
+
                     {apbdData.sectors.map((sec) => (
-                      <div key={sec.id} className="flex justify-between items-center py-0.5">
-                        <span className="text-slate-700 flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: sec.color }}></span>
-                          <span>{sec.name}</span>
-                        </span>
-                        <span className="font-bold text-slate-900">{sec.percentage}%</span>
+                      <div 
+                        key={sec.id} 
+                        onClick={() => setSelectedSectorId(selectedSectorId === sec.id ? null : sec.id)}
+                        className={`p-2 rounded-lg border transition cursor-pointer ${
+                          selectedSectorId === sec.id 
+                            ? 'bg-white border-emerald-300 shadow-xs' 
+                            : 'bg-white/60 border-slate-200/60 hover:bg-white'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-800 font-bold flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: sec.color }}></span>
+                            <span>{sec.name}</span>
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-extrabold text-slate-900">{sec.percentage}%</span>
+                            <ChevronRight className={`w-3 h-3 text-slate-400 transition-transform ${selectedSectorId === sec.id ? 'rotate-90' : ''}`} />
+                          </div>
+                        </div>
+
+                        {/* Sub-Programs Detail if Active */}
+                        {selectedSectorId === sec.id && (
+                          <div className="mt-2 pt-2 border-t border-slate-100 text-[11px] space-y-1.5 text-slate-600">
+                            <p className="italic text-slate-500">{sec.description}</p>
+                            {sec.sub_programs.length > 0 ? (
+                              <div className="space-y-1 pt-1">
+                                {sec.sub_programs.map((sub) => (
+                                  <div key={sub.id} className="flex justify-between bg-slate-50 p-1.5 rounded">
+                                    <span className="font-medium text-slate-700">• {sub.name}</span>
+                                    <span className="font-bold text-slate-900">{formatRupiah(sub.budget)}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="text-[10px] text-slate-400">Alokasi reguler APBD 2026</div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -331,14 +421,14 @@ export default function App() {
               <div className="mt-5">
                 <button
                   onClick={() => setIsReceiptOpen(true)}
-                  className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-3 px-4 rounded-xl shadow transition cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-3.5 px-4 rounded-xl shadow transition cursor-pointer min-h-[44px]"
                 >
                   <Receipt className="w-4 h-4 text-emerald-400" />
                   <span>Cetak Struk Pajak Kasir Saya</span>
                 </button>
               </div>
 
-              {/* Catatan Transparansi Formula (Footnote Disclosure) Sesuai Celah 2.4 */}
+              {/* Catatan Transparansi Formula (Footnote Disclosure Sesuai Celah 2.4) */}
               <div className="mt-4 pt-3 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed">
                 <strong className="text-slate-500 font-semibold">Catatan Transparansi Fiskal:</strong> Angka di atas dihitung berdasarkan formula simulasi dari Pajak Daerah (PB1/PBJT Restoran 10% dan Pajak Kendaraan Bermotor) serta porsi Dana Bagi Hasil (DBH) Pajak Penghasilan (PPh) yang disalurkan kembali oleh Pemerintah Pusat ke kas APBD DKI Jakarta.
               </div>
@@ -349,7 +439,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 3. SECTION THE REALITY GAP (Mengapa Harus Ada ANGIN?) */}
+      {/* 6. SECTION THE REALITY GAP (Mengapa Harus Ada ANGIN?) */}
       <section id="reality-gap" className="border-y border-slate-200/80 bg-white py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-10">
@@ -364,7 +454,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
             {/* Sisi Kiri: Cara Lama */}
             <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-7 flex flex-col justify-between">
               <div>
@@ -405,11 +495,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* 4. PREVIEW CARDS (Budget Flow & Mini GIS Project) */}
+      {/* 7. PREVIEW CARDS (Budget Flow & Mini GIS Project) */}
       <section id="eksplorasi" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          {/* Card Kiri: Budget Flow Sankey Preview */}
+          {/* Card Kiri: Budget Flow Sankey Preview (Adaptive Desktop vs Mobile - Celah 2.3) */}
           <div className="lg:col-span-6 bg-white rounded-2xl p-6 border border-slate-200/70 shadow-sm flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-4">
@@ -422,8 +512,8 @@ export default function App() {
                 </span>
               </div>
 
-              {/* Visual Flow Diagram Preview */}
-              <div className="h-64 bg-slate-50/70 rounded-xl p-4 border border-slate-100 flex flex-col justify-center relative overflow-hidden">
+              {/* DESKTOP VIEW (>= 768px): Horizontal SVG Stream */}
+              <div className="hidden md:flex h-64 bg-slate-50/70 rounded-xl p-4 border border-slate-100 flex-col justify-center relative overflow-hidden">
                 <div className="w-full h-full flex items-center justify-between text-xs">
                   
                   {/* Source Node */}
@@ -453,13 +543,32 @@ export default function App() {
                   </div>
                 </div>
               </div>
+
+              {/* MOBILE VIEW (< 768px): Vertical Stacked List with tap targets >= 44px */}
+              <div className="md:hidden space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                  Alokasi dari {formatRupiah(income)}:
+                </div>
+                <div className="bg-white p-3 rounded-lg border border-slate-200 flex justify-between items-center min-h-[44px]">
+                  <span className="font-semibold text-xs text-slate-800">🚧 Perbaikan Jalan</span>
+                  <span className="font-extrabold text-xs text-emerald-700">{formatRupiah(perbaikanJalan)}</span>
+                </div>
+                <div className="bg-white p-3 rounded-lg border border-slate-200 flex justify-between items-center min-h-[44px]">
+                  <span className="font-semibold text-xs text-slate-800">🏥 Subsidi Puskesmas</span>
+                  <span className="font-extrabold text-xs text-slate-900">{formatRupiah(subsidiPuskesmas)}</span>
+                </div>
+                <div className="bg-white p-3 rounded-lg border border-slate-200 flex justify-between items-center min-h-[44px]">
+                  <span className="font-semibold text-xs text-slate-800">🚌 Subsidi Transportasi</span>
+                  <span className="font-extrabold text-xs text-amber-700">{formatRupiah(subsidiTransportasi)}</span>
+                </div>
+              </div>
             </div>
             
             <div className="mt-4 flex justify-between items-center text-xs text-slate-500 pt-3 border-t border-slate-100">
               <span>*Terhubung langsung dengan simulasi gaji</span>
               <button 
                 onClick={() => setIsReceiptOpen(true)}
-                className="font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 cursor-pointer"
+                className="font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 cursor-pointer py-1"
               >
                 Cetak Rincian Struk <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -472,56 +581,71 @@ export default function App() {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-base font-bold text-slate-900">Radar Proyek Fisik (Mini GIS)</h3>
-                  <p className="text-xs text-slate-500">Pantau proyek pembangunan aktif di sekitarmu</p>
+                  <p className="text-xs text-slate-500">Klik pin di peta untuk rincian &amp; aduan warga</p>
                 </div>
 
-                {/* Selector Jakarta */}
-                <div className="flex items-center gap-1.5 bg-slate-100 px-2.5 py-1 rounded-md text-xs font-semibold text-slate-700">
-                  <Search className="w-3 h-3 text-slate-400" />
-                  <span>Jakarta Selatan</span>
-                </div>
+                {/* Quick Search Button */}
+                <button 
+                  onClick={() => setIsSearchOpen(true)}
+                  className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-md text-xs font-semibold text-slate-700 transition cursor-pointer min-h-[36px]"
+                >
+                  <Search className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Cari Proyek</span>
+                </button>
               </div>
 
-              {/* Map Container Mockup */}
+              {/* Map Container Mockup with Interactive Pins & Offline Vector Siluet (Celah 2.1) */}
               <div className="h-64 rounded-xl relative overflow-hidden border border-slate-200 bg-[#e4e8ec]">
                 <div className="absolute inset-0 opacity-70 bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:16px_16px]"></div>
                 
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <span className="text-slate-400/40 font-black text-3xl tracking-widest uppercase">Jakarta</span>
+                {/* Jakarta SVG Vector Silhouette Map (Offline Fallback indicator) */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+                  <svg className="w-48 h-48 text-slate-600" viewBox="0 0 100 100" fill="currentColor">
+                    <path d="M 20,40 Q 30,20 50,25 T 80,35 Q 90,60 70,80 T 30,75 Z" />
+                  </svg>
                 </div>
 
-                {/* Pin 1: TB Simatupang */}
-                <div className="absolute top-1/4 left-1/3 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group">
-                  <div className="w-6 h-6 bg-amber-500 text-white rounded-full flex items-center justify-center shadow-md ring-4 ring-amber-200/80 group-hover:scale-110 transition">
-                    <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                {/* Pin 1: TB Simatupang (Yellow / 80%) */}
+                <div 
+                  onClick={() => handleOpenProjectById('proj-tb-simatupang')}
+                  className="absolute top-1/4 left-1/3 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-20"
+                >
+                  <div className="w-7 h-7 bg-amber-500 text-white rounded-full flex items-center justify-center shadow-md ring-4 ring-amber-200/80 group-hover:scale-125 transition">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
-                  <div className="mt-1 bg-white/95 px-2 py-0.5 rounded shadow text-[9px] font-bold text-slate-800">
+                  <div className="mt-1 bg-white/95 px-2 py-0.5 rounded shadow text-[9px] font-bold text-slate-800 whitespace-nowrap group-hover:bg-amber-50">
                     Jl. TB Simatupang (80%)
                   </div>
                 </div>
 
-                {/* Pin 2: Fatmawati (Dekat UPNVJ) */}
-                <div className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group">
-                  <div className="w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-md ring-4 ring-emerald-200/80 group-hover:scale-110 transition">
-                    <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                {/* Pin 2: Fatmawati (Green / 100%) */}
+                <div 
+                  onClick={() => handleOpenProjectById('proj-fatmawati')}
+                  className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-20"
+                >
+                  <div className="w-7 h-7 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-md ring-4 ring-emerald-200/80 group-hover:scale-125 transition">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
-                  <div className="mt-1 bg-white/95 px-2 py-0.5 rounded shadow text-[9px] font-bold text-slate-800">
+                  <div className="mt-1 bg-white/95 px-2 py-0.5 rounded shadow text-[9px] font-bold text-slate-800 whitespace-nowrap group-hover:bg-emerald-50">
                     Jl. Fatmawati (100%)
                   </div>
                 </div>
 
-                {/* Pin 3: Kali Krukut Pondok Labu */}
-                <div className="absolute bottom-1/4 right-1/3 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group">
-                  <div className="w-6 h-6 bg-amber-500 text-white rounded-full flex items-center justify-center shadow-md ring-4 ring-amber-200/80 group-hover:scale-110 transition">
-                    <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                {/* Pin 3: Margonda (Red / 45% Terlambat - Trigger Aksi Aduan Warga Celah 2.5) */}
+                <div 
+                  onClick={() => handleOpenProjectById('proj-margonda')}
+                  className="absolute bottom-1/4 right-1/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-20 animate-bounce"
+                >
+                  <div className="w-7 h-7 bg-rose-600 text-white rounded-full flex items-center justify-center shadow-md ring-4 ring-rose-200 group-hover:scale-125 transition">
+                    <AlertTriangle className="w-3.5 h-3.5" />
                   </div>
-                  <div className="mt-1 bg-white/95 px-2 py-0.5 rounded shadow text-[9px] font-bold text-slate-800">
-                    Tanggul Krukut (60%)
+                  <div className="mt-1 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded shadow text-[9px] font-bold text-rose-800 whitespace-nowrap">
+                    Jl. Margonda (45% Terlambat)
                   </div>
                 </div>
 
                 {/* Legend Box at Bottom Left */}
-                <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm rounded-lg p-2.5 shadow-sm border border-slate-200 text-[10px] space-y-1">
+                <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm rounded-lg p-2.5 shadow-sm border border-slate-200 text-[10px] space-y-1 z-10">
                   <div className="font-bold text-slate-800 text-[11px]">Status Pengerjaan</div>
                   <div className="flex items-center gap-1.5 text-slate-600">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
@@ -531,13 +655,25 @@ export default function App() {
                     <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
                     <span>Sedang Dikerjakan</span>
                   </div>
+                  <div className="flex items-center gap-1.5 text-slate-600">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
+                    <span className="font-bold text-rose-700">Terlambat (Aksi Warga)</span>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="mt-4 flex justify-between items-center text-xs text-slate-500 pt-3 border-t border-slate-100">
-              <span>Menampilkan proyek aktif terverifikasi LPSE</span>
-              <span className="font-bold text-slate-400">Peta Penuh (Sprint 2)</span>
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>Dual Mode: Online Map &amp; Offline Vector Fallback</span>
+              </span>
+              <button 
+                onClick={() => setIsSearchOpen(true)}
+                className="font-bold text-emerald-600 hover:text-emerald-700 cursor-pointer"
+              >
+                Cari Semua Proyek ({apbdData.sectors.reduce((acc, s) => acc + s.sub_programs.reduce((a, sp) => a + sp.projects.length, 0), 0)})
+              </button>
             </div>
 
           </div>

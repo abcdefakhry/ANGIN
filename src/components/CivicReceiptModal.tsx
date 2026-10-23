@@ -240,32 +240,62 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
         </div>
 
         {/* Modal Action Buttons */}
-        <div className="mt-4 flex flex-col sm:flex-row gap-2.5">
+        <div className="mt-4 space-y-2">
+          {/* Main Download Button */}
           <button
             onClick={handleDownload}
             disabled={isDownloading}
-            className="flex-1 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold text-xs py-2.5 px-4 rounded-xl shadow-md transition disabled:opacity-50"
+            className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold text-xs py-2.5 px-4 rounded-xl shadow-md transition disabled:opacity-50 cursor-pointer"
           >
             <Download className="w-4 h-4" />
-            <span>{isDownloading ? 'Menyimpan Struk...' : 'Unduh Gambar (PNG)'}</span>
+            <span>{isDownloading ? 'Menyimpan Struk...' : 'Unduh Gambar Struk (PNG)'}</span>
           </button>
 
-          <button
-            onClick={handleCopy}
-            className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 font-semibold text-xs py-2.5 px-3.5 rounded-xl border border-slate-300 shadow-sm transition"
-          >
-            {copied ? (
-              <>
-                <Check className="w-4 h-4 text-emerald-600" />
-                <span className="text-emerald-700">Tersalin!</span>
-              </>
-            ) : (
-              <>
-                <Share2 className="w-4 h-4 text-slate-500" />
-                <span>Salin Ringkasan</span>
-              </>
-            )}
-          </button>
+          {/* Social Share & Copy Row */}
+          <div className="flex gap-2">
+            {/* WhatsApp Direct Share */}
+            <a
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                `🧾 Cek Struk Kontribusi APBD saya di ANGIN.id! Dari pajak kita, kita tahu berapa rupiah yang jadi aspal jalan, puskesmas, dan bus TransJakarta: https://angin.vercel.app`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold text-xs py-2 px-3 rounded-xl transition"
+            >
+              <span>Bagikan ke WA</span>
+            </a>
+
+            {/* Twitter/X Direct Share */}
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                `Saya baru saja cek alokasi riil pajak daerah saya di @ANGINid! Transparansi APBD DKI Jakarta hingga ke perbaikan jalan dan puskesmas. Cek strukmu: https://angin.vercel.app #KawalAPBD #ANGINid`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs py-2 px-3 rounded-xl transition"
+            >
+              <span>Bagikan ke X</span>
+            </a>
+
+            {/* Copy Button */}
+            <button
+              onClick={handleCopy}
+              className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 font-semibold text-xs py-2 px-3 rounded-xl border border-slate-300 shadow-sm transition"
+              title="Salin teks struk"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span className="text-emerald-700">Tersalin!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-4 h-4 text-slate-500" />
+                  <span>Salin</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

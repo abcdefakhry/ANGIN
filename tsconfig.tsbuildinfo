@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/components/civicreceiptmodal.tsx"],"version":"5.7.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/civicreceiptmodal.tsx","./src/components/commandsearchmodal.tsx","./src/components/projectactionmodal.tsx"],"version":"5.7.3"}

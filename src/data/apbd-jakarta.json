@@ -1,0 +1,222 @@
+{
+  "province": "DKI Jakarta",
+  "fiscal_year": 2026,
+  "total_budget": 84200000000000,
+  "realization_percentage": 68,
+  "sectors": [
+    {
+      "id": "sec-infra",
+      "name": "Infrastruktur & Pekerjaan Umum",
+      "budget": 16000000000000,
+      "percentage": 19,
+      "color": "#059669",
+      "description": "Pembangunan jalan, jembatan, penanganan banjir, dan transportasi publik.",
+      "sub_programs": [
+        {
+          "id": "sub-jalan",
+          "name": "Pemeliharaan Jalan & Jembatan",
+          "budget": 4200000000000,
+          "human_conversion": "Setara dengan pengaspalan mulus 1.150 km jalan raya di seluruh wilayah DKI Jakarta.",
+          "projects": [
+            {
+              "id": "proj-tb-simatupang",
+              "title": "Peningkatan Jalan TB Simatupang",
+              "location": "Jakarta Selatan",
+              "budget": 14800000000,
+              "length": "3.2 km",
+              "contractor": "PT Citra Karya Abadi",
+              "progress": 80,
+              "status": "Dalam Pengerjaan",
+              "status_color": "yellow",
+              "coordinates": [-6.2928, 106.8285]
+            },
+            {
+              "id": "proj-fatmawati",
+              "title": "Pengaspalan Ulang Jl. RS Fatmawati",
+              "location": "Jakarta Selatan (Dekat Kampus UPNVJ)",
+              "budget": 8200000000,
+              "length": "2.4 km",
+              "contractor": "PT Sumber Aspal Makmur",
+              "progress": 100,
+              "status": "Selesai",
+              "status_color": "green",
+              "coordinates": [-6.3012, 106.7981]
+            },
+            {
+              "id": "proj-margonda",
+              "title": "Rekonstruksi Saluran & Jalan Margonda Akses",
+              "location": "Perbatasan Jaksel - Depok",
+              "budget": 9200000000,
+              "length": "1.8 km",
+              "contractor": "PT Sumber Beton Jaya",
+              "progress": 45,
+              "status": "Terlambat",
+              "status_color": "red",
+              "coordinates": [-6.3533, 106.8322]
+            }
+          ]
+        },
+        {
+          "id": "sub-banjir",
+          "name": "Normalisasi Sungai & Pengendalian Banjir",
+          "budget": 5800000000000,
+          "human_conversion": "Setara dengan pengerukan dan perkuatan tanggul 45 km aliran sungai kritis.",
+          "projects": [
+            {
+              "id": "proj-krukut",
+              "title": "Pengerukan & Tanggul Kali Krukut",
+              "location": "Pondok Labu, Jakarta Selatan",
+              "budget": 12500000000,
+              "length": "4.5 km",
+              "contractor": "PT Bahtera Tirta Mandiri",
+              "progress": 60,
+              "status": "Dalam Pengerjaan",
+              "status_color": "yellow",
+              "coordinates": [-6.3120, 106.8010]
+            },
+            {
+              "id": "proj-pesanggrahan",
+              "title": "Peningkatan Pompa Air Kali Pesanggrahan",
+              "location": "Kebayoran Lama, Jakarta Selatan",
+              "budget": 7800000000,
+              "length": "1.2 km",
+              "contractor": "PT Sumber Daya Air",
+              "progress": 100,
+              "status": "Selesai",
+              "status_color": "green",
+              "coordinates": [-6.2550, 106.7720]
+            }
+          ]
+        },
+        {
+          "id": "sub-transport",
+          "name": "Subsidi Transportasi Publik (TransJakarta & MRT)",
+          "budget": 4500000000000,
+          "human_conversion": "Menjaga tarif TransJakarta tetap Rp 3.500 untuk 1,2 juta penumpang harian.",
+          "projects": [
+            {
+              "id": "proj-tj-k13",
+              "title": "Revitalisasi Halte Koridor 13 Tendean-Ciledug",
+              "location": "Jakarta Selatan",
+              "budget": 6400000000,
+              "length": "2 Halte Integrasi",
+              "contractor": "PT Rekasarana Transport",
+              "progress": 85,
+              "status": "Dalam Pengerjaan",
+              "status_color": "yellow",
+              "coordinates": [-6.2392, 106.8170]
+            }
+          ]
+        },
+        {
+          "id": "sub-pju",
+          "name": "Penerangan Jalan Umum (PJU Smart Lighting)",
+          "budget": 1500000000000,
+          "human_conversion": "Menjamin 12.000 titik lampu jalan terang benderang untuk keamanan malam warga.",
+          "projects": [
+            {
+              "id": "proj-pju-selatan",
+              "title": "Pemasangan Lampu LED Pintar Jalur Komuter",
+              "location": "Jakarta Selatan",
+              "budget": 3200000000,
+              "length": "850 Titik Lampu",
+              "contractor": "PT Cahaya Terang Nusantara",
+              "progress": 100,
+              "status": "Selesai",
+              "status_color": "green",
+              "coordinates": [-6.2700, 106.8100]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-pendidikan",
+      "name": "Pendidikan & Beasiswa",
+      "budget": 20200000000000,
+      "percentage": 24,
+      "color": "#1e293b",
+      "description": "KJP Plus, KJMU Mahasiswa, dan rehabilitasi gedung sekolah negeri.",
+      "sub_programs": [
+        {
+          "id": "sub-kjp",
+          "name": "Bantuan Biaya Personal KJP Plus & KJMU",
+          "budget": 4500000000000,
+          "human_conversion": "Membiayai perlengkapan sekolah & kuliah untuk 850.000 siswa dan mahasiswa Jakarta.",
+          "projects": []
+        },
+        {
+          "id": "sub-sekolah",
+          "name": "Rehabilitasi Total Gedung Sekolah Negeri",
+          "budget": 3800000000000,
+          "human_conversion": "Merestorasi 142 gedung SD/SMP/SMA agar aman dan ramah disabilitas.",
+          "projects": []
+        }
+      ]
+    },
+    {
+      "id": "sec-kesehatan",
+      "name": "Kesehatan & Fasilitas Medis",
+      "budget": 10900000000000,
+      "percentage": 13,
+      "color": "#0284c7",
+      "description": "Subsidi premi BPJS PBI, operasional 340 puskesmas, dan pencegahan stunting.",
+      "sub_programs": [
+        {
+          "id": "sub-bpjs",
+          "name": "Iuran Jaminan Kesehatan Warga (BPJS PBI)",
+          "budget": 3900000000000,
+          "human_conversion": "Menjamin 4,8 juta warga kurang mampu berobat gratis di faskes kelas 3.",
+          "projects": []
+        },
+        {
+          "id": "sub-puskesmas-ops",
+          "name": "Operasional & Obat 340 Puskesmas Kelurahan",
+          "budget": 2700000000000,
+          "human_conversion": "Ketersediaan obat esensial dan layanan rawat jalan dasar tanpa antre panjang.",
+          "projects": [
+            {
+              "id": "proj-puskesmas-gambir",
+              "title": "Renovasi Poli Lansia & Anak Puskesmas Gambir",
+              "location": "Jakarta Pusat",
+              "budget": 2100000000,
+              "length": "1 Faskes",
+              "contractor": "PT Husada Graha Medika",
+              "progress": 90,
+              "status": "Dalam Pengerjaan",
+              "status_color": "yellow",
+              "coordinates": [-6.1750, 106.8200]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-pegawai",
+      "name": "Belanja Pegawai (Gaji Guru, Tenaga Medis, & ASN)",
+      "budget": 23500000000000,
+      "percentage": 28,
+      "color": "#475569",
+      "description": "Gaji dan tunjangan 60.000+ guru, dokter, pemadam kebakaran, dan aparatur daerah.",
+      "sub_programs": []
+    },
+    {
+      "id": "sec-sosial",
+      "name": "Bantuan Sosial & Pemberdayaan Warga",
+      "budget": 8400000000000,
+      "percentage": 10,
+      "color": "#f59e0b",
+      "description": "Kartu Lansia Jakarta (KLJ), Kartu Anak Jakarta (KAJ), dan bantuan pangan.",
+      "sub_programs": []
+    },
+    {
+      "id": "sec-lingkungan",
+      "name": "Lingkungan Hidup & Kebersihan Kota",
+      "budget": 5200000000000,
+      "percentage": 6,
+      "color": "#10b981",
+      "description": "Armada truk sampah, pengelolaan TPST Bantargebang, dan taman kota RPTRA.",
+      "sub_programs": []
+    }
+  ]
+}

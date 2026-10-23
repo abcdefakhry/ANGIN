@@ -56,7 +56,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
   const delayDays = project.days_delayed || 69;
 
   // Generate advocacy text for social pressure / reporting with exact deadline and delay
-  const complaintText = `📢 [PENGAWASAN WARGA ANGIN.ID]\nLaporan Proyek APBD: ${project.title}\nLokasi: ${project.location}\nNilai Pagu: ${formatRupiah(project.budget)}\nKontraktor: ${project.contractor}\nDeadline Resmi: ${targetDeadline}${isDelayed ? ` (MOLOR ${delayDays} HARI)` : ''}\nStatus Realisasi Fisik: Baru ${project.progress}%\n\nMohon atensi dinas terkait @DKIJakarta @dinasbmkikotajkt atas keterlambatan proyek ini agar segera diselesaikan demi keselamatan & kenyamanan warga! #KawalAPBD #ANGINid`;
+  const complaintText = `[PENGAWASAN WARGA ANGIN.ID]\nLaporan Proyek APBD: ${project.title}\nLokasi: ${project.location}\nNilai Pagu: ${formatRupiah(project.budget)}\nKontraktor: ${project.contractor}\nDeadline Resmi: ${targetDeadline}${isDelayed ? ` (MOLOR ${delayDays} HARI)` : ''}\nStatus Realisasi Fisik: Baru ${project.progress}%\n\nMohon atensi dinas terkait @DKIJakarta @dinasbmkikotajkt atas keterlambatan proyek ini agar segera diselesaikan demi keselamatan & kenyamanan warga! #KawalAPBD #ANGINid`;
 
   // Action: Open Twitter/X intent with pre-filled message
   const handleAdvocateTwitter = () => {
@@ -117,7 +117,8 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
 
           {isDelayed && (
             <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 flex items-center gap-1">
-              <span>⚠️ Molor {delayDays} Hari</span>
+              <AlertTriangle className="w-3 h-3 text-rose-600" />
+              <span>Molor {delayDays} Hari</span>
             </span>
           )}
         </div>
@@ -149,7 +150,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
           <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200">
             <div 
               style={{ width: `${project.progress}%` }} 
-              className={`h-full rounded-full transition-all duration-500 ${
+              className={`h-full rounded-full transition-[width] duration-500 ${
                 project.status_color === 'green'
                   ? 'bg-emerald-600'
                   : project.status_color === 'red'

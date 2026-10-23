@@ -90,14 +90,14 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
       )}
 
       {/* 1. TOP MACRO BANNER: TOTAL APBD & SERAPAN ANGGARAN */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs relative overflow-hidden">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 relative overflow-hidden">
         {/* Decorative subtle background aura */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-50 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
           <div>
             <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full mb-3">
-              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+              <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
               <span>Dokumen Resmi APBD DKI Jakarta • Tahun Anggaran 2026</span>
             </div>
 
@@ -130,7 +130,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
               <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden p-0.5">
                 <div 
                   style={{ width: `${apbdData.realization_percentage}%` }}
-                  className="h-full bg-emerald-600 rounded-full transition-all duration-700"
+                  className="h-full bg-emerald-600 rounded-full transition-[width] duration-700"
                 />
               </div>
               <div className="text-[10px] text-slate-400 text-right">
@@ -144,11 +144,11 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
         <div className="pt-5 pb-3">
           <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-2">
             <span>Aliran Proporsi 6 Sektor Makro APBD DKI:</span>
-            <span className="text-slate-500 font-mono text-[11px]">Total 100% (Rp 84,2 T)</span>
+            <span className="text-slate-500 tabular-nums font-semibold text-[11px]">Total 100% (Rp 84,2 T)</span>
           </div>
 
           {/* Horizontal multi-color bar */}
-          <div className="h-5 w-full bg-slate-100 rounded-xl overflow-hidden flex shadow-inner border border-slate-200">
+          <div className="h-5 w-full bg-slate-100 rounded-xl overflow-hidden flex border border-slate-200">
             {apbdData.sectors.map((sec) => (
               <button
                 key={sec.id}
@@ -165,7 +165,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                   backgroundColor: sec.color
                 }}
                 title={`${sec.name}: ${sec.percentage}% (${formatRupiah(sec.budget)})`}
-                className={`h-full transition-all relative group cursor-pointer border-r border-white/30 last:border-r-0 ${
+                className={`h-full transition-opacity relative group cursor-pointer border-r border-white/30 last:border-r-0 ${
                   sec.id === selectedSectorId ? 'brightness-110 ring-2 ring-slate-900/40 z-10' : 'hover:brightness-110 opacity-90 hover:opacity-100'
                 }`}
               >
@@ -258,10 +258,10 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                     setSelectedSubProgramId(null);
                   }
                 }}
-                className={`text-left p-4 rounded-2xl border transition-all duration-200 flex flex-col justify-between min-h-[124px] cursor-pointer group ${
+                className={`text-left p-4 rounded-2xl border transition-colors duration-150 flex flex-col justify-between min-h-[124px] cursor-pointer group ${
                   isSelected
-                    ? 'bg-white border-emerald-600 shadow-md ring-2 ring-emerald-600/20 translate-y-[-2px]'
-                    : 'bg-white/70 border-slate-200 hover:bg-white hover:border-slate-300 hover:shadow-xs'
+                    ? 'bg-white border-2 border-emerald-600 ring-2 ring-emerald-600/20'
+                    : 'bg-white border border-slate-200 hover:border-slate-300'
                 }`}
               >
                 <div>
@@ -274,13 +274,13 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                       {sector.percentage}%
                     </span>
                   </div>
-                  <div className="font-bold text-xs text-slate-800 line-clamp-2 leading-snug group-hover:text-emerald-700 transition">
+                  <div className="font-bold text-xs text-slate-800 line-clamp-2 leading-snug group-hover:text-emerald-700 transition-colors">
                     {sector.name}
                   </div>
                 </div>
 
                 <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                  <span className="font-extrabold text-slate-900">
+                  <span className="font-extrabold text-slate-900 tabular-nums">
                     {formatRupiah(sector.budget).replace(',00', '')}
                   </span>
                 </div>
@@ -294,7 +294,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* Left Column (5 Cols): Sub-Programs List */}
-        <div className="lg:col-span-5 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+        <div className="lg:col-span-5 bg-white rounded-3xl p-6 border border-slate-200 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
               <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
@@ -304,7 +304,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                 {selectedSector.name}
               </h4>
             </div>
-            <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 tabular-nums">
               {formatRupiah(selectedSector.budget)}
             </span>
           </div>
@@ -319,7 +319,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
               <div className="p-6 bg-slate-50 rounded-2xl text-center text-xs text-slate-500 border border-slate-200 space-y-2">
                 <FileSpreadsheet className="w-6 h-6 text-slate-400 mx-auto" />
                 <p>Alokasi belanja rutin operasional dan gaji ASN/Guru/Nakes yang diatur oleh Peraturan Gubernur DKI Jakarta.</p>
-                <div className="font-bold text-slate-700 text-xs">Total: {formatRupiah(selectedSector.budget)}</div>
+                <div className="font-bold text-slate-700 text-xs tabular-nums">Total: {formatRupiah(selectedSector.budget)}</div>
               </div>
             ) : (
               selectedSector.sub_programs.map((sub) => {
@@ -329,10 +329,10 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                   <div
                     key={sub.id}
                     onClick={() => setSelectedSubProgramId(sub.id)}
-                    className={`p-4 rounded-2xl border transition-all duration-200 cursor-pointer ${
+                    className={`p-4 rounded-2xl border transition-colors duration-150 cursor-pointer ${
                       isSubSelected
-                        ? 'bg-emerald-50/50 border-emerald-500 shadow-xs ring-1 ring-emerald-500/30'
-                        : 'bg-slate-50/80 border-slate-200 hover:bg-slate-100/70 hover:border-slate-300'
+                        ? 'bg-emerald-50/70 border-emerald-500 ring-1 ring-emerald-500/30'
+                        : 'bg-slate-50 border-slate-200 hover:bg-slate-100/70 hover:border-slate-300'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -347,21 +347,21 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                         </div>
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <div className="font-extrabold text-xs text-emerald-800">
+                        <div className="font-extrabold text-xs text-emerald-800 tabular-nums">
                           {formatRupiah(sub.budget)}
                         </div>
-                        <div className="text-[10px] text-slate-400 font-semibold">
+                        <div className="text-[10px] text-slate-400 font-semibold tabular-nums">
                           {percentageOfSector}% dari sektor
                         </div>
                       </div>
                     </div>
 
                     {/* Progress Bar within Sector */}
-                    <div className="mt-3 pt-2 border-t border-slate-200/60">
+                    <div className="mt-3 pt-2 border-t border-slate-200">
                       <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
                         <div 
                           style={{ width: `${percentageOfSector}%` }}
-                          className="h-full bg-emerald-600 rounded-full"
+                          className="h-full bg-emerald-600 rounded-full transition-[width] duration-300"
                         />
                       </div>
                     </div>
@@ -382,15 +382,15 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
           
           {/* HUMAN CONVERSION INSIGHT CARD (Fitur Cerdas Penilaian Guidebook) */}
           {selectedSubProgram?.human_conversion && (
-            <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-slate-50 border border-emerald-200 rounded-3xl p-5 shadow-xs relative overflow-hidden animate-in fade-in">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 relative overflow-hidden">
               <div className="flex items-start gap-3.5">
-                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm shadow-emerald-200">
+                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0">
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 mb-0.5">
-                    Konversi Bahasa Manusia (Dampak Riil Warga)
-                  </div>
+                  <p className="text-xs font-bold text-emerald-800 mb-0.5">
+                    Konversi dampak riil warga
+                  </p>
                   <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-relaxed">
                     "{selectedSubProgram.human_conversion}"
                   </p>
@@ -400,7 +400,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
           )}
 
           {/* PHYSICAL PROJECTS LIST */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+          <div className="bg-white rounded-3xl p-6 border border-slate-200 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
               <div>
                 <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
@@ -416,32 +416,32 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                 <Filter className="w-3.5 h-3.5 text-slate-400 ml-1.5 mr-0.5" />
                 <button
                   onClick={() => setStatusFilter('all')}
-                  className={`px-2 py-1 rounded-lg font-medium transition cursor-pointer text-[11px] ${
-                    statusFilter === 'all' ? 'bg-white text-slate-900 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                  className={`px-2 py-1 rounded-lg font-medium transition-colors cursor-pointer text-[11px] ${
+                    statusFilter === 'all' ? 'bg-white text-slate-900 font-bold' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   Semua
                 </button>
                 <button
                   onClick={() => setStatusFilter('delayed')}
-                  className={`px-2 py-1 rounded-lg font-medium transition cursor-pointer text-[11px] ${
-                    statusFilter === 'delayed' ? 'bg-rose-600 text-white font-bold shadow-xs' : 'text-rose-600 hover:text-rose-800'
+                  className={`px-2 py-1 rounded-lg font-medium transition-colors cursor-pointer text-[11px] ${
+                    statusFilter === 'delayed' ? 'bg-rose-600 text-white font-bold' : 'text-rose-600 hover:text-rose-800'
                   }`}
                 >
                   Terlambat
                 </button>
                 <button
                   onClick={() => setStatusFilter('ongoing')}
-                  className={`px-2 py-1 rounded-lg font-medium transition cursor-pointer text-[11px] ${
-                    statusFilter === 'ongoing' ? 'bg-amber-500 text-white font-bold shadow-xs' : 'text-amber-700 hover:text-amber-900'
+                  className={`px-2 py-1 rounded-lg font-medium transition-colors cursor-pointer text-[11px] ${
+                    statusFilter === 'ongoing' ? 'bg-amber-500 text-white font-bold' : 'text-amber-700 hover:text-amber-900'
                   }`}
                 >
                   Berjalan
                 </button>
                 <button
                   onClick={() => setStatusFilter('completed')}
-                  className={`px-2 py-1 rounded-lg font-medium transition cursor-pointer text-[11px] ${
-                    statusFilter === 'completed' ? 'bg-emerald-600 text-white font-bold shadow-xs' : 'text-emerald-700 hover:text-emerald-900'
+                  className={`px-2 py-1 rounded-lg font-medium transition-colors cursor-pointer text-[11px] ${
+                    statusFilter === 'completed' ? 'bg-emerald-600 text-white font-bold' : 'text-emerald-700 hover:text-emerald-900'
                   }`}
                 >
                   Selesai
@@ -463,10 +463,10 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                     <div
                       key={proj.id}
                       onClick={() => onSelectProject(proj)}
-                      className={`p-4 rounded-2xl border transition-all duration-200 hover:shadow-md cursor-pointer group ${
+                      className={`p-4 rounded-2xl border transition-colors duration-150 cursor-pointer group ${
                         isDelayed
                           ? 'bg-rose-50/40 border-rose-200 hover:border-rose-300'
-                          : 'bg-slate-50/70 border-slate-200 hover:bg-white hover:border-slate-300'
+                          : 'bg-slate-50 border-slate-200 hover:bg-white hover:border-slate-300'
                       }`}
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
@@ -521,7 +521,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                           <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                             <div 
                               style={{ width: `${proj.progress}%` }}
-                              className={`h-full rounded-full transition-all duration-500 ${
+                              className={`h-full rounded-full transition-[width] duration-500 ${
                                 proj.status_color === 'green'
                                   ? 'bg-emerald-600'
                                   : isDelayed
@@ -533,7 +533,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
                         </div>
 
                         <div className="flex items-center justify-between sm:justify-end gap-3">
-                          <div className="font-extrabold text-xs sm:text-sm text-slate-900">
+                          <div className="font-extrabold text-xs sm:text-sm text-slate-900 tabular-nums">
                             {formatRupiah(proj.budget)}
                           </div>
                           <div className="text-[11px] font-bold text-emerald-600 group-hover:underline flex items-center gap-0.5">
@@ -545,10 +545,13 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
 
                       {/* Delayed Alert Callout */}
                       {isDelayed && (
-                        <div className="mt-2.5 pt-2 border-t border-rose-200/70 flex items-center justify-between text-[11px] text-rose-700 font-semibold">
-                          <span>⚠️ Terlambat {proj.days_delayed || 69} hari dari batas kontrak</span>
-                          <span className="text-[10px] bg-rose-600 text-white font-bold px-2 py-0.5 rounded shadow-xs">
-                            📢 Teruskan Aduan Publik
+                        <div className="mt-2.5 pt-2 border-t border-rose-200 flex items-center justify-between text-[11px] text-rose-700 font-semibold">
+                          <span className="flex items-center gap-1.5">
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+                            <span>Terlambat {proj.days_delayed || 69} hari dari batas kontrak</span>
+                          </span>
+                          <span className="text-[10px] bg-rose-600 text-white font-bold px-2 py-0.5 rounded">
+                            Teruskan Aduan Publik
                           </span>
                         </div>
                       )}

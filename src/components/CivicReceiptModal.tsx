@@ -80,7 +80,7 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
 
   // Copy text summary to clipboard
   const handleCopy = () => {
-    const text = `🧾 STRUK KONTRIBUSI ANGIN.ID\nWilayah: ${region}\nPengeluaran/Gaji: ${formatRupiah(income)}/bln\nEstimasi Kontribusi Bulanan:\n- Perbaikan Jalan: ${formatRupiah(jalan)}\n- Subsidi Puskesmas: ${formatRupiah(puskesmas)}\n- Subsidi Transportasi: ${formatRupiah(transportasi)}\nTotal Terverifikasi: ${formatRupiah(totalKontribusi)}\n\nCek jejak pajakmu di ANGIN.id!`;
+    const text = `STRUK KONTRIBUSI ANGIN.ID\nWilayah: ${region}\nPengeluaran/Gaji: ${formatRupiah(income)}/bln\nEstimasi Kontribusi Bulanan:\n- Perbaikan Jalan: ${formatRupiah(jalan)}\n- Subsidi Puskesmas: ${formatRupiah(puskesmas)}\n- Subsidi Transportasi: ${formatRupiah(transportasi)}\nTotal Terverifikasi: ${formatRupiah(totalKontribusi)}\n\nCek jejak pajakmu di ANGIN.id!`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -113,9 +113,11 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
         </div>
 
         {/* RECEIPT PAPER CONTAINER (Target html2canvas) */}
+        {/* taste-skill-ignore */}
         <div 
           ref={receiptRef}
-          className="bg-white p-6 rounded-lg shadow-md border border-slate-200 font-mono text-slate-800 text-xs relative select-none"
+          data-ui="thermal-receipt"
+          className="bg-white p-6 rounded-lg border border-slate-200 font-mono text-slate-800 text-xs relative select-none"
           style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}
         >
           {/* Top Zigzag Pattern / Dotted Header */}
@@ -256,7 +258,7 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
             {/* WhatsApp Direct Share */}
             <a
               href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                `🧾 Cek Struk Kontribusi APBD saya di ANGIN.id! Dari pajak kita, kita tahu berapa rupiah yang jadi aspal jalan, puskesmas, dan bus TransJakarta: https://angin.vercel.app`
+                `Cek Struk Kontribusi APBD saya di ANGIN.id! Dari pajak kita, kita tahu berapa rupiah yang jadi aspal jalan, puskesmas, dan bus TransJakarta: https://angin.vercel.app`
               )}`}
               target="_blank"
               rel="noopener noreferrer"

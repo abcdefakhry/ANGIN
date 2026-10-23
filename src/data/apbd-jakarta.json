@@ -28,6 +28,9 @@
               "progress": 80,
               "status": "Dalam Pengerjaan",
               "status_color": "yellow",
+              "start_date": "15 Mei 2026",
+              "target_date": "30 November 2026",
+              "days_delayed": 0,
               "coordinates": [-6.2928, 106.8285]
             },
             {
@@ -40,6 +43,9 @@
               "progress": 100,
               "status": "Selesai",
               "status_color": "green",
+              "start_date": "10 Januari 2026",
+              "target_date": "15 Mei 2026",
+              "days_delayed": 0,
               "coordinates": [-6.3012, 106.7981]
             },
             {
@@ -52,6 +58,9 @@
               "progress": 45,
               "status": "Terlambat",
               "status_color": "red",
+              "start_date": "10 Maret 2026",
+              "target_date": "15 Agustus 2026",
+              "days_delayed": 69,
               "coordinates": [-6.3533, 106.8322]
             }
           ]

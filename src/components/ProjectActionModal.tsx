@@ -10,7 +10,8 @@ import {
   Copy, 
   Check, 
   Share2,
-  ShieldAlert
+  ShieldAlert,
+  Calendar
 } from 'lucide-react';
 
 export interface ProjectDetail {
@@ -23,6 +24,9 @@ export interface ProjectDetail {
   progress: number;
   status: string;
   status_color: string;
+  start_date?: string;
+  target_date?: string;
+  days_delayed?: number;
   coordinates?: number[];
 }
 
@@ -47,10 +51,12 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
     }).format(val).replace('Rp', 'Rp ');
   };
 
-  const isDelayed = project.status_color === 'red' || project.progress < 50;
+  const isDelayed = project.status_color === 'red' || (project.days_delayed && project.days_delayed > 0) || project.progress < 50;
+  const targetDeadline = project.target_date || (isDelayed ? '15 Agustus 2026' : '30 November 2026');
+  const delayDays = project.days_delayed || 69;
 
-  // Generate advocacy text for social pressure / reporting
-  const complaintText = `📢 [PENGAWASAN WARGA ANGIN.ID]\nLaporan Proyek APBD: ${project.title}\nLokasi: ${project.location}\nNilai Pagu: ${formatRupiah(project.budget)}\nKontraktor: ${project.contractor}\nStatus Progres: ${project.status} (${project.progress}%)\n\nMohon atensi dinas terkait @DKIJakarta @dinasbmkikotajkt atas progres proyek ini agar selesai tepat waktu demi keselamatan warga! #KawalAPBD #ANGINid`;
+  // Generate advocacy text for social pressure / reporting with exact deadline and delay
+  const complaintText = `📢 [PENGAWASAN WARGA ANGIN.ID]\nLaporan Proyek APBD: ${project.title}\nLokasi: ${project.location}\nNilai Pagu: ${formatRupiah(project.budget)}\nKontraktor: ${project.contractor}\nDeadline Resmi: ${targetDeadline}${isDelayed ? ` (MOLOR ${delayDays} HARI)` : ''}\nStatus Realisasi Fisik: Baru ${project.progress}%\n\nMohon atensi dinas terkait @DKIJakarta @dinasbmkikotajkt atas keterlambatan proyek ini agar segera diselesaikan demi keselamatan & kenyamanan warga! #KawalAPBD #ANGINid`;
 
   // Action: Open Twitter/X intent with pre-filled message
   const handleAdvocateTwitter = () => {
@@ -82,14 +88,14 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+          className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
           aria-label="Tutup"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Status Badge Top */}
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex flex-wrap items-center gap-2 mb-3">
           <span 
             className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full ${
               project.status_color === 'green'
@@ -110,8 +116,8 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
           </span>
 
           {isDelayed && (
-            <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
-              Perlu Perhatian Warga
+            <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 flex items-center gap-1">
+              <span>⚠️ Molor {delayDays} Hari</span>
             </span>
           )}
         </div>
@@ -136,7 +142,9 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
         <div className="space-y-1.5 mb-5">
           <div className="flex justify-between text-xs font-semibold text-slate-700">
             <span>Realisasi Fisik Proyek:</span>
-            <span>{project.progress}%</span>
+            <span className={isDelayed ? 'font-bold text-rose-600' : 'font-bold text-slate-900'}>
+              {project.progress}% {isDelayed ? `(Seharusnya 100%)` : ''}
+            </span>
           </div>
           <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200">
             <div 
@@ -152,12 +160,13 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
           </div>
         </div>
 
-        {/* Tender & Contractor Info Box */}
+        {/* Tender & Contractor Info Box with Contract Deadline (Target Tanggal Selesai) */}
         <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/80 space-y-2.5 text-xs mb-5">
           <div className="flex justify-between items-center py-0.5">
             <span className="text-slate-500">Nilai Kontrak APBD:</span>
             <span className="font-extrabold text-slate-900 text-sm">{formatRupiah(project.budget)}</span>
           </div>
+
           <div className="flex justify-between items-center py-0.5 border-t border-slate-200 pt-2">
             <span className="text-slate-500">Kontraktor Pelaksana:</span>
             <span className="font-bold text-slate-800 flex items-center gap-1">
@@ -165,6 +174,31 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
               <span>{project.contractor}</span>
             </span>
           </div>
+
+          {/* ROW DEADLINE KONTRAK ASLI & STATUS KETERLAMBATAN */}
+          <div className="flex justify-between items-center py-0.5 border-t border-slate-200 pt-2">
+            <span className="text-slate-500">Tenggat Selesai Kontrak:</span>
+            {isDelayed ? (
+              <span className="font-extrabold text-rose-700 flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-rose-500" />
+                <span>{targetDeadline}</span>
+                <span className="bg-rose-100 text-rose-800 text-[10px] font-black px-1.5 py-0.5 rounded border border-rose-200">
+                  Molor {delayDays} Hari
+                </span>
+              </span>
+            ) : project.status_color === 'green' ? (
+              <span className="font-bold text-emerald-700 flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-emerald-500" />
+                <span>{targetDeadline} (Tepat Waktu)</span>
+              </span>
+            ) : (
+              <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                <span>{targetDeadline}</span>
+              </span>
+            )}
+          </div>
+
           <div className="flex justify-between items-center py-0.5 border-t border-slate-200 pt-2">
             <span className="text-slate-500">Sumber Keterbukaan:</span>
             <span className="font-semibold text-emerald-700">LPSE &amp; Satu Data DKI Jakarta</span>
@@ -179,7 +213,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
               <div>
                 <h4 className="text-xs font-bold text-rose-900">Aksi Nyata Pengawasan Warga</h4>
                 <p className="text-[11px] text-rose-700 leading-relaxed mt-0.5">
-                  Proyek ini terindikasi mengalami keterlambatan pengerjaan. Warga dapat menyuarakan atensi langsung ke kanal resmi pengawasan publik.
+                  Proyek ini telah <strong>melewati batas waktu kontrak sejak {targetDeadline} (molor {delayDays} hari)</strong> namun baru selesai {project.progress}%. Warga berhak menyuarakan atensi langsung ke kanal pengawasan resmi.
                 </p>
               </div>
             </div>
@@ -187,7 +221,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
             <div className="flex flex-col sm:flex-row gap-2 pt-1">
               <button
                 onClick={handleAdvocateTwitter}
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition"
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition cursor-pointer"
               >
                 <Share2 className="w-3.5 h-3.5 text-sky-400" />
                 <span>Teruskan ke X/Twitter Pemda</span>
@@ -195,7 +229,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
 
               <button
                 onClick={handleOpenLapor}
-                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-rose-50 text-rose-700 border border-rose-300 text-xs font-bold py-2.5 px-3 rounded-lg transition"
+                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-rose-50 text-rose-700 border border-rose-300 text-xs font-bold py-2.5 px-3 rounded-lg transition cursor-pointer"
               >
                 <span>Aduan LAPOR.go.id</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -206,7 +240,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
           <div className="bg-emerald-50/60 border border-emerald-200 rounded-xl p-3.5 flex items-center justify-between text-xs text-emerald-900 mb-4">
             <span className="flex items-center gap-1.5 font-medium">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>Proyek ini berjalan sesuai linimasa kontrak pengadaan.</span>
+              <span>Proyek ini berjalan sesuai linimasa kontrak pengadaan (Target: {targetDeadline}).</span>
             </span>
           </div>
         )}
@@ -215,7 +249,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
         <div className="flex justify-between items-center pt-2">
           <button
             onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-900 font-semibold py-1.5 px-2 rounded hover:bg-slate-100 transition"
+            className="inline-flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-900 font-semibold py-1.5 px-2 rounded hover:bg-slate-100 transition cursor-pointer"
           >
             {copied ? (
               <>
@@ -232,7 +266,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
 
           <button
             onClick={onClose}
-            className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-1.5 rounded transition"
+            className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-1.5 rounded transition cursor-pointer"
           >
             Tutup
           </button>

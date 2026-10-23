@@ -338,6 +338,11 @@ export default function App() {
                 </button>
               </div>
 
+              {/* Catatan Transparansi Formula (Footnote Disclosure) Sesuai Celah 2.4 */}
+              <div className="mt-4 pt-3 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed">
+                <strong className="text-slate-500 font-semibold">Catatan Transparansi Fiskal:</strong> Angka di atas dihitung berdasarkan formula simulasi dari Pajak Daerah (PB1/PBJT Restoran 10% dan Pajak Kendaraan Bermotor) serta porsi Dana Bagi Hasil (DBH) Pajak Penghasilan (PPh) yang disalurkan kembali oleh Pemerintah Pusat ke kas APBD DKI Jakarta.
+              </div>
+
             </div>
           </div>
 

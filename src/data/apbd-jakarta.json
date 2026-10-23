@@ -143,14 +143,40 @@
           "name": "Bantuan Biaya Personal KJP Plus & KJMU",
           "budget": 4500000000000,
           "human_conversion": "Membiayai perlengkapan sekolah & kuliah untuk 850.000 siswa dan mahasiswa Jakarta.",
-          "projects": []
+          "projects": [
+            {
+              "id": "proj-kjmu-upnvj",
+              "title": "Penyaluran KJMU Mahasiswa Berprestasi Jakarta Selatan",
+              "location": "Pondok Labu, Jakarta Selatan",
+              "budget": 8500000000,
+              "length": "1.200 Mahasiswa",
+              "contractor": "Dinas Pendidikan DKI Jakarta",
+              "progress": 100,
+              "status": "Selesai",
+              "status_color": "green",
+              "coordinates": [-6.3150, 106.7950]
+            }
+          ]
         },
         {
           "id": "sub-sekolah",
           "name": "Rehabilitasi Total Gedung Sekolah Negeri",
           "budget": 3800000000000,
           "human_conversion": "Merestorasi 142 gedung SD/SMP/SMA agar aman dan ramah disabilitas.",
-          "projects": []
+          "projects": [
+            {
+              "id": "proj-sdn-pondoklabu",
+              "title": "Rehabilitasi Gedung SDN 01 Pondok Labu",
+              "location": "Pondok Labu, Jakarta Selatan",
+              "budget": 4200000000,
+              "length": "1 Kompleks Sekolah",
+              "contractor": "PT Bangun Sarana Edukasi",
+              "progress": 75,
+              "status": "Dalam Pengerjaan",
+              "status_color": "yellow",
+              "coordinates": [-6.3110, 106.7975]
+            }
+          ]
         }
       ]
     },
@@ -167,7 +193,20 @@
           "name": "Iuran Jaminan Kesehatan Warga (BPJS PBI)",
           "budget": 3900000000000,
           "human_conversion": "Menjamin 4,8 juta warga kurang mampu berobat gratis di faskes kelas 3.",
-          "projects": []
+          "projects": [
+            {
+              "id": "proj-bpjs-subsidi",
+              "title": "Subsidi Premi BPJS PBI Warga Ber-KTP Jakarta",
+              "location": "Seluruh Wilayah DKI Jakarta",
+              "budget": 325000000000,
+              "length": "4,8 Juta Jiwa",
+              "contractor": "BPJS Kesehatan Cabang Utama Jakarta",
+              "progress": 100,
+              "status": "Selesai",
+              "status_color": "green",
+              "coordinates": [-6.1800, 106.8300]
+            }
+          ]
         },
         {
           "id": "sub-puskesmas-ops",
@@ -198,16 +237,59 @@
       "percentage": 28,
       "color": "#475569",
       "description": "Gaji dan tunjangan 60.000+ guru, dokter, pemadam kebakaran, dan aparatur daerah.",
-      "sub_programs": []
+      "sub_programs": [
+        {
+          "id": "sub-guru-nakes",
+          "name": "Gaji & Tunjangan Kinerja Guru & Nakes Daerah",
+          "budget": 14200000000000,
+          "human_conversion": "Kesejahteraan 42.000 tenaga pendidik dan tenaga medis garda terdepan.",
+          "projects": []
+        },
+        {
+          "id": "sub-damkar-satpol",
+          "name": "Operasional Petugas Damkar & Layanan Tanggap 112",
+          "budget": 4100000000000,
+          "human_conversion": "Kesiapsiagaan pos pemadam kebakaran 24 jam di seluruh kecamatan.",
+          "projects": []
+        }
+      ]
     },
     {
       "id": "sec-sosial",
-      "name": "Bantuan Sosial & Pemberdayaan Warga",
+      "name": "Bantuan Sosial & Perlindungan Warga",
       "budget": 8400000000000,
       "percentage": 10,
       "color": "#f59e0b",
-      "description": "Kartu Lansia Jakarta (KLJ), Kartu Anak Jakarta (KAJ), dan bantuan pangan.",
-      "sub_programs": []
+      "description": "Kartu Lansia Jakarta (KLJ), Kartu Anak Jakarta (KAJ), dan bantuan pangan pangan bersubsidi.",
+      "sub_programs": [
+        {
+          "id": "sub-klj",
+          "name": "Bantuan Tunai Kartu Lansia Jakarta (KLJ)",
+          "budget": 3200000000000,
+          "human_conversion": "Bantuan tunai bulanan Rp 600.000 bagi 82.000 lansia pra-sejahtera.",
+          "projects": [
+            {
+              "id": "proj-klj-jaksel",
+              "title": "Penyaluran Bantuan Tunai KLJ Jakarta Selatan",
+              "location": "Jakarta Selatan",
+              "budget": 5400000000,
+              "length": "18.500 Penerima",
+              "contractor": "Bank DKI & Dinas Sosial",
+              "progress": 100,
+              "status": "Selesai",
+              "status_color": "green",
+              "coordinates": [-6.2600, 106.8000]
+            }
+          ]
+        },
+        {
+          "id": "sub-sembako",
+          "name": "Pangan Bersubsidi & Operasi Pasar Murah",
+          "budget": 2800000000000,
+          "human_conversion": "Subsidi daging sapi, ayam, telur, dan beras murah di RPTRA dan pasar jaya.",
+          "projects": []
+        }
+      ]
     },
     {
       "id": "sec-lingkungan",
@@ -216,7 +298,35 @@
       "percentage": 6,
       "color": "#10b981",
       "description": "Armada truk sampah, pengelolaan TPST Bantargebang, dan taman kota RPTRA.",
-      "sub_programs": []
+      "sub_programs": [
+        {
+          "id": "sub-bantargebang",
+          "name": "Pengelolaan TPST Bantargebang & RDF Plant",
+          "budget": 2400000000000,
+          "human_conversion": "Pengolahan 7.500 ton sampah harian Jakarta menjadi bahan bakar alternatif (RDF).",
+          "projects": [
+            {
+              "id": "proj-rdf-plant",
+              "title": "Optimalisasi RDF Plant Pengolahan Sampah Menjadi Energi",
+              "location": "TPST Bantargebang",
+              "budget": 18200000000,
+              "length": "Kapasitas 1.000 Ton/Hari",
+              "contractor": "PT Wijaya Karya Rekayasa",
+              "progress": 88,
+              "status": "Dalam Pengerjaan",
+              "status_color": "yellow",
+              "coordinates": [-6.3500, 106.9900]
+            }
+          ]
+        },
+        {
+          "id": "sub-taman-rptra",
+          "name": "Pemeliharaan 324 Ruang Publik Terbuka Ramah Anak (RPTRA)",
+          "budget": 1600000000000,
+          "human_conversion": "Ruang bermain hijau, perpustakaan anak, dan sarana olahraga gratis warga.",
+          "projects": []
+        }
+      ]
     }
   ]
 }

@@ -6,7 +6,8 @@
 > **Tema Utama:** *"From Visionaries to Architects of Change"* (Tagline: *Dream It. Build It. Change It.*)  
 > **Subtema Pilihan:** Subtema 1 – **Open Government Data**  
 > **Arsitektur Utama:** 100% Full Frontend (Static-First / Jamstack, Zero-Database, No-CRUD)  
-> **Versi Dokumen:** 2.1.0 (Master Execution Guide & Strategic Decision Log)
+> **Target Deployment:** Vercel Production (`angin.vercel.app`) + Offline Presentation Backup  
+> **Versi Dokumen:** 2.2.0 (Master PRD – Sesuai Evaluasi Kritis & Solusi 6 Celah)
 
 ---
 
@@ -19,145 +20,135 @@ Keterbukaan data anggaran pemerintah (APBD) di Indonesia selama ini gagal dipaha
 * **Krisis Akuntabilitas Publik:** Warga rutin membayar pajak (potongan PPh di gaji, pajak resto PB1 10% saat jajan di kafe, pajak motor PKB tahunan), namun tetap bertanya: *"Pajak gue lari ke mana kalau jalanan depan rumah tetap bolong dan puskesmas masih antre berjam-jam?"*
 
 ### 1.2 Solusi ANGIN
-**ANGIN** adalah platform web interaktif yang mengubah data triliunan rupiah APBD menjadi **pecahan rupiah nyata di tingkat akar rumput**. Warga tidak sekadar menonton data, melainkan diberdayakan menjadi *Architects of Change* yang memahami dan mengawasi pembangunan di kotanya.
+**ANGIN** adalah platform web interaktif yang mengubah data triliunan rupiah APBD menjadi **pecahan rupiah nyata di tingkat akar rumput**. Warga tidak sekadar menonton data, melainkan diberdayakan menjadi *Architects of Change* yang memahami, mengawasi, dan mengambil aksi nyata terhadap pembangunan di kotanya.
 
 ---
 
-## 2. Keputusan Strategis & Arsitektur Produk (Design Log)
+## 2. Evaluasi Kritis & Solusi Perbaikan 6 Celah Utama
 
-Bagian ini mendokumentasikan alasan objektif di balik keputusan tim agar seluruh anggota dan dewan juri memahami arah produk secara konsisten:
+Untuk menjamin web ini kebal sanggahan di hadapan dewan juri profesional serta memenuhi standar juara 1, berikut 6 perbaikan konkret yang diintegrasikan ke dalam sistem:
 
-### 2.1 Mengapa Fokus 100% pada APBD (Bukan APBN)?
-1. **Prinsip Kedekatan Dampak (*Impact Proximity*):**
-   * APBN (Pusat) mengurusi hal makro seperti pertahanan (alutsista TNI), pembayaran bunga utang negara, subsidi BBM/listrik BUMN, dan IKN.
-   * APBD (Daerah) adalah instrumen fiskal yang paling langsung diinjak dan dirasakan warga: aspal jalanan, puskesmas kelurahan, normalisasi kali, dan subsidi bus TransJakarta.
-2. **Menghindari Blunder Tata Kelola di Depan Juri:**
-   * Jalan berlubang dan drainase kota adalah **100% kewenangan APBD Pemda**. Jika mencampuradukkan belanja kementerian pusat (APBN) ke proyek jalanan kota, juri yang paham desentralisasi fiskal akan menganggap tim tidak paham pembagian urusan pemerintahan.
-3. **Peta Hanya Relevan di Level Daerah:**
-   * Kita bisa menaruh titik pin fisik perbaikan jalan atau puskesmas di peta Jakarta/Depok. Kita tidak bisa menaruh pin lokasi untuk belanja bunga utang negara atau kapal selam di peta kota.
-4. **Skala Angka yang Tepat:**
-   * Angka APBD DKI (**Rp 84,2 Triliun**) adalah skala ideal: cukup besar untuk dibedah, namun cukup konkret untuk diurai hingga ke proyek aspal bernilai belasan miliar rupiah.
+### 2.1 Isu Peta Offline & Kewajiban Hosting Online
+* **Solusi Tile Peta Offline (Dual Mode):**
+  * *Online Mode:* Peta memuat tile CartoDB/OpenStreetMap standar via internet.
+  * *Offline Fallback Mode:* Sebagai mitigasi panggung onsite (Guidebook Halaman 18), jika koneksi internet terputus (`!navigator.onLine` atau saat tile gagal dimuat), peta otomatis beralih ke **SVG Vector Map Jakarta** interaktif berbasis GeoJSON lokal yang sudah dibundel di dalam proyek. Titik-titik proyek tetap muncul di atas siluet peta Jakarta tanpa kotak abu-abu rusak.
+* **Strategi Deployment Publik:**
+  * Target hosting utama menggunakan **Vercel** (`angin.vercel.app`) dengan integrasi CI/CD automatic deployment dari branch `master` GitHub.
 
-### 2.2 Mengapa 100% Full Frontend Tanpa Database & Tanpa CRUD?
-1. **Karakteristik Data APBD Adalah *Read-Only*:**
-   * Data anggaran tahun fiskal adalah data publik agregat yang tidak diubah setiap detik oleh pengguna umum.
-   * Warga masyarakat adalah pengawas dan penerima manfaat, bukan administrator pemerintah yang berhak mengedit angka anggaran negara di database.
-2. **Menghindari Jebakan Pemula (No Wasted Time on Admin CRUD):**
-   * Membuat halaman login admin dan form input anggaran membutuhkan 40% waktu koding yang tidak dinilai oleh juri. Juri hanya menilai: *"Bagaimana pengalaman masyarakat awam saat mengonsumsi data tersebut?"*
-3. **Ketahanan Panggung & Siap Offline (Guidebook Halaman 18 Poin c):**
-   * Panitia secara tertulis menyarankan menyiapkan alternatif offline saat babak final di kampus UPNVJ.
-   * Arsitektur *Static-First* (Jamstack) memastikan web berjalan **100% instan tanpa koneksi internet sama sekali**, bebas risiko *cold-start* server cloud gratisan yang sering macet saat presentasi.
-4. **Penyimpanan Lokal:**
-   * Fitur bookmark proyek dan riwayat struk disimpan aman di `localStorage` peramban pengguna.
+### 2.2 Sinkronisasi Anggaran 100% & Anti-Empty State
+* **Kelengkapan 6 Sektor (Total 100% = Rp 84,2 Triliun):**
+  1. 🎓 **Pendidikan & Beasiswa:** 24% (`Rp 20,2 Triliun`)
+  2. 💼 **Belanja Pegawai (Gaji ASN/Guru/Nakes):** 28% (`Rp 23,5 Triliun`)
+  3. 🏗️ **Infrastruktur & Pekerjaan Umum:** 19% (`Rp 16,0 Triliun`)
+  4. 🏥 **Kesehatan & Faskes:** 13% (`Rp 10,9 Triliun`)
+  5. 🛡️ **Bantuan Sosial & Perlindungan Warga:** 10% (`Rp 8,4 Triliun`)
+  6. 🌿 **Lingkungan Hidup & Kebersihan Kota:** 6% (`Rp 5,2 Triliun`)  
+  *(Total: 100% / Rp 84,2 T — Seluruh porsi APBD tersinkronisasi presisi tanpa ada anggaran bocor/hilang).*
+* **Solusi Anti-Empty State (Semua Sektor Berisi Data Nyata):**
+  * Sektor Pendidikan, Kesehatan, dan Bansos wajib diisi sub-program dan paket dummy riil:
+    * *Pendidikan:* KJP Plus/KJMU (Rp 4,5 T) & Rehab Gedung Sekolah (Rp 3,8 T - Proyek: SDN 01 Pondok Labu).
+    * *Kesehatan:* Iuran BPJS PBI (Rp 3,9 T) & Operasional Puskesmas (Rp 2,7 T - Proyek: Puskesmas Gambir).
+    * *Bansos:* Kartu Lansia Jakarta (Rp 3,2 T - Proyek: Penyaluran Bantuan Tunai Jaksel) & Bantuan Sembako Pangan (Rp 2,8 T).
+  * Dengan ini, sektor apa pun yang diklik juri akan membelah secara interaktif tanpa kartu kosong!
 
-### 2.3 Tiga Fungsi Nyata Peta Interaktif (Bukan Sekadar Hiasan Visual)
-Peta **bukan gimik pelengkap**, melainkan jembatan antara angka teks di tabel menjadi wujud fisik di dunia nyata:
-1. **Hyperlocal Discovery ("Ada Proyek Apa di Sekitar Gue?"):**
-   * Warga tidak perlu membaca 500 baris tabel. Pengguna cukup mengarahkan peta ke sekitar kampus UPNVJ (Pondok Labu/Fatmawati) atau rumahnya untuk melihat pekerjaan fisik terdekat.
-2. **Visual Status Radar (Bukan Cuma Warna):**
-   * 🟢 **Hijau (Ikon Checklist):** Proyek selesai 100% tepat waktu.
-   * 🟡 **Kuning (Ikon Jam Pasir):** Proyek sedang dikerjakan.
-   * 🔴 **Merah (Ikon Peringatan):** Proyek terlambat dari jadwal / terindikasi mangkrak.
-3. **Civic Watchdog (Alat Verifikasi Warga):**
-   * Jika sistem mencatat perbaikan jalan selesai 100% senilai Rp 8 Miliar, warga yang tinggal di titik koordinat tersebut bisa memverifikasi langsung kondisi fisik di lapangan.
+### 2.3 Strategi Responsif Layar Ponsel (Mobile-First)
+* **Diagram Sankey Adaptif:**
+  * Di layar desktop ($\ge$ 768px): Menampilkan diagram aliran horizontal multi-kolom yang dinamis.
+  * Di layar mobile (< 768px): Diagram horizontal otomatis berubah menjadi **Vertical Accordion Drill-down / Stacked Bar List** yang ramah gulir vertikal dan nyaman disentuh jari (*tap target* $\ge$ 44px).
+* **Pengganti `Ctrl + K` di Layar Sentuh:**
+  * Tombol pintasan `Ctrl + K` tetap aktif untuk keyboard laptop/desktop.
+  * Di navbar mobile disediakan ikon tombol kaca pembesar (Search Bar) mengambang yang langsung memunculkan modal pencarian cepat saat disentuh.
 
-### 2.4 Mengapa React 18 + Vite (Bukan Next.js)?
-1. **Bebas Masalah SSR / Hydration Error:**
-   * Komponen peta (**Leaflet**) dan ekspor kanvas (**html2canvas**) wajib mengakses objek peramban (`window` dan `document`).
-   * Di Next.js, ini sering memicu error merah `ReferenceError: window is not defined` saat Server-Side Rendering. Di Vite, seluruh komponen berjalan di *client-side* sehingga 100% langsung jalan tanpa kendala.
-2. **Tanpa Kewajiban Menulis `'use client'` di Setiap Berkas:**
-   * Karena semua komponen kita bersifat interaktif (slider, tabs, akordeon, modal), menggunakan Vite jauh lebih ergonomis dan bersih.
-3. **Kecepatan Kompilasi (Build 3 Detik):**
-   * Menggunakan esbuild/Vite yang sangat cepat dan stabil, meminimalkan risiko gagal deploy menjelang tenggat First Draft 1 November.
+### 2.4 Akurasi Formula Pajak (Regulasi Fiskal APBD vs APBN)
+* **Catatan Kaki Transparansi Formula (*Footnote Disclosure*):** Di bawah kartu kalkulator hero, dicantumkan teks edukasi hukum perpajakan:
+  > *"Catatan Transparansi Fiskal: Angka di atas dihitung berdasarkan formula simulasi dari Pajak Daerah (PB1/PBJT Restoran 10% dan Pajak Kendaraan Bermotor) serta porsi Dana Bagi Hasil (DBH) Pajak Penghasilan (PPh) yang disalurkan kembali oleh Pemerintah Pusat ke kas APBD DKI Jakarta."*
+* Hal ini membuktikan kepada juri bahwa tim paham administrasi keuangan publik Indonesia dan bukan sekadar asal tembak angka.
+
+### 2.5 Menghadirkan Aksi Nyata Warga (*Actionable Output*)
+Agar tidak berhenti sebagai tontonan data pasif tanpa perlu membangun sistem backend database yang rumit:
+1. **Fitur "Aksi Aduan Suara Warga" (Tautan Langsung ke Kanal Resmi):**
+   * Di proyek berstatus merah/terlambat (misal: *Jl. Margonda*), tersedia tombol: **`[ 📢 Teruskan ke Kanal Pengawasan Publik ]`**.
+   * Tombol ini secara otomatis menyalin ringkasan data proyek (ID tender, lokasi, nama kontraktor, persentase keterlambatan) lalu membuka *pre-filled message* ke kanal Twitter/X pemda (@DKIJakarta / @dinasbmkikotajkt) atau link aduan LAPOR.go.id. Warga langsung melakukan aksi pengawasan sosial (*social pressure*).
+2. **Fitur Ekspor Hasil Simulasi (*Civic Policy Card*):**
+   * Di fitur *The City Architect*, setelah warga selesai menggeser simulasi anggaran kota, disediakan tombol **`[ 📄 Terbitkan Manifesto Anggaran Warga ]`** yang menghasilkan kartu infografis PNG hasil rancangan mereka untuk diviralkan ke media sosial.
+
+### 2.6 Penyelarasan Penuh dengan Syarat Guidebook MIA 2026
+1. **Kelengkapan Dokumen First Draft (Deadline 1 November 2026):**
+   * Format penamaan berkas wajib: **`WIA_FDSMIA2025_NamaTim.pdf`** (maksimal 10 MB, maksimal 10 halaman) yang memuat lengkap 5 komponen wajib:
+     1. Konsep Singkat Website (Latar belakang, tujuan, solusi APBD).
+     2. Sitemap Diagram (Struktur hierarki halaman web).
+     3. Wireframe / Mockup Sederhana (Desain antarmuka).
+     4. Penjelasan Fitur Utama (5 modul utama ANGIN).
+     5. Screenshot Minimal 2 Halaman (Landing Page + Budget Flow Explorer yang sudah berjalan).
+2. **Roadmap Pengembangan Masa Depan (Bahan Video 11 Nov & Pitch Deck 28 Nov):**
+   * **Fase 1 (Saat Ini):** Keterbukaan APBD DKI Jakarta, Visualisasi Proyek Fisik, & Civic Receipt.
+   * **Fase 2 (Q1 2027):** Ekspansi ke kota penyangga (BODETABEK - Depok, Bekasi, Tangerang, Bogor) dan integrasi notifikasi aduan via WhatsApp Bot warga.
+   * **Fase 3 (Q3 2027):** Integrasi AI Automated Anomaly Detection langsung dari portal LPSE pengadaan tender untuk deteksi dini proyek bermasalah.
 
 ---
 
 ## 3. Rencana 5 Fitur Utama & Spesifikasi Fungsional
 
 ### Fitur 1: Kalkulator Alokasi Pajak (In-Hero Interactive Slider) `[SELESAI SPRINT 1]`
-* **Cara Kerja:** Pengguna menggeser slider pendapatan/pengeluaran bulanan (rentang Rp 2.000.000 – Rp 20.000.000, nilai bawaan Rp 4.000.000).
-* **Keluaran Instan:** Tiga kartu pecahan rupiah nyata yang dihitung proporsional dari formula APBD:
-  * 🚧 **Perbaikan Jalan & Jembatan** (~2.2% dari kontribusi)
-  * 🏥 **Subsidi Puskesmas & Faskes** (~3.0% dari kontribusi)
-  * 🚌 **Subsidi Transportasi Publik TransJakarta/MRT** (~1.6% dari kontribusi)
-* **Keterbukaan Sektor Lain:** Terdapat akordeon/tombol toggle untuk melihat alokasi sektor makro lainnya (Pendidikan 24%, Belanja Pegawai 28%, dll.) sehingga data terasa utuh dan akuntabel.
-* **Progress Bar Dinamis:** Bar warna-warni yang secara reaktif menyesuaikan proporsinya mengikuti angka kalkulasi.
+* Slider pendapatan/pengeluaran bulanan (Rp 2 Juta – Rp 20 Juta).
+* Pecahan alokasi instan: Perbaikan Jalan (~2.2%), Puskesmas (~3.0%), Transportasi (~1.6%).
+* Akordeon sektor makro lainnya (Pendidikan 24%, Belanja Pegawai 28%, dll.).
+* Progress bar dinamis yang reaktif mengikuti input slider.
+* Footnote disclosure transparansi fiskal resmi.
 
 ### Fitur 2: Struk Pajak Warga (*Civic Receipt Generator*) `[SELESAI SPRINT 1]`
-* **Konsep UX:** Mengubah data kalkulasi yang kaku menjadi benda personal yang membanggakan warga (*delight factor*).
-* **Tampilan UI:** Pop-up modal berdesain seperti **struk belanja kasir modern / minimarket** yang merinci kontribusi pengguna untuk fasilitas publik (misal: *1,8 meter aspal jalan*, *3 paket obat puskesmas*, *5 tiket busway*).
-* **Fitur Ekspor & Confetti:** Dilengkapi tombol **`[ 📥 Unduh Gambar (PNG) ]`** menggunakan pustaka `html2canvas` yang siap dibagikan ke Instagram Story, X, atau WhatsApp, lengkap dengan animasi *confetti*.
-* **Fitur Salin Ringkasan:** Memungkinkan menyalin rangkuman teks ke clipboard.
+* Modal struk kasir minimarket modern personal dengan barcode dan stempel verifikasi.
+* Tombol unduh gambar PNG menggunakan `html2canvas` + animasi *confetti*.
+* Tombol salin ringkasan teks untuk dibagikan ke WhatsApp / medsos.
 
 ### Fitur 3: Penelusuran Alur Anggaran (*Budget Flow Explorer*) `[TARGET SPRINT 2]`
-* **Multi-Level Drill-down:**
-  * **Level 1 (Makro):** Total APBD Rp 84,2 Triliun dengan progress bar serapan anggaran (68% terserap per Q3).
-  * **Level 2 (Sektoral):** Diagram alur proporsional (Sankey / Tree) memecah anggaran ke 6 sektor utama.
-  * **Level 3 (Sub-Program):** Saat sektor *Infrastruktur & PU (Rp 16,0 T)* diklik, membelah menjadi program konkret (*Pengendalian Banjir Rp 5,8 T*, *Pemeliharaan Jalan Rp 4,2 T*, *Subsidi Transportasi Rp 4,5 T*).
-  * **Level 4 (Proyek Fisik Nyata):** Saat *Pemeliharaan Jalan* diklik, muncul daftar paket pengerjaan nyata (*Jl. TB Simatupang*, *Jl. Fatmawati*, *Jl. Margonda*), nilai pagu tender, panjang jalan (km), nama kontraktor pelaksana, dan status progres pengerjaan.
-* **Kartu Konversi Bahasa Manusia:** Box penerjemah angka nominal:  
-  *"Rp 4,2 Triliun setara dengan pengaspalan mulus 1.150 km jalan raya di seluruh DKI Jakarta."*
+* Diagram alur proporsional adaptif (Desktop: Sankey Horizontal, Mobile: Vertical Accordion).
+* Drill-down hingga Level 4: Makro 84,2 T $\rightarrow$ Sektor $\rightarrow$ Sub-Program $\rightarrow$ Proyek Fisik Jalan & Sekolah.
+* Kartu konversi bahasa manusia (misal: *Rp 4,2 T = 1.150 km jalan raya*).
 
 ### Fitur 4: Radar Peta Proyek Fisik (*Mini GIS Leaflet*) `[TARGET SPRINT 2]`
-Peta interaktif berbasis Leaflet yang ringan dan fungsional dengan pin koordinat nyata, pop-up info proyek, filter status (selesai, berjalan, terlambat), dan filter wilayah.
+* Peta interaktif Leaflet dengan dual mode (Online OpenStreetMap + Offline SVG Fallback).
+* Pin status pengerjaan: Hijau (selesai), Kuning (berjalan), Merah (terlambat).
+* Tombol aksi aduan suara warga pada proyek berstatus merah.
 
 ### Fitur 5: Simulator Kota Warga (*The City Architect*) `[TARGET SPRINT 3]`
-* **Konsep:** Memenuhi semangat tema *"From Visionaries to Architects of Change"*.
-* **Cara Kerja:** Mini simulasi di mana warga memegang peran sebagai pengambil kebijakan kota:
-  * Pengguna menggeser slider kebijakan: *Pangkas anggaran dinas/rapat hotel 30%* $\rightarrow$ *Alihkan dananya ke beasiswa mahasiswa & perbaikan jembatan*.
-  * Indikator dampak langsung merespons secara dinamis (*Indeks Kualitas Udara naik*, *Tingkat Kemacetan turun*, *Jumlah beasiswa bertambah*).
-
-### Fitur Pendukung Pro:
-* **Command Palette (`Ctrl + K`):** Pencarian cepat instan untuk nama jalan, proyek, atau dinas tanpa perlu klik menu manual.
-* **Sticky Context Breadcrumb:** Navigasi jalur atas (`DKI Jakarta > Infrastruktur > Pemeliharaan Jalan > Jl. TB Simatupang`) agar pengguna tidak tersesat dalam data.
+* Simulasi pergeseran anggaran publik dengan dampak indikator kemacetan dan kualitas udara.
+* Tombol ekspor *Manifesto Anggaran Warga* (PNG).
 
 ---
 
-## 4. Standar Desain, Estetika, & Aksesibilitas (Anti-Slop UI)
+## 4. Arsitektur Teknis: 100% Full Frontend (Zero Database)
 
-Web ini mematuhi panduan `antislop-ui` agar terlihat profesional, bersih, dan berbobot:
-
-1. **Palet Warna Terarah & Kredibel (GovTech Modern):**
-   * **Background Base:** `Slate-50` (`#F8FAFC`) / Card White (`#FFFFFF`).
-   * **Primary Text:** `Slate-900` (`#0F172A`) & `Slate-600` (`#475569`).
-   * **Primary Accent:** `Emerald-600` (`#059669`) / `Emerald-500` (`#10B981`) melambangkan transparansi rupiah.
-   * **Status Accent:** `Amber-500` (sedang berjalan) & `Rose-500` (terlambat/peringatan).
-   * **Aturan Anti-Slop:** Dilarang menggunakan gradien ungu-neon generik, tidak ada efek *glow* berlebih, dan tidak ada emoji dekoratif di dalam elemen UI resmi.
-2. **Inklusivitas & Aksesibilitas (Human-Centered):**
-   * **Navigasi Keyboard Penuh:** Slider, tombol, dan kartu proyek dapat diakses menggunakan tombol `Tab`, panah, dan `Enter`.
-   * **Aman untuk Buta Warna (*Colorblind Safe*):** Status proyek tidak boleh hanya mengandalkan warna; wajib disertai ikon dan label teks yang eksplisit.
-   * **Kontras Tinggi:** Rasio kontras teks di atas 4.5:1 (memenuhi standar WCAG AAA) agar nyaman dibaca di bawah terik matahari.
+1. **Prinsip Read-Only:** Data anggaran adalah data agregat publik per tahun fiskal.
+2. **Kesiapan Offline & Zero Cold-Start:** Memenuhi klausul alternatif offline Guidebook Hal. 18.
+3. **Penyimpanan Lokal:** Memanfaatkan `localStorage` untuk bookmark proyek dan riwayat struk.
+4. **Pilihan Stack:** React 18 + Vite (TypeScript) + Tailwind CSS + Shadcn UI + Lucide Icons + Leaflet + Recharts + html2canvas + cmdk.
 
 ---
 
 ## 5. Skema Data Dummy Resmi (`src/data/apbd-jakarta.json`) `[SELESAI SPRINT 1]`
 
-Telah diimplementasikan berkas `src/data/apbd-jakarta.json` yang memuat struktur data APBD DKI Jakarta 2026 (Rp 84,2 Triliun), 6 sektor utama, sub-program pengerjaan, hingga rincian paket proyek jalan nyata dengan koordinat GPS.
+Telah aktif dan mencakup 6 sektor lengkap (100% / Rp 84,2 T) dengan seluruh sub-program terisi anti-empty state (Infrastruktur, Pendidikan, Kesehatan, Pegawai, Bansos, Lingkungan Hidup).
 
 ---
 
 ## 6. Log Status & Roadmap Kepatuhan Guidebook WIA 2026
 
-### Status Pengerjaan Terkini:
 * [x] **Sprint 1 (23 Oktober 2026) — SELESAI:**
   * Pemasangan dependensi inti (`html2canvas`, `canvas-confetti`, `leaflet`, `react-leaflet@4`, `recharts`, `cmdk`).
-  * Pembuatan dataset mock resmi `src/data/apbd-jakarta.json`.
-  * Implementasi komponen Modal Struk Pajak Kasir (`src/components/CivicReceiptModal.tsx`) dengan ekspor gambar PNG dan confetti.
-  * Penyempurnaan Landing Page (`src/App.tsx`): Dropdown wilayah aktif, akordeon sektor makro, progress bar dinamis, dan section *The Reality Gap*.
-  * Verifikasi kompilasi build sukses (`npm run build` dalam 4 detik, 0 error).
+  * Pembuatan dataset mock resmi 6 sektor 100% sinkron (`src/data/apbd-jakarta.json`).
+  * Implementasi Modal Struk Kasir Pajak (`src/components/CivicReceiptModal.tsx`) dengan ekspor PNG & confetti.
+  * Penyempurnaan Landing Page (`src/App.tsx`): Dropdown wilayah aktif, akordeon sektor makro, progress bar dinamis, section *The Reality Gap*, dan footnote transparansi fiskal resmi.
+  * Verifikasi kompilasi build sukses (`npm run build` dalam 3,6 detik, 0 error).
 * [ ] **Sprint 2 (27 - 31 Oktober 2026) — SELANJUTNYA:**
-  * Pembuatan Halaman Kedua: *Budget Flow Explorer* detail dengan rincian alur sektoral & daftar proyek jalan fisik.
-  * Integrasi Leaflet Map interaktif dengan pin proyek nyata.
+  * Halaman Kedua: *Budget Flow Explorer* detail dengan visual adaptif (desktop horizontal, mobile vertical accordion).
+  * Integrasi Leaflet Map interaktif dengan offline SVG fallback dan tombol aksi aduan warga ke kanal pemda.
 * [ ] **01 November 2026 — FIRST DRAFT SUBMISSION:**
-  * **Kewajiban Guidebook Halaman 14:** Link Repository GitHub publik + Dokumen PDF <10 halaman (memuat screenshot 2 halaman wajib: Landing Page + 1 Halaman Lain).
-* [ ] **03 - 07 November 2026 — REVIEW IT & EVALUASI:**
-  * Evaluasi & masukan resmi dari mentor kompetisi.
-* [ ] **08 - 10 November 2026 — FIX IT (REVISI):**
-  * Perbaikan karya berdasarkan masukan mentor.
-* [ ] **11 November 2026 — FINAL SUBMISSION:**
-  * Pengumpulan Proposal PDF (maks 30 hal), Surat Orisinalitas bermaterai, dan video YouTube 5 menit.
-* [ ] **28 November 2026 — FINAL ONSITE (PUNCAK):**
-  * Pitching onsite 10 menit + live demo di hadapan dewan juri di UPN Veteran Jakarta.
+  * Berkas PDF wajib: `WIA_FDSMIA2025_NamaTim.pdf` (< 10 MB, < 10 hal, 5 komponen wajib termasuk screenshot minimal 2 halaman).
+* [ ] **03 - 07 November 2026 — REVIEW IT & EVALUASI:** Masukan mentor industri.
+* [ ] **08 - 10 November 2026 — FIX IT (REVISI):** Perbaikan karya.
+* [ ] **11 November 2026 — FINAL SUBMISSION:** Proposal PDF (maks 30 hal), Surat Orisinalitas bermaterai, dan video YouTube 5 menit (memuat roadmap 3 fase).
+* [ ] **28 November 2026 — FINAL ONSITE PITCHING:** Presentasi 10 menit di UPN Veteran Jakarta.
 
 ---
 

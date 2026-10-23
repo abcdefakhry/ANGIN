@@ -16,9 +16,13 @@ import {
 import { CivicReceiptModal } from './components/CivicReceiptModal';
 import { CommandSearchModal } from './components/CommandSearchModal';
 import { ProjectActionModal, ProjectDetail } from './components/ProjectActionModal';
+import { BudgetFlowExplorer } from './components/BudgetFlowExplorer';
 import apbdData from './data/apbd-jakarta.json';
 
 export default function App() {
+  // Navigation View State: 'home' | 'explorer'
+  const [activeView, setActiveView] = useState<'home' | 'explorer'>('home');
+
   // Gaji default 4.000.000 (sesuai mockup)
   const [income, setIncome] = useState<number>(4000000);
   const [selectedRegion, setSelectedRegion] = useState('DKI Jakarta');
@@ -121,12 +125,48 @@ export default function App() {
               </div>
             </a>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-6 text-[13px] font-semibold text-slate-700">
-              <a href="#kalkulator" className="text-slate-900 hover:text-emerald-600 transition-colors">Kalkulator Pajak</a>
-              <a href="#eksplorasi" className="hover:text-emerald-600 transition-colors">Aliran APBD</a>
-              <a href="#radar" className="hover:text-emerald-600 transition-colors">Radar Proyek</a>
-              <a href="#reality-gap" className="hover:text-emerald-600 transition-colors">Mengapa ANGIN?</a>
+            {/* Desktop Navigation Links / View Switcher */}
+            <nav className="hidden md:flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 bg-slate-100 p-1 rounded-xl">
+              <button 
+                onClick={() => setActiveView('home')}
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                  activeView === 'home' 
+                    ? 'bg-white text-slate-900 shadow-xs font-bold' 
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Beranda &amp; Kalkulator
+              </button>
+
+              <button 
+                onClick={() => {
+                  setActiveView('explorer');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                  activeView === 'explorer' 
+                    ? 'bg-emerald-600 text-white shadow-xs font-bold' 
+                    : 'text-slate-600 hover:text-emerald-700'
+                }`}
+              >
+                <span>Pohon Alur APBD</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded font-black ${
+                  activeView === 'explorer' ? 'bg-emerald-700 text-emerald-100' : 'bg-emerald-100 text-emerald-800'
+                }`}>
+                  Rp 84,2 T
+                </span>
+              </button>
+
+              {activeView === 'home' && (
+                <>
+                  <a href="#radar" className="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
+                    Radar Peta
+                  </a>
+                  <a href="#reality-gap" className="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
+                    Mengapa ANGIN?
+                  </a>
+                </>
+              )}
             </nav>
           </div>
 
@@ -203,9 +243,54 @@ export default function App() {
           </div>
 
         </div>
+
+        {/* Mobile View Switcher Tab Bar (< 768px) */}
+        <div className="md:hidden flex border-t border-slate-200/80 bg-slate-50/95 backdrop-blur px-4 py-2 gap-2">
+          <button
+            onClick={() => setActiveView('home')}
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition min-h-[44px] flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeView === 'home'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <span>Beranda &amp; Pajak</span>
+          </button>
+          <button
+            onClick={() => {
+              setActiveView('explorer');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition min-h-[44px] flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeView === 'explorer'
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <span>Pohon Alur</span>
+            <span className={`text-[10px] px-1.5 py-0.2 rounded font-black ${
+              activeView === 'explorer' ? 'bg-emerald-700 text-emerald-100' : 'bg-emerald-100 text-emerald-800'
+            }`}>
+              84,2 T
+            </span>
+          </button>
+        </div>
       </header>
 
-      {/* 5. HERO SECTION */}
+      {/* MAIN VIEW SWITCHER */}
+      {activeView === 'explorer' ? (
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+          <BudgetFlowExplorer 
+            onSelectProject={(project) => setSelectedProject(project)}
+            onNavigateHome={() => {
+              setActiveView('home');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        </main>
+      ) : (
+        <>
+          {/* 5. HERO SECTION */}
       <section id="kalkulator" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 pb-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           
@@ -226,13 +311,16 @@ export default function App() {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              <a 
-                href="#eksplorasi"
+              <button 
+                onClick={() => {
+                  setActiveView('explorer');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
                 className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-xl text-sm transition shadow-sm shadow-emerald-200 min-h-[44px] cursor-pointer"
               >
                 <span>Telusuri Aliran APBD</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </button>
 
               <a 
                 href="#radar"
@@ -564,11 +652,20 @@ export default function App() {
               </div>
             </div>
             
-            <div className="mt-4 flex justify-between items-center text-xs text-slate-500 pt-3 border-t border-slate-100">
-              <span>*Terhubung langsung dengan simulasi gaji</span>
+            <div className="mt-4 flex flex-wrap justify-between items-center gap-2 text-xs text-slate-500 pt-3 border-t border-slate-100">
+              <button 
+                onClick={() => {
+                  setActiveView('explorer');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1.5 cursor-pointer py-1.5 px-3 bg-emerald-50 rounded-lg border border-emerald-200/60"
+              >
+                <span>Buka Alur Penuh (Rp 84,2 T)</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
               <button 
                 onClick={() => setIsReceiptOpen(true)}
-                className="font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 cursor-pointer py-1"
+                className="font-bold text-slate-700 hover:text-slate-900 flex items-center gap-1 cursor-pointer py-1"
               >
                 Cetak Rincian Struk <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -680,6 +777,8 @@ export default function App() {
 
         </div>
       </section>
+      </>
+      )}
 
       {/* FOOTER */}
       <footer className="border-t border-slate-200 bg-white py-8">

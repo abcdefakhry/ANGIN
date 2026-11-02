@@ -12,7 +12,10 @@ import {
   AlertCircle,
   Sliders,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  Home,
+  Workflow,
+  Info
 } from 'lucide-react';
 import type { ProjectDetail } from './components/ProjectActionModal';
 import { CommandSearchModal } from './components/CommandSearchModal';
@@ -182,79 +185,119 @@ export default function App() {
               </div>
             </a>
 
-            {/* Desktop Navigation Links / View Switcher */}
-            <nav className="hidden md:flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 bg-slate-100 p-1 rounded-xl">
+            {/* Desktop Navigation Dock (Modern Icon-First, Smooth Hover-Expanded - antislop-ui) */}
+            <nav className="hidden md:flex items-center gap-1 bg-slate-100/90 border border-slate-200/80 p-1 rounded-2xl">
+              {/* 1. Beranda */}
               <button 
                 onClick={() => {
                   setActiveView('home');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                className={`group relative flex items-center h-8 px-2.5 rounded-xl transition-[background-color,color,border-color] duration-200 cursor-pointer ${
                   activeView === 'home' 
-                    ? 'bg-white text-slate-900 font-bold' 
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-slate-900 font-bold border border-slate-200' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
                 }`}
+                title="Beranda & Kalkulator Pajak"
+                aria-label="Beranda"
               >
-                Beranda &amp; Kalkulator
+                <Home className={`w-4 h-4 flex-shrink-0 transition-colors ${activeView === 'home' ? 'text-emerald-600' : 'text-slate-500 group-hover:text-slate-900'}`} />
+                <span className="max-w-0 opacity-0 overflow-hidden whitespace-nowrap text-xs font-semibold group-hover:max-w-[120px] group-hover:opacity-100 group-hover:ml-1.5 group-focus-visible:max-w-[120px] group-focus-visible:opacity-100 group-focus-visible:ml-1.5 transition-[max-width,opacity,margin] duration-300 ease-out">
+                  Beranda
+                </span>
+                {activeView === 'home' && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-emerald-600 rounded-full"></span>
+                )}
               </button>
 
+              {/* 2. Pohon Alur APBD */}
               <button 
                 onClick={() => {
                   setActiveView('explorer');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                className={`group relative flex items-center h-8 px-2.5 rounded-xl transition-[background-color,color,border-color] duration-200 cursor-pointer ${
                   activeView === 'explorer' 
-                    ? 'bg-emerald-600 text-white font-bold' 
-                    : 'text-slate-600 hover:text-emerald-700'
+                    ? 'bg-white text-slate-900 font-bold border border-slate-200' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
                 }`}
+                title="Pohon Alur APBD (Rp 84,2 Triliun)"
+                aria-label="Pohon Alur APBD"
               >
-                <span>Pohon Alur APBD</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded font-black ${
-                  activeView === 'explorer' ? 'bg-emerald-700 text-emerald-100' : 'bg-emerald-100 text-emerald-800'
-                }`}>
-                  Rp 84,2 T
+                <Workflow className={`w-4 h-4 flex-shrink-0 transition-colors ${activeView === 'explorer' ? 'text-emerald-600' : 'text-slate-500 group-hover:text-slate-900'}`} />
+                <span className="max-w-0 opacity-0 overflow-hidden whitespace-nowrap text-xs font-semibold group-hover:max-w-[140px] group-hover:opacity-100 group-hover:ml-1.5 group-focus-visible:max-w-[140px] group-focus-visible:opacity-100 group-focus-visible:ml-1.5 transition-[max-width,opacity,margin] duration-300 ease-out">
+                  Pohon Alur APBD
                 </span>
+                {activeView === 'explorer' && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-emerald-600 rounded-full"></span>
+                )}
               </button>
 
+              {/* 3. Radar Peta GIS */}
               <button 
                 onClick={() => {
                   setActiveView('map');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                className={`group relative flex items-center h-8 px-2.5 rounded-xl transition-[background-color,color,border-color] duration-200 cursor-pointer ${
                   activeView === 'map' 
-                    ? 'bg-slate-900 text-white font-bold' 
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-slate-900 font-bold border border-slate-200' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
                 }`}
+                title="Radar Peta Proyek Fisik (GIS Jakarta)"
+                aria-label="Radar Peta GIS"
               >
-                <MapPin className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Radar Peta GIS</span>
+                <MapPin className={`w-4 h-4 flex-shrink-0 transition-colors ${activeView === 'map' ? 'text-emerald-600' : 'text-slate-500 group-hover:text-slate-900'}`} />
+                <span className="max-w-0 opacity-0 overflow-hidden whitespace-nowrap text-xs font-semibold group-hover:max-w-[140px] group-hover:opacity-100 group-hover:ml-1.5 group-focus-visible:max-w-[140px] group-focus-visible:opacity-100 group-focus-visible:ml-1.5 transition-[max-width,opacity,margin] duration-300 ease-out">
+                  Radar Peta GIS
+                </span>
+                {activeView === 'map' && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-emerald-600 rounded-full"></span>
+                )}
               </button>
 
+              {/* 4. Simulasi Kota */}
               <button 
                 onClick={() => {
                   setActiveView('simulator');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                className={`group relative flex items-center h-8 px-2.5 rounded-xl transition-[background-color,color,border-color] duration-200 cursor-pointer ${
                   activeView === 'simulator' 
-                    ? 'bg-emerald-600 text-white font-bold' 
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-slate-900 font-bold border border-slate-200' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
                 }`}
+                title="The City Architect: Simulasi APBD Warga"
+                aria-label="Simulasi Kota"
               >
-                <Sliders className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Simulasi Kota</span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded font-black bg-amber-400 text-slate-950">
-                  Warga
+                <Sliders className={`w-4 h-4 flex-shrink-0 transition-colors ${activeView === 'simulator' ? 'text-emerald-600' : 'text-slate-500 group-hover:text-slate-900'}`} />
+                <span className="max-w-0 opacity-0 overflow-hidden whitespace-nowrap text-xs font-semibold group-hover:max-w-[140px] group-hover:opacity-100 group-hover:ml-1.5 group-focus-visible:max-w-[140px] group-focus-visible:opacity-100 group-focus-visible:ml-1.5 transition-[max-width,opacity,margin] duration-300 ease-out">
+                  Simulasi Kota
                 </span>
+                {activeView === 'simulator' && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-emerald-600 rounded-full"></span>
+                )}
               </button>
 
-              {activeView === 'home' && (
-                <a href="#reality-gap" className="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
+              {/* 5. Mengapa ANGIN */}
+              <button
+                onClick={() => {
+                  if (activeView !== 'home') {
+                    setActiveView('home');
+                    setTimeout(() => document.getElementById('reality-gap')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                  } else {
+                    document.getElementById('reality-gap')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="group relative flex items-center h-8 px-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-white/80 transition-[background-color,color] duration-200 cursor-pointer"
+                title="Mengapa ANGIN? (Data & Krisis Akuntabilitas)"
+                aria-label="Mengapa ANGIN?"
+              >
+                <Info className="w-4 h-4 flex-shrink-0 text-slate-500 group-hover:text-slate-900 transition-colors" />
+                <span className="max-w-0 opacity-0 overflow-hidden whitespace-nowrap text-xs font-semibold group-hover:max-w-[140px] group-hover:opacity-100 group-hover:ml-1.5 group-focus-visible:max-w-[140px] group-focus-visible:opacity-100 group-focus-visible:ml-1.5 transition-[max-width,opacity,margin] duration-300 ease-out">
                   Mengapa ANGIN?
-                </a>
-              )}
+                </span>
+              </button>
             </nav>
           </div>
 

@@ -247,10 +247,10 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
           <button
             onClick={handleDownload}
             disabled={isDownloading}
-            className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold text-xs py-2.5 px-4 rounded-xl shadow-md transition disabled:opacity-50 cursor-pointer"
+            className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold text-xs py-3 px-4 rounded-xl shadow-md transition-colors disabled:opacity-50 cursor-pointer min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
           >
             <Download className="w-4 h-4" />
-            <span>{isDownloading ? 'Menyimpan Struk...' : 'Unduh Gambar Struk (PNG)'}</span>
+            <span>{isDownloading ? 'Menyiapkan Gambar Struk (PNG)...' : 'Unduh Gambar Struk (PNG)'}</span>
           </button>
 
           {/* Social Share & Copy Row */}
@@ -262,7 +262,7 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold text-xs py-2 px-3 rounded-xl transition"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold text-xs py-2.5 px-3 rounded-xl transition-colors min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             >
               <span>Bagikan ke WA</span>
             </a>
@@ -274,7 +274,7 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs py-2 px-3 rounded-xl transition"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs py-2.5 px-3 rounded-xl transition-colors min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             >
               <span>Bagikan ke X</span>
             </a>
@@ -282,7 +282,7 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
             {/* Copy Button */}
             <button
               onClick={handleCopy}
-              className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 font-semibold text-xs py-2 px-3 rounded-xl border border-slate-300 shadow-sm transition"
+              className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 font-semibold text-xs py-2.5 px-3.5 rounded-xl border border-slate-300 shadow-sm transition-colors min-h-[44px] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               title="Salin teks struk"
             >
               {copied ? (

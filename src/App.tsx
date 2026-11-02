@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
 import { 
   ChevronDown, 
   MapPin, 
@@ -11,7 +13,6 @@ import {
   Sliders,
   Sparkles,
   ChevronRight,
-  AlertTriangle,
   Wrench,
   HeartPulse,
   BusFront
@@ -22,6 +23,38 @@ import { ProjectActionModal, ProjectDetail } from './components/ProjectActionMod
 import { BudgetFlowExplorer } from './components/BudgetFlowExplorer';
 import { RadarMapPage } from './components/RadarMapPage';
 import apbdData from './data/apbd-jakarta.json';
+
+// Helper to create clean preview pins for mini-map
+const createHomePreviewPin = (status_color: string, isDelayed: boolean) => {
+  let bgColor = '#059669'; // Emerald
+  let ringColor = 'rgba(5, 150, 105, 0.25)';
+  let innerContent = '<div style="width: 7px; height: 7px; background: white; border-radius: 50%;"></div>';
+
+  if (isDelayed || status_color === 'red') {
+    bgColor = '#e11d48'; // Rose
+    ringColor = 'rgba(225, 29, 72, 0.35)';
+    innerContent = '<div style="color: white; font-size: 10px; font-weight: 900; line-height: 1;">!</div>';
+  } else if (status_color === 'yellow') {
+    bgColor = '#d97706'; // Amber
+    ringColor = 'rgba(217, 119, 6, 0.25)';
+    innerContent = '<div style="width: 6px; height: 6px; background: white; border-radius: 50%;"></div>';
+  }
+
+  return L.divIcon({
+    className: 'custom-home-preview-pin',
+    html: `
+      <div style="position: relative; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <div style="position: absolute; inset: 0; border-radius: 50%; background: ${ringColor};"></div>
+        <div style="position: relative; width: 20px; height: 20px; border-radius: 50%; background: ${bgColor}; border: 2px solid #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(0,0,0,0.2);">
+          ${innerContent}
+        </div>
+      </div>
+    `,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    popupAnchor: [0, -15],
+  });
+};
 
 export default function App() {
   // Navigation View State: 'home' | 'explorer' | 'map'
@@ -38,6 +71,21 @@ export default function App() {
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectDetail | null>(null);
+
+  // Flat list of projects with coordinates for the preview mini-map
+  const projectsWithCoords = useMemo(() => {
+    const list: ProjectDetail[] = [];
+    for (const sec of apbdData.sectors) {
+      for (const sub of sec.sub_programs) {
+        for (const proj of sub.projects) {
+          if (proj.coordinates && proj.coordinates.length === 2) {
+            list.push(proj);
+          }
+        }
+      }
+    }
+    return list;
+  }, []);
 
   // Perhitungan proporsional alokasi pajak warga
   // Asumsi porsi kontribusi pajak lokal (~2.2% jalan, ~3.0% puskesmas, ~1.6% transportasi dari formula APBD)
@@ -754,70 +802,89 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Map Container Mockup with Interactive Pins & Offline Vector Siluet (Celah 2.1) */}
-              <div className="h-64 rounded-xl relative overflow-hidden border border-slate-200 bg-slate-100">
-                
-                {/* Jakarta SVG Vector Silhouette Map (Offline Fallback indicator) */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                  <svg className="w-48 h-48 text-slate-600" viewBox="0 0 100 100" fill="currentColor">
-                    <path d="M 20,40 Q 30,20 50,25 T 80,35 Q 90,60 70,80 T 30,75 Z" />
-                  </svg>
-                </div>
-
-                {/* Pin 1: TB Simatupang (Yellow / 80%) */}
-                <div 
-                  onClick={() => handleOpenProjectById('proj-tb-simatupang')}
-                  className="absolute top-1/4 left-1/3 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-20"
+              {/* Real Interactive Leaflet Mini-Map Preview (Live Spasial APBD) */}
+              <div data-ui="map-preview" className="h-72 rounded-xl relative overflow-hidden border border-slate-200 bg-slate-100">
+                <MapContainer
+                  center={[-6.2400, 106.8200]}
+                  zoom={11}
+                  className="w-full h-full z-10"
+                  zoomControl={false}
+                  scrollWheelZoom={false}
+                  dragging={true}
                 >
-                  <div className="w-7 h-7 bg-amber-500 text-white rounded-full flex items-center justify-center ring-4 ring-amber-200/80 group-hover:scale-110 transition-transform">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                  </div>
-                  <div className="mt-1 bg-white px-2 py-0.5 rounded border border-slate-200 text-[9px] font-bold text-slate-800 whitespace-nowrap group-hover:bg-amber-50">
-                    Jl. TB Simatupang (80%)
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+
+                  {projectsWithCoords.map((proj) => {
+                    const isDelayed = proj.status_color === 'red' || Boolean(proj.days_delayed && proj.days_delayed > 0);
+                    return (
+                      <Marker
+                        key={proj.id}
+                        position={[proj.coordinates![0], proj.coordinates![1]]}
+                        icon={createHomePreviewPin(proj.status_color, isDelayed)}
+                      >
+                        <Popup className="govtech-popup">
+                          <div className="p-3 space-y-2 max-w-[240px]">
+                            <div className="flex items-center justify-between gap-1">
+                              <span className="text-[10px] font-semibold text-slate-500 truncate">{proj.location}</span>
+                              <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded whitespace-nowrap ${
+                                isDelayed ? 'bg-rose-100 text-rose-800' : proj.status_color === 'yellow' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
+                              }`}>
+                                {isDelayed ? `${proj.days_delayed}h Molor` : proj.status}
+                              </span>
+                            </div>
+                            <h4 className="font-bold text-xs text-slate-900 leading-snug">{proj.title}</h4>
+                            <div className="text-[10px] text-slate-600 bg-slate-50 p-1.5 rounded border border-slate-100">
+                              <div className="flex justify-between">
+                                <span className="text-slate-500">Pagu:</span>
+                                <span className="font-bold text-slate-900 tabular-nums">{formatRupiah(proj.budget)}</span>
+                              </div>
+                              <div className="flex justify-between mt-0.5">
+                                <span className="text-slate-500">Progres:</span>
+                                <span className="font-bold text-slate-800 tabular-nums">{proj.progress}%</span>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => setSelectedProject(proj)}
+                              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-[11px] py-1.5 px-2 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                            >
+                              <span>Buka Lembar Audit</span>
+                              <ArrowRight className="w-3 h-3 text-emerald-400" />
+                            </button>
+                          </div>
+                        </Popup>
+                      </Marker>
+                    );
+                  })}
+                </MapContainer>
+
+                {/* Floating Map Legend (Bottom Left) */}
+                <div className="absolute bottom-2.5 left-2.5 z-20 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-lg p-2 text-[10px] space-y-1 shadow-sm hidden sm:block">
+                  <div className="font-bold text-slate-800 text-[10px]">Status Proyek ({projectsWithCoords.length})</div>
+                  <div className="flex items-center gap-1.5 text-slate-600 text-[10px]">
+                    <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                    <span>Selesai</span>
+                    <span className="w-2 h-2 rounded-full bg-amber-500 ml-1"></span>
+                    <span>Berjalan</span>
+                    <span className="w-2 h-2 rounded-full bg-rose-600 ml-1"></span>
+                    <span className="text-rose-700 font-bold">Molor</span>
                   </div>
                 </div>
 
-                {/* Pin 2: Fatmawati (Green / 100%) */}
-                <div 
-                  onClick={() => handleOpenProjectById('proj-fatmawati')}
-                  className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-20"
-                >
-                  <div className="w-7 h-7 bg-emerald-600 text-white rounded-full flex items-center justify-center ring-4 ring-emerald-200/80 group-hover:scale-110 transition-transform">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                  </div>
-                  <div className="mt-1 bg-white px-2 py-0.5 rounded border border-slate-200 text-[9px] font-bold text-slate-800 whitespace-nowrap group-hover:bg-emerald-50">
-                    Jl. Fatmawati (100%)
-                  </div>
-                </div>
-
-                {/* Pin 3: Margonda (Red / 45% Terlambat - Trigger Aksi Aduan Warga Celah 2.5) */}
-                <div 
-                  onClick={() => handleOpenProjectById('proj-margonda')}
-                  className="absolute bottom-1/4 right-1/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-20"
-                >
-                  <div className="w-7 h-7 bg-rose-600 text-white rounded-full flex items-center justify-center ring-4 ring-rose-200 group-hover:scale-110 transition-transform">
-                    <AlertTriangle className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="mt-1 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded text-[9px] font-bold text-rose-800 whitespace-nowrap">
-                    Jl. Margonda (45% Terlambat)
-                  </div>
-                </div>
-
-                {/* Legend Box at Bottom Left */}
-                <div className="absolute bottom-3 left-3 bg-white rounded-lg p-2.5 border border-slate-200 text-[10px] space-y-1 z-10">
-                  <div className="font-bold text-slate-800 text-[11px]">Status Pengerjaan</div>
-                  <div className="flex items-center gap-1.5 text-slate-600">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-                    <span>100% Selesai Tepat Waktu</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-slate-600">
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                    <span>Sedang Dikerjakan</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-slate-600">
-                    <span className="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
-                    <span className="font-bold text-rose-700">Terlambat (Aksi Warga)</span>
-                  </div>
+                {/* Floating "Layar Penuh" Button (Bottom Right) */}
+                <div className="absolute bottom-2.5 right-2.5 z-20">
+                  <button
+                    onClick={() => {
+                      setActiveView('map');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="bg-slate-900/90 hover:bg-slate-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors cursor-pointer shadow-sm min-h-[36px]"
+                  >
+                    <span>Layar Penuh</span>
+                    <ArrowRight className="w-3 h-3 text-emerald-400" />
+                  </button>
                 </div>
               </div>
             </div>

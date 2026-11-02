@@ -325,7 +325,7 @@ export const RadarMapPage: React.FC<RadarMapPageProps> = ({
                 placeholder="Cari jalan, kontraktor, proyek..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-8 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white transition-colors"
+                className="w-full pl-9 pr-8 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus:bg-white transition-colors"
               />
               {searchQuery && (
                 <button
@@ -386,7 +386,7 @@ export const RadarMapPage: React.FC<RadarMapPageProps> = ({
               <select
                 value={selectedSector}
                 onChange={(e) => setSelectedSector(e.target.value)}
-                className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500 min-h-[40px]"
+                className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 font-medium text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 min-h-[40px]"
               >
                 {sectorOptions.map((sec) => (
                   <option key={sec} value={sec}>
@@ -407,7 +407,7 @@ export const RadarMapPage: React.FC<RadarMapPageProps> = ({
           {/* Scrollable Project Items */}
           <div className="flex-1 overflow-y-auto p-3 space-y-2.5 divide-y divide-slate-100">
             {filteredProjects.length === 0 ? (
-              <div className="py-12 text-center text-slate-400 text-xs">
+              <div className="py-12 text-center text-slate-500 text-xs">
                 Tidak ada proyek yang sesuai dengan kombinasi filter di atas.
               </div>
             ) : (

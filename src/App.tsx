@@ -490,7 +490,7 @@ export default function App() {
             </h1>
             
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
-              <strong className="text-slate-800 font-semibold">ANGIN</strong> menerjemahkan data terbuka APBD menjadi angka riil pengeluaranmu. Cek alokasi pajakmu, simulasikan anggaran publik, dan pantau proyek fisik di sekitarmu.
+              <strong className="text-slate-800 font-semibold">ANGIN</strong> mengubah data APBD menjadi rincian rupiah yang kamu belanjakan. Telusuri ke mana larinya uang pajakmu dan pantau proyek fisik yang sedang dibangun di jalanan sekitarmu.
             </p>
 
             {/* CTA Buttons */}
@@ -767,7 +767,7 @@ export default function App() {
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Pendekatan ANGIN</span>
                 </div>
-                <h4 className="text-lg font-bold text-slate-900 mb-2">Visual, Personal, &amp; Spasial</h4>
+                <h4 className="text-lg font-bold text-slate-900 mb-2">Rupiah Nyata hingga Titik Peta</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
                   Cukup geser slider penghasilanmu, lihat pecahan rupiah nyata yang kamu danai, telusuri alur anggarannya hingga ke nama kontraktor dan titik koordinat jalan di peta.
                 </p>
@@ -918,7 +918,7 @@ export default function App() {
             <div className="mt-4 flex justify-between items-center text-xs text-slate-500 pt-3 border-t border-slate-100">
               <span className="flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span>Dual Mode: Online Map &amp; Offline Vector Fallback</span>
+                <span>Tersedia mode peta offline tanpa kuota internet</span>
               </span>
               <button 
                 onClick={() => setIsSearchOpen(true)}
@@ -942,7 +942,7 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-slate-900 text-sm">ANGIN</span>
-              <span>— Anggaran Indonesia (Inisiatif Open Government Data)</span>
+              <span>(Anggaran Indonesia) • Inisiatif Keterbukaan Data Warga</span>
             </div>
             <div>
               Dikembangkan untuk Web In Action (WIA) 2026 • KSM Multimedia UPN Veteran Jakarta

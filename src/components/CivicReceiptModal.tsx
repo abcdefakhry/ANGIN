@@ -232,11 +232,11 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
             {/* Verification Badge */}
             <div className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded mt-2">
               <ShieldCheck className="w-3 h-3 text-emerald-600" />
-              <span>TERVERIFIKASI SATU DATA INDONESIA</span>
+              <span>BERSUMBER DARI DATA TERBUKA PEMPROV DKI JAKARTA</span>
             </div>
 
-            <div className="mt-3 text-[10px] text-slate-500 italic">
-              "Terima kasih telah menjadi bagian dari pembangunan kotamu!"
+            <div className="mt-3 text-[10px] text-slate-500">
+              *Estimasi kontribusi bulanan dari komponen PB1, PKB, dan dana bagi hasil daerah.
             </div>
           </div>
         </div>

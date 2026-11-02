@@ -212,7 +212,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
             <div className="flex items-start gap-2.5">
               <ShieldAlert className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-bold text-rose-900">Aksi Nyata Pengawasan Warga</h4>
+                <h4 className="text-xs font-bold text-rose-900">Laporkan Keterlambatan Proyek Ini</h4>
                 <p className="text-[11px] text-rose-700 leading-relaxed mt-0.5">
                   Proyek ini telah <strong>melewati batas waktu kontrak sejak {targetDeadline} (molor {delayDays} hari)</strong> namun baru selesai {project.progress}%. Warga berhak menyuarakan atensi langsung ke kanal pengawasan resmi.
                 </p>

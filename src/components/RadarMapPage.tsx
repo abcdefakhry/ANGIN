@@ -701,7 +701,7 @@ export const RadarMapPage: React.FC<RadarMapPageProps> = ({
                             <div className="bg-rose-50 border border-rose-200 rounded-lg p-2 text-[10px] text-rose-800 flex items-start gap-1.5">
                               <AlertTriangle className="w-3.5 h-3.5 text-rose-600 flex-shrink-0 mt-0.5" />
                               <div>
-                                <strong>Melewati Target Kontrak:</strong> Terlambat {proj.days_delayed} hari. Warga berhak melayangkan aduan audit publik.
+                                <strong>Melewati Batas Kontrak:</strong> Terlambat {proj.days_delayed} hari. Laporkan kendala ini langsung ke dinas pengawas melalui tombol di bawah.
                               </div>
                             </div>
                           )}

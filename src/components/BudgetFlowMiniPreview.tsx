@@ -42,6 +42,7 @@ export function BudgetFlowMiniPreview({
     {
       id: 'pendidikan',
       name: 'Pendidikan & KJP',
+      subtitle: 'Porsi 24% APBD',
       icon: GraduationCap,
       pct: 24,
       macroVal: 'Rp 20,2 T',
@@ -58,6 +59,7 @@ export function BudgetFlowMiniPreview({
     {
       id: 'infrastruktur',
       name: 'Jalan & Saluran Air',
+      subtitle: 'Porsi 19% APBD',
       icon: Wrench,
       pct: 19,
       macroVal: 'Rp 16,0 T',
@@ -72,7 +74,8 @@ export function BudgetFlowMiniPreview({
     },
     {
       id: 'kesehatan',
-      name: 'Puskesmas & BPJS PBI',
+      name: 'Puskesmas & BPJS',
+      subtitle: 'Subsidi PBI • 13% APBD',
       icon: HeartPulse,
       pct: 13,
       macroVal: 'Rp 10,9 T',
@@ -88,6 +91,7 @@ export function BudgetFlowMiniPreview({
     {
       id: 'transportasi',
       name: 'Subsidi Transjakarta',
+      subtitle: 'Porsi 8% APBD',
       icon: BusFront,
       pct: 8,
       macroVal: 'Rp 6,7 T',
@@ -173,7 +177,7 @@ export function BudgetFlowMiniPreview({
           </div>
 
           {/* Column 2: Fluid Scalable SVG Stream Connector */}
-          <div className="flex-1 min-w-[50px] max-w-[140px] h-[230px] relative">
+          <div className="w-14 sm:w-16 md:w-20 flex-shrink-0 h-[230px] relative">
             <svg 
               viewBox="0 0 100 230" 
               preserveAspectRatio="none"
@@ -217,7 +221,7 @@ export function BudgetFlowMiniPreview({
           </div>
 
           {/* Column 3: Full-Width Target Sector Cards (Clean HTML, Zero Text Clipping) */}
-          <div className="flex-1 min-w-[210px] sm:min-w-[240px] max-w-[290px] space-y-2 z-10">
+          <div className="flex-1 min-w-0 space-y-2 z-10">
             {sectors.map((sec, idx) => {
               const Icon = sec.icon;
               const isHighlighted = hoveredIndex === idx;
@@ -229,7 +233,7 @@ export function BudgetFlowMiniPreview({
                   onMouseEnter={() => setHoveredIndex(idx)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   onClick={onOpenExplorer}
-                  className={`w-full rounded-xl px-3 py-2 flex items-center justify-between border transition-[border-color,background-color] duration-150 cursor-pointer select-none min-h-[46px] ${
+                  className={`w-full rounded-xl px-3 py-2 flex items-center justify-between gap-2.5 border transition-[border-color,background-color] duration-150 cursor-pointer select-none min-h-[46px] ${
                     isHighlighted
                       ? 'bg-white border-slate-400'
                       : isDimmed
@@ -238,25 +242,25 @@ export function BudgetFlowMiniPreview({
                   }`}
                   title={`Klik untuk menelusuri sektor ${sec.name} di Pohon Alur`}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
                     <div 
                       className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
                       style={{ backgroundColor: `${sec.color}15`, color: sec.color }}
                     >
                       <Icon className="w-3.5 h-3.5" />
                     </div>
-                    <div className="min-w-0">
-                      <div className="text-xs font-bold text-slate-900 leading-tight whitespace-nowrap">
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs font-bold text-slate-900 leading-tight truncate">
                         {sec.name}
                       </div>
-                      <div className="text-[10px] text-slate-500 tabular-nums whitespace-nowrap">
-                        Porsi {sec.pct}% APBD
+                      <div className="text-[10px] text-slate-500 tabular-nums truncate">
+                        {sec.subtitle}
                       </div>
                     </div>
                   </div>
 
-                  <div className="text-right flex-shrink-0 pl-2">
-                    <span className="text-xs font-extrabold text-slate-900 tabular-nums whitespace-nowrap">
+                  <div className="text-right flex-shrink-0 pl-1.5">
+                    <span className="text-xs sm:text-[13px] font-extrabold text-slate-900 tabular-nums whitespace-nowrap">
                       {viewMode === 'tax' ? sec.personalVal : sec.macroVal}
                     </span>
                   </div>
@@ -286,19 +290,19 @@ export function BudgetFlowMiniPreview({
                 onClick={onOpenExplorer}
                 className="bg-white p-2.5 rounded-lg border border-slate-200 flex items-center justify-between cursor-pointer min-h-[44px]"
               >
-                <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex items-center gap-2.5 min-w-0 flex-1">
                   <div 
                     className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: `${sec.color}15`, color: sec.color }}
                   >
                     <Icon className="w-4 h-4" />
                   </div>
-                  <div className="min-w-0">
-                    <div className="text-xs font-bold text-slate-800 leading-tight">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-xs font-bold text-slate-800 leading-tight truncate">
                       {sec.name}
                     </div>
-                    <div className="text-[10px] text-slate-500 tabular-nums">
-                      Porsi {sec.pct}% APBD
+                    <div className="text-[10px] text-slate-500 tabular-nums truncate">
+                      {sec.subtitle}
                     </div>
                   </div>
                 </div>

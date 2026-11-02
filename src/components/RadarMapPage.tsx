@@ -16,7 +16,8 @@ import {
   X, 
   ExternalLink,
   RotateCcw,
-  MapPin
+  MapPin,
+  Navigation
 } from 'lucide-react';
 import { ProjectDetail } from './ProjectActionModal';
 import apbdData from '../data/apbd-jakarta.json';
@@ -78,6 +79,37 @@ export const RadarMapPage: React.FC<RadarMapPageProps> = ({
   const [mapCenter, setMapCenter] = useState<[number, number]>(defaultJakartaCenter);
   const [mapZoom, setMapZoom] = useState<number>(12);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+  const [isLocating, setIsLocating] = useState<boolean>(false);
+  const [locateFeedback, setLocateFeedback] = useState<string | null>(null);
+
+  // Handle Geolocation "Proyek Dekat Saya"
+  const handleLocateMe = () => {
+    if (!navigator.geolocation) {
+      alert('Browser Anda belum mendukung deteksi lokasi (Geolocation).');
+      return;
+    }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setIsLocating(false);
+        const userLat = pos.coords.latitude;
+        const userLng = pos.coords.longitude;
+        setMapCenter([userLat, userLng]);
+        setMapZoom(14);
+        setLocateFeedback('Lokasi Ditemukan');
+        setTimeout(() => setLocateFeedback(null), 3500);
+      },
+      (err) => {
+        setIsLocating(false);
+        console.warn('Geolocation error:', err);
+        setMapCenter(defaultJakartaCenter);
+        setMapZoom(12);
+        setLocateFeedback('Pusat Jakarta');
+        setTimeout(() => setLocateFeedback(null), 3500);
+      },
+      { timeout: 7000 }
+    );
+  };
 
   // Sync with browser online/offline events
   useEffect(() => {
@@ -226,7 +258,7 @@ export const RadarMapPage: React.FC<RadarMapPageProps> = ({
           <span className="text-slate-300">|</span>
           <div className="flex items-center gap-2">
             <h1 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-              Radar Proyek Fisik APBD DKI 2026
+              Kawal Proyek: Pantau Pembangunan DKI
             </h1>
             <span className="hidden sm:inline-block text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-full tabular-nums">
               {filteredProjects.length} Titik Proyek Terpetakan
@@ -235,6 +267,16 @@ export const RadarMapPage: React.FC<RadarMapPageProps> = ({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Quick Geolocation: Proyek Dekat Saya */}
+          <button
+            onClick={handleLocateMe}
+            disabled={isLocating}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer min-h-[44px] sm:min-h-0 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
+            title="Pusatkan peta ke lokasi Anda saat ini untuk melihat proyek sekitar"
+          >
+            <Navigation className={`w-3.5 h-3.5 ${isLocating ? 'animate-spin text-emerald-600' : 'text-emerald-700'}`} />
+            <span>{isLocating ? 'Mencari...' : locateFeedback || 'Proyek Dekat Saya'}</span>
+          </button>
           {/* Quick Filter: Molor */}
           <button
             onClick={() => {

@@ -233,7 +233,7 @@ export default function App() {
                 )}
               </button>
 
-              {/* 3. Radar Peta GIS */}
+              {/* 3. Kawal Proyek */}
               <button 
                 onClick={() => {
                   setActiveView('map');
@@ -244,12 +244,12 @@ export default function App() {
                     ? 'bg-white text-slate-900 font-bold border border-slate-200' 
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
                 }`}
-                title="Radar Peta Proyek Fisik (GIS Jakarta)"
-                aria-label="Radar Peta GIS"
+                title="Kawal Proyek Pembangunan DKI Jakarta"
+                aria-label="Kawal Proyek"
               >
                 <MapPin className={`w-4 h-4 flex-shrink-0 transition-colors ${activeView === 'map' ? 'text-emerald-600' : 'text-slate-500 group-hover:text-slate-900'}`} />
                 <span className="max-w-0 opacity-0 overflow-hidden whitespace-nowrap text-xs font-semibold group-hover:max-w-[140px] group-hover:opacity-100 group-hover:ml-1.5 group-focus-visible:max-w-[140px] group-focus-visible:opacity-100 group-focus-visible:ml-1.5 transition-[max-width,opacity,margin] duration-300 ease-out">
-                  Radar Peta GIS
+                  Kawal Proyek
                 </span>
                 {activeView === 'map' && (
                   <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-emerald-600 rounded-full"></span>
@@ -415,7 +415,7 @@ export default function App() {
             }`}
           >
             <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Peta GIS</span>
+            <span>Kawal Proyek</span>
           </button>
           <button
             onClick={() => {
@@ -514,7 +514,7 @@ export default function App() {
                 className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold px-5 py-3 rounded-xl text-sm border border-slate-300 transition-colors min-h-[44px] cursor-pointer"
               >
                 <MapPin className="w-4 h-4 text-emerald-600" />
-                <span>Buka Radar Peta GIS</span>
+                <span>Kawal Proyek di Peta</span>
               </button>
 
               <button 
@@ -796,13 +796,13 @@ export default function App() {
             onOpenReceipt={() => setIsReceiptOpen(true)}
           />
 
-          {/* Card Kanan: Mini GIS Project Map Preview */}
+          {/* Card Kanan: Kawal Proyek Map Preview */}
           <div id="radar" className="lg:col-span-6 bg-white rounded-2xl p-6 border border-slate-200 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">Radar Proyek Fisik (Mini GIS)</h3>
-                  <p className="text-xs text-slate-500">Klik pin di peta untuk rincian &amp; aduan warga</p>
+                  <h3 className="text-base font-bold text-slate-900">Kawal Proyek di Sekitarmu</h3>
+                  <p className="text-xs text-slate-500">Klik pin di peta untuk melihat progres atau kawal proyek molor</p>
                 </div>
 
                 {/* Quick Map & Search Buttons */}

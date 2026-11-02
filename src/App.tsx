@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { 
@@ -17,12 +17,15 @@ import {
   HeartPulse,
   BusFront
 } from 'lucide-react';
-import { CivicReceiptModal } from './components/CivicReceiptModal';
+import type { ProjectDetail } from './components/ProjectActionModal';
 import { CommandSearchModal } from './components/CommandSearchModal';
-import { ProjectActionModal, ProjectDetail } from './components/ProjectActionModal';
-import { BudgetFlowExplorer } from './components/BudgetFlowExplorer';
-import { RadarMapPage } from './components/RadarMapPage';
+import { ProjectActionModal } from './components/ProjectActionModal';
 import apbdData from './data/apbd-jakarta.json';
+
+const CivicReceiptModal = lazy(() => import('./components/CivicReceiptModal').then(m => ({ default: m.CivicReceiptModal })));
+const BudgetFlowExplorer = lazy(() => import('./components/BudgetFlowExplorer').then(m => ({ default: m.BudgetFlowExplorer })));
+const RadarMapPage = lazy(() => import('./components/RadarMapPage').then(m => ({ default: m.RadarMapPage })));
+const CityArchitectSimulator = lazy(() => import('./components/CityArchitectSimulator'));
 
 // Helper to create clean preview pins for mini-map
 const createHomePreviewPin = (status_color: string, isDelayed: boolean) => {
@@ -57,8 +60,8 @@ const createHomePreviewPin = (status_color: string, isDelayed: boolean) => {
 };
 
 export default function App() {
-  // Navigation View State: 'home' | 'explorer' | 'map'
-  const [activeView, setActiveView] = useState<'home' | 'explorer' | 'map'>('home');
+  // Navigation View State: 'home' | 'explorer' | 'map' | 'simulator'
+  const [activeView, setActiveView] = useState<'home' | 'explorer' | 'map' | 'simulator'>('home');
 
   // Gaji default 4.000.000 (sesuai mockup)
   const [income, setIncome] = useState<number>(4000000);
@@ -136,13 +139,17 @@ export default function App() {
   return (
     <div className="min-h-[100dvh] bg-[#F8FAFC] text-slate-900 selection:bg-emerald-100 selection:text-emerald-900 font-sans">
       
-      {/* 1. MODAL STRUK PAJAK DIGITAL (CIVIC RECEIPT) */}
-      <CivicReceiptModal 
-        isOpen={isReceiptOpen}
-        onClose={() => setIsReceiptOpen(false)}
-        income={income}
-        region={selectedRegion}
-      />
+      {/* 1. MODAL STRUK PAJAK DIGITAL (CIVIC RECEIPT) - LAZY LOADED */}
+      {isReceiptOpen && (
+        <Suspense fallback={null}>
+          <CivicReceiptModal 
+            isOpen={isReceiptOpen}
+            onClose={() => setIsReceiptOpen(false)}
+            income={income}
+            region={selectedRegion}
+          />
+        </Suspense>
+      )}
 
       {/* 2. MODAL COMMAND SEARCH (Ctrl + K) */}
       <CommandSearchModal 
@@ -225,6 +232,24 @@ export default function App() {
               >
                 <MapPin className="w-3.5 h-3.5 text-emerald-500" />
                 <span>Radar Peta GIS</span>
+              </button>
+
+              <button 
+                onClick={() => {
+                  setActiveView('simulator');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                  activeView === 'simulator' 
+                    ? 'bg-emerald-600 text-white font-bold' 
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Sliders className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Simulasi Kota</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded font-black bg-amber-400 text-slate-950">
+                  Warga
+                </span>
               </button>
 
               {activeView === 'home' && (
@@ -349,32 +374,65 @@ export default function App() {
             }`}
           >
             <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Radar Peta</span>
+            <span>Peta GIS</span>
+          </button>
+          <button
+            onClick={() => {
+              setActiveView('simulator');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-1 cursor-pointer ${
+              activeView === 'simulator'
+                ? 'bg-emerald-600 text-white'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Sliders className="w-3.5 h-3.5" />
+            <span>Simulasi</span>
           </button>
         </div>
       </header>
 
       {/* MAIN VIEW SWITCHER */}
-      {activeView === 'explorer' ? (
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-          <BudgetFlowExplorer 
+      <Suspense fallback={
+        <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-3 py-16">
+          <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-xs text-slate-500 font-medium">Memuat modul interaktif ANGIN...</p>
+        </div>
+      }>
+        {activeView === 'explorer' ? (
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+            <BudgetFlowExplorer 
+              onSelectProject={(project) => setSelectedProject(project)}
+              onNavigateHome={() => {
+                setActiveView('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          </main>
+        ) : activeView === 'map' ? (
+          <RadarMapPage 
             onSelectProject={(project) => setSelectedProject(project)}
             onNavigateHome={() => {
               setActiveView('home');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
-        </main>
-      ) : activeView === 'map' ? (
-        <RadarMapPage 
-          onSelectProject={(project) => setSelectedProject(project)}
-          onNavigateHome={() => {
-            setActiveView('home');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-        />
-      ) : (
-        <>
+        ) : activeView === 'simulator' ? (
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+            <CityArchitectSimulator 
+              onNavigateHome={() => {
+                setActiveView('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onNavigateExplorer={() => {
+                setActiveView('explorer');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          </main>
+        ) : (
+          <>
           {/* 5. HERO SECTION */}
       <section id="kalkulator" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 pb-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
@@ -416,6 +474,17 @@ export default function App() {
               >
                 <MapPin className="w-4 h-4 text-emerald-600" />
                 <span>Buka Radar Peta GIS</span>
+              </button>
+
+              <button 
+                onClick={() => {
+                  setActiveView('simulator');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-colors min-h-[44px] cursor-pointer"
+              >
+                <Sliders className="w-4 h-4 text-emerald-400" />
+                <span>Simulasi Arsitek Kota</span>
               </button>
             </div>
 
@@ -908,6 +977,7 @@ export default function App() {
       </section>
       </>
       )}
+      </Suspense>
 
       {/* FOOTER (Shown on non-map views) */}
       {activeView !== 'map' && (

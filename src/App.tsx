@@ -20,11 +20,12 @@ import { CivicReceiptModal } from './components/CivicReceiptModal';
 import { CommandSearchModal } from './components/CommandSearchModal';
 import { ProjectActionModal, ProjectDetail } from './components/ProjectActionModal';
 import { BudgetFlowExplorer } from './components/BudgetFlowExplorer';
+import { RadarMapPage } from './components/RadarMapPage';
 import apbdData from './data/apbd-jakarta.json';
 
 export default function App() {
-  // Navigation View State: 'home' | 'explorer'
-  const [activeView, setActiveView] = useState<'home' | 'explorer'>('home');
+  // Navigation View State: 'home' | 'explorer' | 'map'
+  const [activeView, setActiveView] = useState<'home' | 'explorer' | 'map'>('home');
 
   // Gaji default 4.000.000 (sesuai mockup)
   const [income, setIncome] = useState<number>(4000000);
@@ -131,7 +132,10 @@ export default function App() {
             {/* Desktop Navigation Links / View Switcher */}
             <nav className="hidden md:flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 bg-slate-100 p-1 rounded-xl">
               <button 
-                onClick={() => setActiveView('home')}
+                onClick={() => {
+                  setActiveView('home');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
                 className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
                   activeView === 'home' 
                     ? 'bg-white text-slate-900 font-bold' 
@@ -160,15 +164,25 @@ export default function App() {
                 </span>
               </button>
 
+              <button 
+                onClick={() => {
+                  setActiveView('map');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                  activeView === 'map' 
+                    ? 'bg-slate-900 text-white font-bold' 
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <MapPin className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Radar Peta GIS</span>
+              </button>
+
               {activeView === 'home' && (
-                <>
-                  <a href="#radar" className="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
-                    Radar Peta
-                  </a>
-                  <a href="#reality-gap" className="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
-                    Mengapa ANGIN?
-                  </a>
-                </>
+                <a href="#reality-gap" className="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-colors">
+                  Mengapa ANGIN?
+                </a>
               )}
             </nav>
           </div>
@@ -248,34 +262,46 @@ export default function App() {
         </div>
 
         {/* Mobile View Switcher Tab Bar (< 768px) */}
-        <div className="md:hidden flex border-t border-slate-200 bg-slate-50 px-4 py-2 gap-2">
+        <div className="md:hidden flex border-t border-slate-200 bg-slate-50 px-2 py-1.5 gap-1.5">
           <button
-            onClick={() => setActiveView('home')}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-1.5 cursor-pointer ${
+            onClick={() => {
+              setActiveView('home');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-1 cursor-pointer ${
               activeView === 'home'
                 ? 'bg-white text-slate-900 border border-slate-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <span>Beranda &amp; Pajak</span>
+            <span>Beranda</span>
           </button>
           <button
             onClick={() => {
               setActiveView('explorer');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-1.5 cursor-pointer ${
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-1 cursor-pointer ${
               activeView === 'explorer'
                 ? 'bg-emerald-600 text-white'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <span>Pohon Alur</span>
-            <span className={`text-[10px] px-1.5 py-0.2 rounded font-black ${
-              activeView === 'explorer' ? 'bg-emerald-700 text-emerald-100' : 'bg-emerald-100 text-emerald-800'
-            }`}>
-              84,2 T
-            </span>
+          </button>
+          <button
+            onClick={() => {
+              setActiveView('map');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-1 cursor-pointer ${
+              activeView === 'map'
+                ? 'bg-slate-900 text-white'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Radar Peta</span>
           </button>
         </div>
       </header>
@@ -291,6 +317,14 @@ export default function App() {
             }}
           />
         </main>
+      ) : activeView === 'map' ? (
+        <RadarMapPage 
+          onSelectProject={(project) => setSelectedProject(project)}
+          onNavigateHome={() => {
+            setActiveView('home');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
       ) : (
         <>
           {/* 5. HERO SECTION */}
@@ -325,12 +359,16 @@ export default function App() {
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              <a 
-                href="#radar"
-                className="inline-flex items-center justify-center bg-white hover:bg-slate-50 text-slate-700 font-semibold px-5 py-3 rounded-xl text-sm border border-slate-300 transition-colors min-h-[44px] cursor-pointer"
+              <button 
+                onClick={() => {
+                  setActiveView('map');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold px-5 py-3 rounded-xl text-sm border border-slate-300 transition-colors min-h-[44px] cursor-pointer"
               >
-                Lihat Radar Peta
-              </a>
+                <MapPin className="w-4 h-4 text-emerald-600" />
+                <span>Buka Radar Peta GIS</span>
+              </button>
             </div>
 
             {/* Trust Badge */}
@@ -693,14 +731,27 @@ export default function App() {
                   <p className="text-xs text-slate-500">Klik pin di peta untuk rincian &amp; aduan warga</p>
                 </div>
 
-                {/* Quick Search Button */}
-                <button 
-                  onClick={() => setIsSearchOpen(true)}
-                  className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-md text-xs font-semibold text-slate-700 transition cursor-pointer min-h-[36px]"
-                >
-                  <Search className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Cari Proyek</span>
-                </button>
+                {/* Quick Map & Search Buttons */}
+                <div className="flex items-center gap-1.5">
+                  <button 
+                    onClick={() => {
+                      setActiveView('map');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer min-h-[36px]"
+                  >
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>Peta Lengkap</span>
+                  </button>
+
+                  <button 
+                    onClick={() => setIsSearchOpen(true)}
+                    className="hidden sm:flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 transition-colors cursor-pointer min-h-[36px]"
+                  >
+                    <Search className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Cari</span>
+                  </button>
+                </div>
               </div>
 
               {/* Map Container Mockup with Interactive Pins & Offline Vector Siluet (Celah 2.1) */}
@@ -791,18 +842,20 @@ export default function App() {
       </>
       )}
 
-      {/* FOOTER */}
-      <footer className="border-t border-slate-200 bg-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex items-center gap-2">
-            <span className="font-extrabold text-slate-900 text-sm">ANGIN</span>
-            <span>— Anggaran Indonesia (Inisiatif Open Government Data)</span>
+      {/* FOOTER (Shown on non-map views) */}
+      {activeView !== 'map' && (
+        <footer className="border-t border-slate-200 bg-white py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-slate-900 text-sm">ANGIN</span>
+              <span>— Anggaran Indonesia (Inisiatif Open Government Data)</span>
+            </div>
+            <div>
+              Dikembangkan untuk Web In Action (WIA) 2026 • KSM Multimedia UPN Veteran Jakarta
+            </div>
           </div>
-          <div>
-            Dikembangkan untuk Web In Action (WIA) 2026 • KSM Multimedia UPN Veteran Jakarta
-          </div>
-        </div>
-      </footer>
+        </footer>
+      )}
 
     </div>
   );

@@ -28,3 +28,27 @@ input[type="range"]::-moz-range-thumb {
   border: 3px solid #ffffff;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
+
+/* Leaflet map popup override for clean GovTech styling */
+.leaflet-popup-content-wrapper {
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4;
+}
+
+.leaflet-popup-tip {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.leaflet-container {
+  font-family: inherit;
+}

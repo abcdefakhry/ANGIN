@@ -12,14 +12,12 @@ import {
   AlertCircle,
   Sliders,
   Sparkles,
-  ChevronRight,
-  Wrench,
-  HeartPulse,
-  BusFront
+  ChevronRight
 } from 'lucide-react';
 import type { ProjectDetail } from './components/ProjectActionModal';
 import { CommandSearchModal } from './components/CommandSearchModal';
 import { ProjectActionModal } from './components/ProjectActionModal';
+import { BudgetFlowMiniPreview } from './components/BudgetFlowMiniPreview';
 import apbdData from './data/apbd-jakarta.json';
 
 const CivicReceiptModal = lazy(() => import('./components/CivicReceiptModal').then(m => ({ default: m.CivicReceiptModal })));
@@ -745,99 +743,15 @@ export default function App() {
       <section id="eksplorasi" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          {/* Card Kiri: Budget Flow Sankey Preview (Adaptive Desktop vs Mobile - Celah 2.3) */}
-          <div data-ui="sankey-preview" className="lg:col-span-6 bg-white rounded-2xl p-6 border border-slate-200 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900">Aliran Anggaran (Budget Flow)</h3>
-                  <p className="text-xs text-slate-500">Aliran APBD DKI Jakarta ke sektor riil</p>
-                </div>
-                <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
-                  Rp 84,2 Triliun
-                </span>
-              </div>
-
-              {/* DESKTOP VIEW (>= 768px): Horizontal SVG Stream */}
-              <div className="hidden md:flex h-64 bg-slate-50 rounded-xl p-4 border border-slate-100 flex-col justify-center relative overflow-hidden">
-                <div className="w-full h-full flex items-center justify-between text-xs">
-                  
-                  {/* Source Node */}
-                  <div className="w-28 bg-emerald-600 text-white rounded-lg p-3 font-semibold z-10">
-                    <div className="text-[10px] text-emerald-100 font-normal">Gaji Warga</div>
-                    <div className="text-sm font-bold">{formatRupiah(income)}</div>
-                  </div>
-
-                  {/* Connecting Streams SVG */}
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
-                    <path d="M 120 128 C 190 128, 220 68, 310 68" fill="none" stroke="#10b981" strokeWidth="22" strokeOpacity="0.45" />
-                    <path d="M 120 128 C 190 128, 220 128, 310 128" fill="none" stroke="#1e293b" strokeWidth="32" strokeOpacity="0.55" />
-                    <path d="M 120 128 C 190 128, 220 188, 310 188" fill="none" stroke="#f59e0b" strokeWidth="20" strokeOpacity="0.55" />
-                  </svg>
-
-                  {/* Target Nodes */}
-                  <div className="space-y-2.5 z-10 pr-2">
-                    <div className="bg-emerald-50 border border-emerald-300 text-emerald-900 px-3 py-1.5 rounded text-[11px] font-semibold">
-                      Jalan: {formatRupiah(perbaikanJalan)}
-                    </div>
-                    <div className="bg-slate-800 text-white px-3 py-1.5 rounded text-[11px] font-semibold">
-                      Puskesmas: {formatRupiah(subsidiPuskesmas)}
-                    </div>
-                    <div className="bg-amber-500 text-white px-3 py-1.5 rounded text-[11px] font-semibold">
-                      Transportasi: {formatRupiah(subsidiTransportasi)}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* MOBILE VIEW (< 768px): Vertical Stacked List with tap targets >= 44px */}
-              <div className="md:hidden space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <div className="text-[11px] font-bold text-slate-500 mb-2">
-                  Alokasi dari {formatRupiah(income)}:
-                </div>
-                <div className="bg-white p-3 rounded-lg border border-slate-200 flex justify-between items-center min-h-[44px]">
-                  <span className="font-semibold text-xs text-slate-800 flex items-center gap-2">
-                    <Wrench className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Penambalan Jalan</span>
-                  </span>
-                  <span className="font-extrabold text-xs text-emerald-700 tabular-nums">{formatRupiah(perbaikanJalan)}</span>
-                </div>
-                <div className="bg-white p-3 rounded-lg border border-slate-200 flex justify-between items-center min-h-[44px]">
-                  <span className="font-semibold text-xs text-slate-800 flex items-center gap-2">
-                    <HeartPulse className="w-3.5 h-3.5 text-slate-700" />
-                    <span>Subsidi Puskesmas</span>
-                  </span>
-                  <span className="font-extrabold text-xs text-slate-900 tabular-nums">{formatRupiah(subsidiPuskesmas)}</span>
-                </div>
-                <div className="bg-white p-3 rounded-lg border border-slate-200 flex justify-between items-center min-h-[44px]">
-                  <span className="font-semibold text-xs text-slate-800 flex items-center gap-2">
-                    <BusFront className="w-3.5 h-3.5 text-amber-600" />
-                    <span>Subsidi Transportasi</span>
-                  </span>
-                  <span className="font-extrabold text-xs text-amber-700 tabular-nums">{formatRupiah(subsidiTransportasi)}</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mt-4 flex flex-wrap justify-between items-center gap-2 text-xs text-slate-500 pt-3 border-t border-slate-100">
-              <button 
-                onClick={() => {
-                  setActiveView('explorer');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1.5 cursor-pointer py-1.5 px-3 bg-emerald-50 rounded-lg border border-emerald-200"
-              >
-                <span>Buka Alur Penuh (Rp 84,2 T)</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-              <button 
-                onClick={() => setIsReceiptOpen(true)}
-                className="font-bold text-slate-700 hover:text-slate-900 flex items-center gap-1 cursor-pointer py-1"
-              >
-                Cetak Rincian Struk <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
+          {/* Card Kiri: Interactive Sankey Mini Flow Preview */}
+          <BudgetFlowMiniPreview 
+            income={income}
+            onOpenExplorer={() => {
+              setActiveView('explorer');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenReceipt={() => setIsReceiptOpen(true)}
+          />
 
           {/* Card Kanan: Mini GIS Project Map Preview */}
           <div id="radar" className="lg:col-span-6 bg-white rounded-2xl p-6 border border-slate-200 flex flex-col justify-between">

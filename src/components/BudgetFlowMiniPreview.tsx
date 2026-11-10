@@ -220,8 +220,8 @@ export function BudgetFlowMiniPreview({
             </svg>
           </div>
 
-          {/* Column 3: Full-Width Target Sector Cards (Clean HTML, Zero Text Clipping) */}
-          <div className="flex-1 min-w-0 space-y-2 z-10">
+          {/* Column 3: Full-Width Target Sector Cards (Tasteskill Hairline Grid Matrix) */}
+          <div className="flex-1 min-w-0 cells-grid rounded-xl flex flex-col z-10">
             {sectors.map((sec, idx) => {
               const Icon = sec.icon;
               const isHighlighted = hoveredIndex === idx;
@@ -233,12 +233,12 @@ export function BudgetFlowMiniPreview({
                   onMouseEnter={() => setHoveredIndex(idx)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   onClick={onOpenExplorer}
-                  className={`w-full rounded-xl px-3 py-2 flex items-center justify-between gap-2.5 border transition-all duration-150 active:scale-[0.99] cursor-pointer select-none min-h-[46px] ${
+                  className={`w-full px-3.5 py-2.5 flex items-center justify-between gap-2.5 transition-colors cursor-pointer select-none min-h-[46px] ${
                     isHighlighted
-                      ? 'bg-white border-slate-400 shadow-xs'
+                      ? 'bg-slate-50'
                       : isDimmed
-                      ? 'bg-white/60 border-slate-200/50 opacity-60'
-                      : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-2xs'
+                      ? 'bg-white/70 opacity-60'
+                      : 'bg-white hover:bg-slate-50/80'
                   }`}
                   title={`Klik untuk menelusuri sektor ${sec.name} di Pohon Alur`}
                 >
@@ -260,7 +260,7 @@ export function BudgetFlowMiniPreview({
                   </div>
 
                   <div className="text-right flex-shrink-0 pl-1.5">
-                    <span className="text-xs sm:text-[13px] font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                    <span className="text-xs sm:text-[13px] font-bold text-slate-900 tabular-nums font-mono whitespace-nowrap">
                       {viewMode === 'tax' ? sec.personalVal : sec.macroVal}
                     </span>
                   </div>
@@ -272,8 +272,8 @@ export function BudgetFlowMiniPreview({
         </div>
 
         {/* MOBILE VIEW (< 640px): Vertical Stacked Progressive Flow */}
-        <div className="sm:hidden space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
-          <div className="flex items-center justify-between text-[11px] text-slate-600 font-semibold mb-1 pb-1 border-b border-slate-200">
+        <div className="sm:hidden cells-grid rounded-xl flex flex-col">
+          <div className="flex items-center justify-between text-xs text-slate-600 font-semibold p-3 bg-slate-50">
             <span>
               {viewMode === 'tax' ? `Alokasi Pajak (${formatRupiah(monthlyTax)}/bln):` : 'Porsi APBD Rp 84,2 Triliun:'}
             </span>
@@ -288,7 +288,7 @@ export function BudgetFlowMiniPreview({
               <div 
                 key={sec.id}
                 onClick={onOpenExplorer}
-                className="bg-white p-2.5 rounded-lg border border-slate-200 flex items-center justify-between cursor-pointer min-h-[44px]"
+                className="bg-white hover:bg-slate-50/80 p-3 flex items-center justify-between cursor-pointer min-h-[44px] transition-colors"
               >
                 <div className="flex items-center gap-2.5 min-w-0 flex-1">
                   <div 
@@ -308,10 +308,10 @@ export function BudgetFlowMiniPreview({
                 </div>
 
                 <div className="text-right flex-shrink-0 pl-2">
-                  <div className="text-xs font-bold text-slate-900 tabular-nums whitespace-nowrap">
+                  <div className="text-xs font-bold text-slate-900 tabular-nums font-mono whitespace-nowrap">
                     {viewMode === 'tax' ? sec.personalVal : sec.macroVal}
                   </div>
-                  <div className="text-[9px] text-emerald-600 font-semibold flex items-center justify-end gap-0.5">
+                  <div className="text-[10px] text-emerald-600 font-semibold flex items-center justify-end gap-0.5">
                     <span>Lihat</span>
                     <ArrowRight className="w-2.5 h-2.5" />
                   </div>
@@ -326,7 +326,7 @@ export function BudgetFlowMiniPreview({
       <div className="mt-4 flex flex-wrap justify-between items-center gap-2 text-xs text-slate-500 pt-3 border-t border-slate-100">
         <button 
           onClick={onOpenExplorer}
-          className="font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1.5 cursor-pointer py-1.5 px-3 bg-emerald-50 rounded-lg border border-emerald-200 transition-colors"
+          className="btn-tactile font-semibold text-emerald-800 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer py-2 px-3.5 bg-emerald-50 hover:bg-emerald-100/80 rounded-xl border border-emerald-200 transition-all min-h-[38px]"
         >
           <span>Buka Alur Penuh (Rp 84,2 T)</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -334,7 +334,7 @@ export function BudgetFlowMiniPreview({
 
         <button 
           onClick={onOpenReceipt}
-          className="font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1 cursor-pointer py-1.5 px-2.5 transition-colors"
+          className="btn-tactile font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 cursor-pointer py-2 px-3 rounded-xl hover:bg-slate-50 transition-all min-h-[38px]"
         >
           <Receipt className="w-3.5 h-3.5 text-slate-500" />
           <span>Cetak Rincian Struk</span>

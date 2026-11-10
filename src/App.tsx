@@ -675,11 +675,11 @@ export default function App() {
                 </div>
               </div>
 
-              {/* 3 Metrics Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
+              {/* 3 Metrics Cards (Tasteskill Hairline Grid Matrix) */}
+              <div className="cells-grid rounded-xl grid grid-cols-1 sm:grid-cols-3 mt-5">
                 
                 {/* Metric 1 */}
-                <div className="bg-slate-50/80 hover:bg-slate-100/60 rounded-xl p-3.5 border border-slate-200/70 transition-all flex sm:flex-col justify-between items-center sm:items-start group">
+                <div className="bg-white hover:bg-slate-50/90 p-3.5 transition-colors flex sm:flex-col justify-between items-center sm:items-start group">
                   <div className="order-2 sm:order-1 font-mono font-bold text-base sm:text-lg text-slate-900 tracking-tight tabular-nums">
                     {formatRupiah(perbaikanJalan)}
                   </div>
@@ -690,7 +690,7 @@ export default function App() {
                 </div>
 
                 {/* Metric 2 */}
-                <div className="bg-slate-50/80 hover:bg-slate-100/60 rounded-xl p-3.5 border border-slate-200/70 transition-all flex sm:flex-col justify-between items-center sm:items-start group">
+                <div className="bg-white hover:bg-slate-50/90 p-3.5 transition-colors flex sm:flex-col justify-between items-center sm:items-start group">
                   <div className="order-2 sm:order-1 font-mono font-bold text-base sm:text-lg text-slate-900 tracking-tight tabular-nums">
                     {formatRupiah(subsidiPuskesmas)}
                   </div>
@@ -701,7 +701,7 @@ export default function App() {
                 </div>
 
                 {/* Metric 3 */}
-                <div className="bg-slate-50/80 hover:bg-slate-100/60 rounded-xl p-3.5 border border-slate-200/70 transition-all flex sm:flex-col justify-between items-center sm:items-start group">
+                <div className="bg-white hover:bg-slate-50/90 p-3.5 transition-colors flex sm:flex-col justify-between items-center sm:items-start group">
                   <div className="order-2 sm:order-1 font-mono font-bold text-base sm:text-lg text-slate-900 tracking-tight tabular-nums">
                     {formatRupiah(subsidiTransportasi)}
                   </div>
@@ -755,8 +755,8 @@ export default function App() {
                 </button>
 
                 {showOtherSectors && (
-                  <div className="mt-2 p-3 bg-slate-50/70 rounded-xl space-y-2 text-xs border border-slate-200/70 animate-in fade-in duration-200">
-                    <div className="text-xs text-slate-500 font-medium pb-2 border-b border-slate-200/60 flex justify-between">
+                  <div className="mt-2.5 cells-grid rounded-xl flex flex-col animate-in fade-in duration-200">
+                    <div className="bg-slate-50/90 text-xs text-slate-500 font-medium p-3 flex justify-between">
                       <span>Porsi 6 Sektor Utama Anggaran DKI:</span>
                       <span className="font-mono font-bold text-slate-800">Total 100% (Rp 84,2 T)</span>
                     </div>
@@ -765,14 +765,14 @@ export default function App() {
                       <div 
                         key={sec.id} 
                         onClick={() => setSelectedSectorId(selectedSectorId === sec.id ? null : sec.id)}
-                        className={`p-2.5 rounded-lg border transition cursor-pointer ${
+                        className={`p-3 transition-colors cursor-pointer ${
                           selectedSectorId === sec.id 
-                            ? 'bg-white border-emerald-300 shadow-xs' 
-                            : 'bg-white/80 border-slate-200/60 hover:bg-white'
+                            ? 'bg-emerald-50/40' 
+                            : 'bg-white hover:bg-slate-50/80'
                         }`}
                       >
                         <div className="flex justify-between items-center">
-                          <span className="text-slate-800 font-semibold flex items-center gap-2">
+                          <span className="text-slate-800 font-semibold flex items-center gap-2 text-xs">
                             <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: sec.color }}></span>
                             <span>{sec.name}</span>
                           </span>
@@ -784,12 +784,12 @@ export default function App() {
 
                         {/* Sub-Programs Detail if Active */}
                         {selectedSectorId === sec.id && (
-                          <div className="mt-2.5 pt-2 border-t border-slate-100 text-xs space-y-1.5 text-slate-600">
+                          <div className="mt-2.5 pt-2.5 border-t border-slate-100 text-xs space-y-1.5 text-slate-600">
                             <p className="italic text-slate-500">{sec.description}</p>
                             {sec.sub_programs.length > 0 ? (
-                              <div className="space-y-1.5 pt-1">
+                              <div className="space-y-1 pt-1">
                                 {sec.sub_programs.map((sub) => (
-                                  <div key={sub.id} className="flex justify-between bg-slate-50 p-2 rounded-md">
+                                  <div key={sub.id} className="flex justify-between bg-slate-50/90 p-2 rounded-lg">
                                     <span className="font-medium text-slate-700">• {sub.name}</span>
                                     <span className="font-mono font-bold text-slate-900 tabular-nums">{formatRupiah(sub.budget)}</span>
                                   </div>
@@ -810,7 +810,7 @@ export default function App() {
               <div className="mt-5">
                 <button
                   onClick={() => setIsReceiptOpen(true)}
-                  className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-[0.98] hover:-translate-y-0.5 text-white text-sm font-semibold py-3.5 px-4 rounded-xl transition-all shadow-sm hover:shadow-md cursor-pointer min-h-[44px]"
+                  className="btn-tactile w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-3.5 px-4 rounded-xl shadow-sm hover:shadow-md cursor-pointer min-h-[44px]"
                 >
                   <Receipt className="w-4 h-4 text-emerald-400" />
                   <span>Cetak Struk Pajak Kasir Saya</span>
@@ -843,41 +843,41 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
+          <div className="cells-grid rounded-2xl grid grid-cols-1 md:grid-cols-2 items-stretch">
             {/* Sisi Kiri: Cara Lama */}
-            <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-6 sm:p-7 flex flex-col justify-between shadow-2xs">
+            <div className="bg-white p-6 sm:p-8 flex flex-col justify-between">
               <div>
-                <div className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-full border border-slate-200 mb-3">
+                <div className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-full border border-slate-200 mb-4">
                   <AlertCircle className="w-3.5 h-3.5 text-slate-500" />
                   <span>Format Konvensional</span>
                 </div>
-                <h4 className="text-lg font-bold text-slate-900 mb-2">Dokumen PDF 400+ Halaman</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2.5 tracking-tight">Dokumen PDF 400+ Halaman</h4>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed text-pretty">
                   Tabel angka mentah berformat ribuan baris, singkatan birokrasi kaku (*BTL, BL, PPKD*), dan tidak ada korelasi langsung dengan jalanan yang dilewati warga setiap hari.
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 italic">
+              <div className="mt-8 pt-4 border-t border-slate-100 text-xs text-slate-500 italic text-pretty">
                 "Warga sulit mengawasi karena bahasa laporan dibuat untuk auditor, bukan untuk masyarakat pembayar pajak."
               </div>
             </div>
 
             {/* Sisi Kanan: Cara ANGIN */}
-            <div className="bg-white border border-emerald-300/80 rounded-2xl p-6 sm:p-7 flex flex-col justify-between shadow-[0_4px_20px_-4px_rgba(5,150,105,0.08)] relative overflow-hidden">
+            <div className="bg-emerald-50/20 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
               <div>
-                <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200 mb-3">
+                <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200 mb-4">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Pendekatan ANGIN</span>
                 </div>
-                <h4 className="text-lg font-bold text-slate-900 mb-2">Rupiah Nyata hingga Titik Peta</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2.5 tracking-tight">Rupiah Nyata hingga Titik Peta</h4>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed text-pretty">
                   Cukup geser slider penghasilanmu, lihat pecahan rupiah nyata yang kamu danai, telusuri alur anggarannya hingga ke nama kontraktor dan titik koordinat jalan di peta.
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-100 text-xs font-semibold text-emerald-800 flex items-center gap-1.5">
+              <div className="mt-8 pt-4 border-t border-emerald-100/60 text-xs font-semibold text-emerald-800 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>100% Data Resmi Pemprov DKI Jakarta (Tahun 2026)</span>
+                <span>100% Data Resmi Pemprov DKI Jakarta (Tahun Anggaran 2026)</span>
               </div>
             </div>
           </div>

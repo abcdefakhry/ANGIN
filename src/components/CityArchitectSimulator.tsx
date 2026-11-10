@@ -385,10 +385,10 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
           </div>
         </div>
 
-        {/* Right: Live Predictive City Impact Cards */}
-        <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        {/* Right: Live Predictive City Impact Cards (Tasteskill Hairline Grid Matrix) */}
+        <div className="lg:col-span-7 cells-grid rounded-2xl grid grid-cols-2 sm:grid-cols-4">
           {/* Card 1: Traffic Index */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between">
+          <div className="bg-white p-4 flex flex-col justify-between hover:bg-slate-50/80 transition-colors">
             <div className="flex items-center justify-between text-slate-500 mb-2">
               <span className="text-xs font-semibold text-slate-600">Kemacetan</span>
               <Car className="w-4 h-4 text-emerald-600" />
@@ -410,7 +410,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
           </div>
 
           {/* Card 2: Air Quality Index */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between">
+          <div className="bg-white p-4 flex flex-col justify-between hover:bg-slate-50/80 transition-colors">
             <div className="flex items-center justify-between text-slate-500 mb-2">
               <span className="text-xs font-semibold text-slate-600">Polusi (AQI)</span>
               <Wind className="w-4 h-4 text-teal-600" />
@@ -430,7 +430,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
           </div>
 
           {/* Card 3: Education & Scholarship Boost */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between">
+          <div className="bg-white p-4 flex flex-col justify-between hover:bg-slate-50/80 transition-colors">
             <div className="flex items-center justify-between text-slate-500 mb-2">
               <span className="text-xs font-semibold text-slate-600">Beasiswa KJP</span>
               <GraduationCap className="w-4 h-4 text-blue-600" />
@@ -452,7 +452,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
           </div>
 
           {/* Card 4: Healthcare Reach */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between">
+          <div className="bg-white p-4 flex flex-col justify-between hover:bg-slate-50/80 transition-colors">
             <div className="flex items-center justify-between text-slate-500 mb-2">
               <span className="text-xs font-semibold text-slate-600">Layanan Faskes</span>
               <HeartPulse className="w-4 h-4 text-rose-600" />
@@ -628,10 +628,10 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
             </div>
           </div>
 
-          {/* Allocation Breakdown Table */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {/* Allocation Breakdown Table (Tasteskill Hairline Grid Matrix) */}
+          <div className="cells-grid rounded-xl grid grid-cols-2 sm:grid-cols-3">
             {sectors.map((s) => (
-              <div key={s.id} className="p-3.5 bg-slate-50/80 rounded-xl border border-slate-200/70">
+              <div key={s.id} className="p-3.5 bg-white hover:bg-slate-50/80 transition-colors">
                 <div className="text-xs font-semibold text-slate-700 truncate">{s.name}</div>
                 <div className="text-base font-bold text-slate-900 tabular-nums font-mono mt-1">
                   Rp {s.currentBudget.toFixed(1)} T

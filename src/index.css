@@ -79,3 +79,35 @@ input[type="range"]::-moz-range-thumb:active {
 .leaflet-container {
   font-family: inherit;
 }
+
+/* Tasteskill design tokens & micro-interactions */
+:root {
+  --ease-taste: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-card: 0 0 0 1px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04), 0 16px 36px -24px rgba(15, 23, 42, 0.10);
+  --shadow-lift: 0 0 0 1px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.05), 0 20px 40px -20px rgba(15, 23, 42, 0.16);
+}
+
+/* Hairline Grid Matrix (.cells) */
+.cells-grid {
+  background-color: rgba(15, 23, 42, 0.08);
+  gap: 1px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+/* Tactile button micro-interaction */
+.btn-tactile {
+  transition: background-color 0.2s var(--ease-taste), 
+              box-shadow 0.2s var(--ease-taste), 
+              color 0.2s var(--ease-taste), 
+              transform 90ms var(--ease-taste);
+}
+.btn-tactile:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+/* Automatic pretty text wrapping for body text */
+p, .text-pretty {
+  text-wrap: pretty;
+}

@@ -661,7 +661,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
                 <span className="text-[10px] text-slate-500 block">Baseline Jakarta: 142</span>
               </div>
               <div>
-                <span className="text-slate-600 block text-[11px]">Belanja Publik vs Birokrasi:</span>
+                <span className="text-slate-600 block text-[11px]">Fasilitas Warga vs Operasional Kantor:</span>
                 <strong className="text-sm font-bold tabular-nums text-emerald-900">{publicSpendingRatio}% : {100 - publicSpendingRatio}%</strong>
                 <span className="text-[10px] text-slate-500 block">Alokasi langsung ke warga</span>
               </div>

@@ -236,7 +236,7 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
             </div>
 
             <div className="mt-3 text-[10px] text-slate-500">
-              *Estimasi kontribusi bulanan dari komponen PB1, PKB, dan dana bagi hasil daerah.
+              *Estimasi kontribusi dari pajak makan di luar (restoran), pajak kendaraan, dan bagi hasil pajak penghasilan.
             </div>
           </div>
         </div>

@@ -133,10 +133,10 @@ export const InteractiveBudgetCharts: React.FC<InteractiveBudgetChartsProps> = (
             <span>Grafik Visualisasi Interaktif APBD</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Eksplorasi Analitik Anggaran DKI Jakarta
+            Grafik Rincian Anggaran DKI Jakarta
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
-            Pilah dan bandingkan alokasi belanja berdasarkan tahun anggaran, porsi sektor, dan jenis belanja secara dinamis.
+            Bandingkan penggunaan anggaran dari tahun ke tahun, porsi per sektor, dan jenis pengeluaran pemerintah.
           </p>
         </div>
 
@@ -412,7 +412,7 @@ export const InteractiveBudgetCharts: React.FC<InteractiveBudgetChartsProps> = (
       {chartMode === 'categories' && (
         <div className="space-y-4 animate-in fade-in duration-200">
           <div className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-            <strong>Keterbukaan Tata Kelola:</strong> Sesuai Standar Akuntansi Pemerintahan (SAP), belanja APBD DKI Jakarta dibagi menjadi 5 pos utama. Warga berhak mengawasi berapa persen anggaran yang menjadi aset fisik publik versus biaya rutin birokrasi.
+            <strong>Keterbukaan Belanja Kota:</strong> Anggaran DKI Jakarta dibagi menjadi 5 pos utama. Warga berhak tahu berapa persen uang pajak yang diubah jadi fasilitas umum (jalan, sekolah, puskesmas) dibanding biaya kantor dinas dan gaji pegawai.
           </div>
 
           <div className="space-y-3">

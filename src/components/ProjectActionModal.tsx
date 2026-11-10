@@ -145,7 +145,7 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
         {/* Progress Bar */}
         <div className="space-y-1.5 mb-5">
           <div className="flex justify-between text-xs font-semibold text-slate-700">
-            <span>Realisasi Fisik Proyek:</span>
+            <span>Kemajuan Pembangunan di Lapangan:</span>
             <span className={isDelayed ? 'font-bold text-rose-600' : 'font-bold text-slate-900'}>
               {project.progress}% {isDelayed ? `(Seharusnya 100%)` : ''}
             </span>

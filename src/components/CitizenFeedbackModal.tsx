@@ -83,8 +83,8 @@ const INITIAL_ASPIRATIONS: CitizenFeedbackItem[] = [
     category: 'pertanyaan',
     wilayah: 'Jakarta Barat',
     locationDetail: 'Kel. Rawa Buaya, Cengkareng',
-    title: 'Klarifikasi Mekanisme Verifikasi DTKS untuk Penerima Beasiswa KJP',
-    description: 'Bagaimana warga dapat memantau keterbukaan hasil seleksi desil penerima KJP Plus di kelurahan agar bantuan benar-benar diterima siswa prasejahtera yang berhak?',
+    title: 'Klarifikasi Verifikasi Data Warga Miskin (DTKS) untuk Penerima Beasiswa KJP',
+    description: 'Bagaimana warga dapat memantau transparansi data penerima KJP Plus di kelurahan agar bantuan benar-benar diterima siswa yang membutuhkan?',
     author: 'Ibu Rahayu',
     supportCount: 29,
     status: 'Ditinjau Bappeda DKI',
@@ -369,7 +369,7 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
             Kotak Suara &amp; Aspirasi APBD
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
-            Sampaikan usulan kebutuhan fasilitas, laporkan proyek yang bermasalah di sekitarmu, atau dukung aspirasi warga lain untuk diperjuangkan dalam Musrenbang.
+            Sampaikan usulan kebutuhan fasilitas, laporkan proyek yang bermasalah di sekitarmu, atau dukung aspirasi warga lain untuk diperjuangkan dalam perencanaan anggaran kota (Musrenbang).
           </p>
         </div>
 

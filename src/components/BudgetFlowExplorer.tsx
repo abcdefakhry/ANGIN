@@ -386,7 +386,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
           {/* Proportional Flow Bar Summary */}
           <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-2">
             <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
-              <span>Proporsi 6 Sektor Makro APBD DKI Jakarta 2026:</span>
+              <span>Proporsi 6 Sektor Utama Anggaran DKI Jakarta 2026:</span>
               <span className="text-slate-500 tabular-nums text-[11px]">100% Tersinkron (Rp 84,2 T)</span>
             </div>
             <div className="h-4 w-full bg-slate-100 rounded-lg overflow-hidden flex border border-slate-200">

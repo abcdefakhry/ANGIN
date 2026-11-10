@@ -116,10 +116,10 @@ export function BudgetFlowMiniPreview({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div>
             <h3 className="text-base font-bold text-slate-900 leading-tight">
-              Aliran Anggaran (Budget Flow)
+              Aliran Uang Anggaran
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
-              Visualisasi penyerapan dana dari sumber ke sektor riil warga
+              Pantau bagaimana uang pajak disalurkan ke fasilitas dan bantuan warga
             </p>
           </div>
 

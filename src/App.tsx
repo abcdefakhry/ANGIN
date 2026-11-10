@@ -733,7 +733,7 @@ export default function App() {
                 >
                   <span className="flex items-center gap-1.5">
                     <Sliders className="w-3.5 h-3.5" />
-                    <span>{showOtherSectors ? 'Sembunyikan Sektor Makro Lainnya' : 'Buka Rincian 6 Sektor APBD Lengkap (100% / Rp 84,2 T)'}</span>
+                    <span>{showOtherSectors ? 'Sembunyikan Sektor Lainnya' : 'Buka Rincian 6 Sektor APBD Lengkap (100% / Rp 84,2 T)'}</span>
                   </span>
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showOtherSectors ? 'rotate-180' : ''}`} />
                 </button>
@@ -741,7 +741,7 @@ export default function App() {
                 {showOtherSectors && (
                   <div className="mt-2 p-3.5 bg-slate-50 rounded-xl space-y-2.5 text-xs border border-slate-200/80 animate-in fade-in duration-200">
                     <div className="text-[11px] text-slate-500 font-medium pb-1 border-b border-slate-200 flex justify-between">
-                      <span>Porsi 6 Sektor Makro APBD DKI:</span>
+                      <span>Porsi 6 Sektor Utama Anggaran DKI:</span>
                       <span className="font-bold text-slate-700">Total 100% (Rp 84,2 T)</span>
                     </div>
 
@@ -803,7 +803,7 @@ export default function App() {
 
               {/* Catatan Transparansi Formula (Footnote Disclosure Sesuai Celah 2.4) */}
               <div className="mt-4 pt-3 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed">
-                <strong className="text-slate-500 font-semibold">Catatan Transparansi Fiskal:</strong> Angka di atas dihitung berdasarkan formula simulasi dari Pajak Daerah (PB1/PBJT Restoran 10% dan Pajak Kendaraan Bermotor) serta porsi Dana Bagi Hasil (DBH) Pajak Penghasilan (PPh) yang disalurkan kembali oleh Pemerintah Pusat ke kas APBD DKI Jakarta.
+                <strong className="text-slate-500 font-semibold">Cara Hitung Kontribusi Pajak:</strong> Angka ini dihitung dari pajak konsumsi harian (seperti makan di restoran 10%), pajak motor/mobil, dan bagi hasil pajak penghasilan warga yang dikembalikan ke kas kota Jakarta.
               </div>
 
             </div>
@@ -823,7 +823,7 @@ export default function App() {
               Mengubah Angka Birokrasi Jadi Bahasa Sehari-hari
             </h3>
             <p className="text-sm text-slate-600 mt-2">
-              APBD bukan cuma lembar pertanggungjawaban pemerintah, melainkan uang warga yang harus dipertanggungjawabkan kembali ke warga.
+              APBD adalah uang warga Jakarta. Setiap rupiah harus terbuka dan terasa manfaatnya langsung bagi kehidupan sehari-hari.
             </p>
           </div>
 

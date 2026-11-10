@@ -109,7 +109,7 @@ export function BudgetFlowMiniPreview({
   return (
     <div 
       data-ui="sankey-preview" 
-      className="lg:col-span-6 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 flex flex-col justify-between"
+      className="lg:col-span-6 bg-white rounded-2xl p-6 border border-slate-200/90 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] flex flex-col justify-between"
     >
       <div>
         {/* Card Header & Perspective Switcher */}

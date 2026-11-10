@@ -207,7 +207,7 @@ export default function App() {
                 </svg>
               </div>
               <div className="flex items-baseline">
-                <span className="font-extrabold text-xl tracking-tight text-slate-900">ANGIN</span>
+                <span className="font-bold text-xl tracking-tight text-slate-900">ANGIN</span>
                 <span className="text-xs font-semibold text-emerald-600 ml-0.5">.id</span>
               </div>
             </a>
@@ -559,7 +559,7 @@ export default function App() {
               <span>Open Government Data • APBD {selectedRegion} 2026</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-extrabold text-slate-900 tracking-tight leading-[1.14]">
+            <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-bold text-slate-900 tracking-[-0.03em] leading-[1.12]">
               Pajakmu Triliunan, Tapi Jalan Depan Rumah Tetap Bolong?
             </h1>
             
@@ -574,7 +574,7 @@ export default function App() {
                   setActiveView('explorer');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-colors min-h-[44px] cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] hover:-translate-y-0.5 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all shadow-sm hover:shadow-md min-h-[44px] cursor-pointer"
               >
                 <span>Telusuri Aliran APBD</span>
                 <ArrowRight className="w-4 h-4" />
@@ -585,7 +585,7 @@ export default function App() {
                   setActiveView('map');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold px-5 py-3 rounded-xl text-sm border border-slate-300 transition-colors min-h-[44px] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 active:scale-[0.98] hover:-translate-y-0.5 text-slate-700 font-semibold px-5 py-3 rounded-xl text-sm border border-slate-300 hover:border-slate-400 transition-all shadow-2xs hover:shadow-xs min-h-[44px] cursor-pointer"
               >
                 <MapPin className="w-4 h-4 text-emerald-600" />
                 <span>Kawal Proyek di Peta</span>
@@ -596,7 +596,7 @@ export default function App() {
                   setActiveView('simulator');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-colors min-h-[44px] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 active:scale-[0.98] hover:-translate-y-0.5 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-all shadow-sm hover:shadow-md min-h-[44px] cursor-pointer"
               >
                 <Sliders className="w-4 h-4 text-emerald-400" />
                 <span>Simulasi Arsitek Kota</span>
@@ -608,7 +608,7 @@ export default function App() {
                   setFeedbackProjectTitle(undefined);
                   setIsFeedbackOpen(true);
                 }}
-                className="inline-flex items-center justify-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-4 py-3 rounded-xl text-sm border border-emerald-200 transition-colors min-h-[44px] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 active:scale-[0.98] hover:-translate-y-0.5 text-emerald-800 font-semibold px-4 py-3 rounded-xl text-sm border border-emerald-200 transition-all min-h-[44px] cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4 text-emerald-600" />
                 <span>Kotak Aspirasi Warga</span>
@@ -668,7 +668,7 @@ export default function App() {
                 
                 {/* Metric 1 */}
                 <div className="bg-slate-50 rounded-xl p-3 border border-slate-200 flex sm:flex-col justify-between items-center sm:items-start transition-colors">
-                  <div className="order-2 sm:order-1 font-extrabold text-sm sm:text-base text-slate-900 tabular-nums">
+                  <div className="order-2 sm:order-1 font-bold text-sm sm:text-base text-slate-900 tabular-nums">
                     {formatRupiah(perbaikanJalan)}
                   </div>
                   <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-2">
@@ -678,7 +678,7 @@ export default function App() {
 
                 {/* Metric 2 */}
                 <div className="bg-slate-50 rounded-xl p-3 border border-slate-200 flex sm:flex-col justify-between items-center sm:items-start transition-colors">
-                  <div className="order-2 sm:order-1 font-extrabold text-sm sm:text-base text-slate-900 tabular-nums">
+                  <div className="order-2 sm:order-1 font-bold text-sm sm:text-base text-slate-900 tabular-nums">
                     {formatRupiah(subsidiPuskesmas)}
                   </div>
                   <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-2">
@@ -688,7 +688,7 @@ export default function App() {
 
                 {/* Metric 3 */}
                 <div className="bg-amber-50 rounded-xl p-3 border border-amber-200 flex sm:flex-col justify-between items-center sm:items-start transition-colors">
-                  <div className="order-2 sm:order-1 font-extrabold text-sm sm:text-base text-slate-900 tabular-nums">
+                  <div className="order-2 sm:order-1 font-bold text-sm sm:text-base text-slate-900 tabular-nums">
                     {formatRupiah(subsidiTransportasi)}
                   </div>
                   <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-2">
@@ -819,7 +819,7 @@ export default function App() {
             <p className="text-sm font-semibold text-emerald-700 mb-2">
               Keterbukaan data yang membumi
             </p>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               Mengubah Angka Birokrasi Jadi Bahasa Sehari-hari
             </h3>
             <p className="text-sm text-slate-600 mt-2">
@@ -1027,7 +1027,7 @@ export default function App() {
         <footer className="border-t border-slate-200 bg-white py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-slate-900 text-sm">ANGIN</span>
+              <span className="font-bold text-slate-900 text-sm">ANGIN</span>
               <span>(Anggaran Indonesia) • Inisiatif Keterbukaan Data Warga</span>
             </div>
             <div>

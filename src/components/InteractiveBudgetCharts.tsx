@@ -132,7 +132,7 @@ export const InteractiveBudgetCharts: React.FC<InteractiveBudgetChartsProps> = (
             <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
             <span>Grafik Visualisasi Interaktif APBD</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             Grafik Rincian Anggaran DKI Jakarta
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
@@ -349,12 +349,12 @@ export const InteractiveBudgetCharts: React.FC<InteractiveBudgetChartsProps> = (
                   className="w-3.5 h-3.5 rounded-full"
                   style={{ backgroundColor: activeDonutSector.color }}
                 />
-                <h3 className="text-base font-extrabold text-slate-900">
+                <h3 className="text-base font-bold text-slate-900">
                   {activeDonutSector.name}
                 </h3>
               </div>
               <div className="text-right">
-                <span className="text-base font-black text-slate-900 tabular-nums">
+                <span className="text-base font-bold text-slate-900 tabular-nums font-mono">
                   Rp {activeDonutSector.value} T
                 </span>
                 <span className="text-xs text-slate-500 ml-1">({activeDonutSector.percentage}%)</span>
@@ -424,7 +424,7 @@ export const InteractiveBudgetCharts: React.FC<InteractiveBudgetChartsProps> = (
                     <p className="text-[11px] text-slate-500 mt-0.5">{item.desc}</p>
                   </div>
                   <div className="text-left sm:text-right flex-shrink-0">
-                    <span className="text-sm font-extrabold text-slate-900 tabular-nums">
+                    <span className="text-sm font-bold text-slate-900 tabular-nums font-mono">
                       Rp {item.budget.toFixed(1)} Triliun
                     </span>
                     <span className="text-xs text-slate-500 ml-1">({item.pct}% APBD)</span>

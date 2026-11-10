@@ -272,7 +272,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
             The City Architect: Simulasi APBD Alternatif Warga
           </h1>
           <p className="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
@@ -395,7 +395,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
               <Car className="w-4 h-4 text-emerald-600" />
             </div>
             <div>
-              <div className="text-2xl font-extrabold text-slate-900 tabular-nums">
+              <div className="text-2xl font-bold text-slate-900 tabular-nums font-mono">
                 {trafficIndex}%
               </div>
               <div className="text-[10px] text-slate-500 mt-0.5">
@@ -417,7 +417,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
               <Wind className="w-4 h-4 text-teal-600" />
             </div>
             <div>
-              <div className="text-2xl font-extrabold text-slate-900 tabular-nums">
+              <div className="text-2xl font-bold text-slate-900 tabular-nums font-mono">
                 {aqiIndex}
               </div>
               <div className="text-[10px] text-slate-500 mt-0.5">
@@ -437,7 +437,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
               <GraduationCap className="w-4 h-4 text-blue-600" />
             </div>
             <div>
-              <div className="text-2xl font-extrabold text-slate-900 tabular-nums">
+              <div className="text-2xl font-bold text-slate-900 tabular-nums font-mono">
                 {educationGrowth >= 0 ? `+${educationGrowth}%` : `${educationGrowth}%`}
               </div>
               <div className="text-[10px] text-slate-500 mt-0.5">
@@ -459,7 +459,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
               <HeartPulse className="w-4 h-4 text-rose-600" />
             </div>
             <div>
-              <div className="text-2xl font-extrabold text-slate-900 tabular-nums">
+              <div className="text-2xl font-bold text-slate-900 tabular-nums font-mono">
                 {healthcareGrowth >= 0 ? `+${healthcareGrowth}%` : `${healthcareGrowth}%`}
               </div>
               <div className="text-[10px] text-slate-500 mt-0.5">
@@ -620,7 +620,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
 
             <div className="text-right">
               <div className="text-xs font-bold text-slate-500">Pagu Total</div>
-              <div className="text-xl font-black text-slate-900 tabular-nums">
+              <div className="text-xl font-bold text-slate-900 tabular-nums font-mono">
                 Rp {totalAllocated.toFixed(1)} T
               </div>
               <div className="text-[10px] text-slate-400">
@@ -634,7 +634,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
             {sectors.map((s) => (
               <div key={s.id} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
                 <div className="text-[11px] font-bold text-slate-700 truncate">{s.name}</div>
-                <div className="text-sm font-extrabold text-slate-900 tabular-nums mt-1">
+                <div className="text-sm font-bold text-slate-900 tabular-nums font-mono mt-1">
                   Rp {s.currentBudget.toFixed(1)} T
                 </div>
                 <div className="text-[10px] text-slate-500 tabular-nums">

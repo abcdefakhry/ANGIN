@@ -365,7 +365,7 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
             <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
             <span>Kanal Partisipasi Publik Warga</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             Kotak Suara &amp; Aspirasi APBD
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">

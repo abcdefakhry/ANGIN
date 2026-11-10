@@ -233,12 +233,12 @@ export function BudgetFlowMiniPreview({
                   onMouseEnter={() => setHoveredIndex(idx)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   onClick={onOpenExplorer}
-                  className={`w-full rounded-xl px-3 py-2 flex items-center justify-between gap-2.5 border transition-[border-color,background-color] duration-150 cursor-pointer select-none min-h-[46px] ${
+                  className={`w-full rounded-xl px-3 py-2 flex items-center justify-between gap-2.5 border transition-all duration-150 active:scale-[0.99] cursor-pointer select-none min-h-[46px] ${
                     isHighlighted
-                      ? 'bg-white border-slate-400'
+                      ? 'bg-white border-slate-400 shadow-xs'
                       : isDimmed
                       ? 'bg-white/60 border-slate-200/50 opacity-60'
-                      : 'bg-white border-slate-200 hover:border-slate-300'
+                      : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-2xs'
                   }`}
                   title={`Klik untuk menelusuri sektor ${sec.name} di Pohon Alur`}
                 >
@@ -260,7 +260,7 @@ export function BudgetFlowMiniPreview({
                   </div>
 
                   <div className="text-right flex-shrink-0 pl-1.5">
-                    <span className="text-xs sm:text-[13px] font-extrabold text-slate-900 tabular-nums whitespace-nowrap">
+                    <span className="text-xs sm:text-[13px] font-bold text-slate-900 tabular-nums whitespace-nowrap">
                       {viewMode === 'tax' ? sec.personalVal : sec.macroVal}
                     </span>
                   </div>
@@ -308,7 +308,7 @@ export function BudgetFlowMiniPreview({
                 </div>
 
                 <div className="text-right flex-shrink-0 pl-2">
-                  <div className="text-xs font-extrabold text-slate-900 tabular-nums whitespace-nowrap">
+                  <div className="text-xs font-bold text-slate-900 tabular-nums whitespace-nowrap">
                     {viewMode === 'tax' ? sec.personalVal : sec.macroVal}
                   </div>
                   <div className="text-[9px] text-emerald-600 font-semibold flex items-center justify-end gap-0.5">

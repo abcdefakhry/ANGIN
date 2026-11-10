@@ -118,11 +118,11 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
           ref={receiptRef}
           data-ui="thermal-receipt"
           className="bg-white p-6 rounded-lg border border-slate-200 font-mono text-slate-800 text-xs relative select-none"
-          style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}
+          style={{ fontFamily: "'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" }}
         >
           {/* Top Zigzag Pattern / Dotted Header */}
           <div className="text-center border-b border-dashed border-slate-300 pb-3 mb-3">
-            <div className="text-base font-extrabold tracking-widest text-slate-900 uppercase">
+            <div className="text-base font-bold tracking-widest text-slate-900 uppercase">
               ANGIN.ID
             </div>
             <div className="text-[10px] text-slate-500 tracking-wider">
@@ -204,7 +204,7 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
 
           {/* Total Row */}
           <div className="border-t-2 border-slate-900 pt-2 mb-3">
-            <div className="flex justify-between text-xs font-black">
+            <div className="flex justify-between text-xs font-bold">
               <span>TOTAL PAJAK DAERAH:</span>
               <span className="text-emerald-700">{formatRupiah(totalKontribusi)}</span>
             </div>

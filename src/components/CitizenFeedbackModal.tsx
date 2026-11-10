@@ -14,7 +14,12 @@ import {
   Copy,
   ChevronRight,
   ShieldCheck,
-  Building2
+  Building2,
+  Camera,
+  UploadCloud,
+  Trash2,
+  ZoomIn,
+  Loader2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -30,6 +35,7 @@ export interface CitizenFeedbackItem {
   status: 'Terkirim' | 'Masuk Risalah Musrenbang' | 'Diteruskan ke Dinas Terkait' | 'Ditinjau Bappeda DKI';
   date: string;
   hasSupported?: boolean;
+  imageUrl?: string;
 }
 
 interface CitizenFeedbackModalProps {
@@ -54,6 +60,7 @@ const INITIAL_ASPIRATIONS: CitizenFeedbackItem[] = [
     status: 'Diteruskan ke Dinas Terkait',
     date: '2 hari lalu',
     hasSupported: false,
+    imageUrl: '/images/aspirasi/bukti-galian-saluran.jpg',
   },
   {
     id: 'ASP-2026-0794',
@@ -67,6 +74,7 @@ const INITIAL_ASPIRATIONS: CitizenFeedbackItem[] = [
     status: 'Masuk Risalah Musrenbang',
     date: '4 hari lalu',
     hasSupported: false,
+    imageUrl: '/images/aspirasi/bukti-underpass-gelap.jpg',
   },
   {
     id: 'ASP-2026-0751',
@@ -93,8 +101,65 @@ const INITIAL_ASPIRATIONS: CitizenFeedbackItem[] = [
     status: 'Diteruskan ke Dinas Terkait',
     date: '1 minggu lalu',
     hasSupported: false,
+    imageUrl: '/images/aspirasi/bukti-tanggul-rob.jpg',
   },
 ];
+
+/**
+ * Client-side HTML5 Canvas Image Compression (Option 1)
+ * Resizes image to max 900x900 and exports as JPEG quality 0.75 (~60-100 KB)
+ * Safely stored in localStorage without exceeding quotas or requiring external backend.
+ */
+const compressImage = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    if (!file.type.startsWith('image/')) {
+      reject(new Error('Berkas harus berupa gambar (JPG, PNG, WebP)'));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDimension = 900;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          }
+        } else {
+          if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Gagal memproses kanvas gambar'));
+          return;
+        }
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+        resolve(compressedDataUrl);
+      };
+      img.onerror = () => reject(new Error('Format berkas gambar tidak dapat dibaca'));
+      img.src = event.target?.result as string;
+    };
+    reader.onerror = () => reject(new Error('Gagal membaca berkas'));
+    reader.readAsDataURL(file);
+  });
+};
 
 export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
   isOpen,
@@ -120,6 +185,10 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
   const [title, setTitle] = useState<string>(defaultProjectTitle ? `Aduan terkait: ${defaultProjectTitle}` : '');
   const [description, setDescription] = useState<string>('');
   const [author, setAuthor] = useState<string>('');
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isCompressing, setIsCompressing] = useState<boolean>(false);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [zoomImage, setZoomImage] = useState<{ url: string; title: string } | null>(null);
   const [submittedTicket, setSubmittedTicket] = useState<string | null>(null);
   const [copiedTicket, setCopiedTicket] = useState<boolean>(false);
 
@@ -143,6 +212,34 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
 
   if (!isOpen) return null;
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 15 * 1024 * 1024) {
+      setImageError('Ukuran berkas asli maksimal 15 MB');
+      return;
+    }
+
+    setImageError(null);
+    setIsCompressing(true);
+    try {
+      const compressed = await compressImage(file);
+      setUploadedImage(compressed);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Gagal memproses gambar';
+      setImageError(msg);
+    } finally {
+      setIsCompressing(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setUploadedImage(null);
+    setImageError(null);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) return;
@@ -160,6 +257,7 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
       status: 'Terkirim',
       date: 'Baru saja',
       hasSupported: true,
+      imageUrl: uploadedImage || undefined,
     };
 
     setAspirations([newItem, ...aspirations]);
@@ -201,6 +299,8 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
     setDescription('');
     setLocationDetail('');
     setAuthor('');
+    setUploadedImage(null);
+    setImageError(null);
     setSubmittedTicket(null);
   };
 
@@ -433,7 +533,96 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
                   />
                 </div>
 
-                {/* 5. Author Name */}
+                {/* 5. Upload Foto Bukti Lapangan (Client-side HTML5 Canvas Compression) */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="font-bold text-slate-800 flex items-center gap-1.5">
+                      <Camera className="w-4 h-4 text-emerald-600" />
+                      <span>Foto Bukti Lapangan (Opsional):</span>
+                    </label>
+                    <span className="text-[10px] text-slate-400 font-medium">
+                      Kompresi otomatis Canvas (~80 KB)
+                    </span>
+                  </div>
+
+                  {uploadedImage ? (
+                    <div className="relative rounded-xl border border-emerald-300 bg-emerald-50/40 p-3 flex items-center justify-between gap-3 animate-in fade-in">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <img 
+                          src={uploadedImage} 
+                          alt="Pratinjau Bukti" 
+                          className="w-16 h-16 rounded-lg object-cover border border-emerald-200 shadow-2xs flex-shrink-0 cursor-pointer"
+                          onClick={() => setZoomImage({ url: uploadedImage, title: title || 'Pratinjau Bukti Lapangan' })}
+                        />
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                            <span className="truncate">Foto siap dilampirkan</span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 mt-0.5">
+                            Telah dikompresi ringan di peramban, aman disimpan di memori.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => setZoomImage({ url: uploadedImage, title: title || 'Pratinjau Bukti Lapangan' })}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 mt-1 cursor-pointer"
+                          >
+                            <ZoomIn className="w-3 h-3" />
+                            <span>Perbesar foto</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="p-2 rounded-lg text-rose-600 hover:text-rose-700 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer flex-shrink-0"
+                        title="Hapus foto"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-slate-50/70 hover:bg-emerald-50/20 rounded-xl p-4 cursor-pointer transition text-center group">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          disabled={isCompressing}
+                          className="sr-only"
+                        />
+                        {isCompressing ? (
+                          <div className="flex items-center gap-2 text-emerald-700 py-1">
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span className="font-semibold text-xs">Mengompresi resolusi foto via Canvas...</span>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="w-10 h-10 rounded-full bg-white shadow-2xs border border-slate-200 flex items-center justify-center text-slate-500 group-hover:text-emerald-600 group-hover:border-emerald-300 transition mb-2">
+                              <UploadCloud className="w-5 h-5" />
+                            </div>
+                            <div className="font-bold text-xs text-slate-700 group-hover:text-emerald-800">
+                              Klik untuk pilih foto jalan berlubang, gorong-gorong, atau fasilitas
+                            </div>
+                            <div className="text-[10px] text-slate-400 mt-0.5">
+                              JPG, PNG, atau WebP • Otomatis diperkecil agar hemat memori lokal
+                            </div>
+                          </>
+                        )}
+                      </label>
+
+                      {imageError && (
+                        <div className="text-[11px] text-rose-600 font-semibold mt-1.5 flex items-center gap-1">
+                          <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+                          <span>{imageError}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* 6. Author Name */}
                 <div>
                   <label className="block font-bold text-slate-800 mb-1.5">Nama / Inisial Pengirim (Boleh Anonim):</label>
                   <input
@@ -543,6 +732,32 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
                       {item.description}
                     </p>
 
+                    {/* Image Attachment in Feed (Click to Zoom Lightbox) */}
+                    {item.imageUrl && (
+                      <div 
+                        onClick={() => setZoomImage({ url: item.imageUrl!, title: item.title })}
+                        className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-100 group cursor-pointer max-h-48 shadow-2xs"
+                      >
+                        <img 
+                          src={item.imageUrl} 
+                          alt={item.title} 
+                          className="w-full h-44 object-cover object-center group-hover:scale-102 transition duration-300"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-90 group-hover:opacity-100 transition" />
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-white text-[11px] font-semibold">
+                          <span className="inline-flex items-center gap-1.5 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20">
+                            <Camera className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Foto Bukti Lapangan</span>
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-[10px] bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-lg hover:bg-white/30 transition">
+                            <ZoomIn className="w-3.5 h-3.5" />
+                            <span>Perbesar</span>
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
                       <div className="flex items-center gap-1 text-[11px] text-slate-500">
                         <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
@@ -579,6 +794,37 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
           </div>
         )}
       </div>
+
+      {/* LIGHTBOX MODAL FOR IMAGES */}
+      {zoomImage && (
+        <div 
+          className="fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-150"
+          onClick={() => setZoomImage(null)}
+        >
+          <div 
+            className="relative max-w-4xl w-full flex flex-col items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setZoomImage(null)}
+              className="absolute -top-12 right-0 p-2 rounded-full bg-white/20 hover:bg-white/30 text-white transition cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Tutup pratinjau foto"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <img 
+              src={zoomImage.url} 
+              alt={zoomImage.title}
+              className="max-h-[78vh] max-w-full rounded-2xl object-contain shadow-2xl border border-white/10" 
+            />
+
+            <div className="mt-3 text-center text-white text-xs sm:text-sm font-semibold bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 max-w-xl">
+              {zoomImage.title}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

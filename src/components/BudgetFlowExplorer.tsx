@@ -7,32 +7,42 @@ import {
   CheckCircle2, 
   Clock, 
   Sparkles, 
-  ArrowRight,
-  ArrowLeft,
-  RotateCcw,
-  Filter,
-  Wrench,
-  GraduationCap,
-  HeartPulse,
-  Users,
-  TreePine,
-  Check,
-  Building
+  ArrowRight, 
+  ArrowLeft, 
+  RotateCcw, 
+  Filter, 
+  Wrench, 
+  GraduationCap, 
+  HeartPulse, 
+  Users, 
+  TreePine, 
+  Check, 
+  Building,
+  BarChart3,
+  LayoutGrid,
+  BookOpen,
+  MessageSquare
 } from 'lucide-react';
 import apbdData from '../data/apbd-jakarta.json';
 import { ProjectDetail } from './ProjectActionModal';
+import { InteractiveBudgetCharts } from './InteractiveBudgetCharts';
+import { BudgetGlossaryModal } from './BudgetGlossaryModal';
 
 interface BudgetFlowExplorerProps {
   onSelectProject: (project: ProjectDetail) => void;
   onNavigateHome?: () => void;
+  onOpenFeedback?: () => void;
 }
 
 export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
   onSelectProject,
-  onNavigateHome
+  onNavigateHome,
+  onOpenFeedback,
 }) => {
   // Wizard Step State: 1 = Pilih Sektor, 2 = Pilih Sub-Program & Dampak, 3 = Bukti Proyek Lapangan
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+  const [step1View, setStep1View] = useState<'charts' | 'cards'>('charts');
+  const [isGlossaryOpen, setIsGlossaryOpen] = useState<boolean>(false);
 
   // Selected Sector & Sub-Program
   const [selectedSectorId, setSelectedSectorId] = useState<string>('sec-infra');
@@ -218,86 +228,159 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
       </div>
 
       {/* ========================================================= */}
-      {/* STEP 1: PILIH SEKTOR MAKRO (1 DARI 6 KANTONG APBD) */}
+      {/* STEP 1: PILIH SEKTOR MAKRO & GRAFIK INTERAKTIF RECHARTS */}
       {/* ========================================================= */}
       {currentStep === 1 && (
-        <section className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <section className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
           
           <div className="text-center max-w-2xl mx-auto py-2">
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-              Dari Rp 84,2 Triliun, Mau Lihat Larinya ke Mana?
+              Alur Belanja APBD DKI Jakarta 2026
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-              Seluruh anggaran belanja DKI Jakarta 2026 dibagi ke 6 bidang di bawah ini. Pilih salah satu sektor untuk menelusuri bagaimana uang tersebut mengalir sampai ke lingkunganmu.
+              Seluruh anggaran belanja DKI Jakarta 2026 dibagi ke 6 bidang di bawah ini. Pilih salah satu sektor atau gunakan grafik analitik interaktif untuk menelusuri bagaimana uang tersebut mengalir sampai ke lingkunganmu.
             </p>
           </div>
 
-          {/* 6 Sector Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {apbdData.sectors.map((sector) => {
-              const isSelected = sector.id === selectedSectorId;
-              const projectCount = sector.sub_programs.reduce((acc, sp) => acc + sp.projects.length, 0);
+          {/* Sub-Header Toolbar: Chart View Switcher & Glossary Shortcut */}
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-slate-200">
+            <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+              <button
+                onClick={() => setStep1View('charts')}
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer flex items-center gap-1.5 min-h-[36px] ${
+                  step1View === 'charts'
+                    ? 'bg-white text-slate-900 font-bold shadow-xs border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Grafik Analitik Interaktif</span>
+              </button>
 
-              return (
-                <div
-                  key={sector.id}
-                  onClick={() => {
-                    setSelectedSectorId(sector.id);
-                    if (sector.sub_programs.length > 0) {
-                      setSelectedSubProgramId(sector.sub_programs[0].id);
-                    }
-                    setCurrentStep(2);
-                  }}
-                  className={`p-5 rounded-2xl border transition-colors cursor-pointer group flex flex-col justify-between ${
-                    isSelected 
-                      ? 'bg-emerald-50/60 border-emerald-500 ring-2 ring-emerald-500/20' 
-                      : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
-                  }`}
+              <button
+                onClick={() => setStep1View('cards')}
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer flex items-center gap-1.5 min-h-[36px] ${
+                  step1View === 'cards'
+                    ? 'bg-white text-slate-900 font-bold shadow-xs border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <LayoutGrid className="w-3.5 h-3.5 text-blue-600" />
+                <span>Kartu 6 Sektor</span>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsGlossaryOpen(true)}
+                className="inline-flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer min-h-[38px]"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+                <span>Kamus Istilah APBD Warga</span>
+              </button>
+
+              {onOpenFeedback && (
+                <button
+                  onClick={onOpenFeedback}
+                  className="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer min-h-[38px]"
                 >
-                  <div>
-                    {/* Top Sector Header */}
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
-                        {getSectorIcon(sector.id)}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        {projectCount > 0 && (
-                          <span className="text-[10px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md tabular-nums">
-                            {projectCount} Proyek
-                          </span>
-                        )}
-                        <span className="text-xs font-black text-slate-900 bg-slate-100 px-2 py-0.5 rounded-md tabular-nums">
-                          {sector.percentage}% APBD
-                        </span>
-                      </div>
-                    </div>
+                  <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Kotak Suara Warga</span>
+                </button>
+              )}
+            </div>
+          </div>
 
-                    <h2 className="text-base font-bold text-slate-900 leading-snug group-hover:text-emerald-700 transition-colors">
-                      {sector.name}
-                    </h2>
+          {/* Interactive Recharts Component (Mentor Point 1 & Point 3) */}
+          {step1View === 'charts' && (
+            <InteractiveBudgetCharts 
+              onOpenGlossary={() => setIsGlossaryOpen(true)}
+              onSelectSector={(sectorKey) => {
+                const matched = apbdData.sectors.find((s) => s.id.includes(sectorKey));
+                if (matched) {
+                  setSelectedSectorId(matched.id);
+                  if (matched.sub_programs.length > 0) {
+                    setSelectedSubProgramId(matched.sub_programs[0].id);
+                  }
+                  setCurrentStep(2);
+                }
+              }}
+            />
+          )}
 
-                    <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-                      {sector.description}
-                    </p>
-                  </div>
+          {/* 6 Sector Cards Grid */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-800">
+              <span>Pilih Sektor untuk Membedah Sub-Program &amp; Titik Proyek:</span>
+              <span className="text-slate-500 font-normal">Klik salah satu sektor</span>
+            </div>
 
-                  {/* Budget & Action Row */}
-                  <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {apbdData.sectors.map((sector) => {
+                const isSelected = sector.id === selectedSectorId;
+                const projectCount = sector.sub_programs.reduce((acc, sp) => acc + sp.projects.length, 0);
+
+                return (
+                  <div
+                    key={sector.id}
+                    onClick={() => {
+                      setSelectedSectorId(sector.id);
+                      if (sector.sub_programs.length > 0) {
+                        setSelectedSubProgramId(sector.sub_programs[0].id);
+                      }
+                      setCurrentStep(2);
+                    }}
+                    className={`p-5 rounded-2xl border transition-colors cursor-pointer group flex flex-col justify-between ${
+                      isSelected 
+                        ? 'bg-emerald-50/60 border-emerald-500 ring-2 ring-emerald-500/20' 
+                        : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
+                    }`}
+                  >
                     <div>
-                      <div className="text-[10px] text-slate-500 font-medium">Porsi Anggaran</div>
-                      <div className="font-extrabold text-sm text-slate-900 tabular-nums">
-                        {formatRupiah(sector.budget).replace(',00', '')}
+                      {/* Top Sector Header */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+                          {getSectorIcon(sector.id)}
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          {projectCount > 0 && (
+                            <span className="text-[10px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md tabular-nums">
+                              {projectCount} Proyek
+                            </span>
+                          )}
+                          <span className="text-xs font-black text-slate-900 bg-slate-100 px-2 py-0.5 rounded-md tabular-nums">
+                            {sector.percentage}% APBD
+                          </span>
+                        </div>
                       </div>
+
+                      <h2 className="text-base font-bold text-slate-900 leading-snug group-hover:text-emerald-700 transition-colors">
+                        {sector.name}
+                      </h2>
+
+                      <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                        {sector.description}
+                      </p>
                     </div>
 
-                    <div className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 group-hover:translate-x-0.5 transition-transform">
-                      <span>Bedah Sektor</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                    {/* Budget & Action Row */}
+                    <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <div>
+                        <div className="text-[10px] text-slate-500 font-medium">Porsi Anggaran</div>
+                        <div className="font-extrabold text-sm text-slate-900 tabular-nums">
+                          {formatRupiah(sector.budget).replace(',00', '')}
+                        </div>
+                      </div>
+
+                      <div className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 group-hover:translate-x-0.5 transition-transform">
+                        <span>Bedah Sektor</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
 
           {/* Proportional Flow Bar Summary */}
@@ -412,17 +495,38 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
           {/* HUMAN CONVERSION IMPACT CARD (PENTING UNTUK WARGA AWAM) */}
           {selectedSubProgram?.human_conversion && (
             <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 relative overflow-hidden">
-              <div className="flex items-start gap-3.5">
-                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <div className="space-y-1">
-                  <div className="text-xs font-bold text-emerald-800">
-                    Apa Artinya Pos Anggaran Ini Bagi Warga Jakarta?
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-5 h-5" />
                   </div>
-                  <blockquote className="text-sm sm:text-base font-semibold text-slate-900 leading-relaxed">
-                    "{selectedSubProgram.human_conversion}"
-                  </blockquote>
+                  <div className="space-y-1">
+                    <div className="text-xs font-bold text-emerald-800">
+                      Dampak Nyata yang Dirasakan Warga:
+                    </div>
+                    <div className="text-sm sm:text-base font-semibold text-slate-900 leading-relaxed">
+                      {selectedSubProgram.human_conversion}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 self-start sm:self-center flex-shrink-0">
+                  <button
+                    onClick={() => setIsGlossaryOpen(true)}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800 bg-white hover:bg-emerald-100/60 border border-emerald-200 px-3 py-1.5 rounded-lg transition cursor-pointer min-h-[36px]"
+                  >
+                    <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Kamus Istilah</span>
+                  </button>
+                  {onOpenFeedback && (
+                    <button
+                      onClick={onOpenFeedback}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg transition cursor-pointer min-h-[36px]"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Kirim Aspirasi</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -628,6 +732,12 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
 
         </section>
       )}
+
+      {/* Modal Kamus Istilah APBD Warga */}
+      <BudgetGlossaryModal
+        isOpen={isGlossaryOpen}
+        onClose={() => setIsGlossaryOpen(false)}
+      />
 
     </div>
   );

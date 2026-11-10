@@ -11,7 +11,8 @@ import {
   Check, 
   Share2,
   ShieldAlert,
-  Calendar
+  Calendar,
+  MessageSquare
 } from 'lucide-react';
 
 export interface ProjectDetail {
@@ -33,11 +34,13 @@ export interface ProjectDetail {
 interface ProjectActionModalProps {
   project: ProjectDetail | null;
   onClose: () => void;
+  onOpenCitizenFeedback?: (project: ProjectDetail) => void;
 }
 
 export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
   project,
   onClose,
+  onOpenCitizenFeedback,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -222,27 +225,54 @@ export const ProjectActionModal: React.FC<ProjectActionModalProps> = ({
             <div className="flex flex-col sm:flex-row gap-2 pt-1">
               <button
                 onClick={handleAdvocateTwitter}
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition cursor-pointer"
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition cursor-pointer min-h-[40px]"
               >
                 <Share2 className="w-3.5 h-3.5 text-sky-400" />
-                <span>Teruskan ke X/Twitter Pemda</span>
+                <span>Teruskan ke X/Twitter</span>
               </button>
 
               <button
                 onClick={handleOpenLapor}
-                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-rose-50 text-rose-700 border border-rose-300 text-xs font-bold py-2.5 px-3 rounded-lg transition cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-rose-50 text-rose-700 border border-rose-300 text-xs font-bold py-2.5 px-3 rounded-lg transition cursor-pointer min-h-[40px]"
               >
-                <span>Aduan LAPOR.go.id</span>
+                <span>LAPOR.go.id</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </button>
             </div>
+
+            {onOpenCitizenFeedback && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onOpenCitizenFeedback(project);
+                }}
+                className="w-full inline-flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition cursor-pointer min-h-[40px]"
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-emerald-200" />
+                <span>Kirim Aduan ke Kotak Suara Warga ANGIN</span>
+              </button>
+            )}
           </div>
         ) : (
-          <div className="bg-emerald-50/60 border border-emerald-200 rounded-xl p-3.5 flex items-center justify-between text-xs text-emerald-900 mb-4">
-            <span className="flex items-center gap-1.5 font-medium">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>Proyek ini berjalan sesuai linimasa kontrak pengadaan (Target: {targetDeadline}).</span>
-            </span>
+          <div className="space-y-2 mb-4">
+            <div className="bg-emerald-50/60 border border-emerald-200 rounded-xl p-3.5 flex items-center justify-between text-xs text-emerald-900">
+              <span className="flex items-center gap-1.5 font-medium">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Proyek ini berjalan sesuai linimasa kontrak pengadaan (Target: {targetDeadline}).</span>
+              </span>
+            </div>
+            {onOpenCitizenFeedback && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onOpenCitizenFeedback(project);
+                }}
+                className="w-full inline-flex items-center justify-center gap-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold py-2 px-3 rounded-lg transition cursor-pointer min-h-[38px]"
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Punya masukan warga terkait proyek ini? Kirim aspirasi</span>
+              </button>
+            )}
           </div>
         )}
 

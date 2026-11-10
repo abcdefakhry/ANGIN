@@ -15,12 +15,16 @@ import {
   ChevronRight,
   Home,
   Workflow,
-  Info
+  Info,
+  MessageSquare,
+  BookOpen
 } from 'lucide-react';
 import type { ProjectDetail } from './components/ProjectActionModal';
 import { CommandSearchModal } from './components/CommandSearchModal';
 import { ProjectActionModal } from './components/ProjectActionModal';
 import { BudgetFlowMiniPreview } from './components/BudgetFlowMiniPreview';
+import { CitizenFeedbackModal } from './components/CitizenFeedbackModal';
+import { BudgetGlossaryModal } from './components/BudgetGlossaryModal';
 import apbdData from './data/apbd-jakarta.json';
 
 const CivicReceiptModal = lazy(() => import('./components/CivicReceiptModal').then(m => ({ default: m.CivicReceiptModal })));
@@ -75,6 +79,10 @@ export default function App() {
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectDetail | null>(null);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [feedbackCategory, setFeedbackCategory] = useState<'usulan' | 'laporan' | 'pertanyaan'>('usulan');
+  const [feedbackProjectTitle, setFeedbackProjectTitle] = useState<string | undefined>(undefined);
+  const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
 
   // Flat list of projects with coordinates for the preview mini-map
   const projectsWithCoords = useMemo(() => {
@@ -163,6 +171,25 @@ export default function App() {
       <ProjectActionModal 
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
+        onOpenCitizenFeedback={(proj) => {
+          setFeedbackCategory('laporan');
+          setFeedbackProjectTitle(proj.title);
+          setIsFeedbackOpen(true);
+        }}
+      />
+
+      {/* 4. MODAL KOTAK SUARA & ASPIRASI WARGA (MENTOR POINT #4) */}
+      <CitizenFeedbackModal
+        isOpen={isFeedbackOpen}
+        onClose={() => setIsFeedbackOpen(false)}
+        defaultCategory={feedbackCategory}
+        defaultProjectTitle={feedbackProjectTitle}
+      />
+
+      {/* 5. MODAL KAMUS ISTILAH APBD WARGA (MENTOR POINT #2) */}
+      <BudgetGlossaryModal
+        isOpen={isGlossaryOpen}
+        onClose={() => setIsGlossaryOpen(false)}
       />
 
       {/* 4. TOP HEADER / NAVBAR */}
@@ -279,7 +306,37 @@ export default function App() {
                 )}
               </button>
 
-              {/* 5. Mengapa ANGIN */}
+              {/* 5. Suara Warga / Aspirasi (Mentor Saran #4) */}
+              <button
+                onClick={() => {
+                  setFeedbackCategory('usulan');
+                  setFeedbackProjectTitle(undefined);
+                  setIsFeedbackOpen(true);
+                }}
+                className="group relative flex items-center h-8 px-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-white/80 transition-[background-color,color] duration-200 cursor-pointer"
+                title="Kotak Suara & Aspirasi Warga"
+                aria-label="Suara Warga"
+              >
+                <MessageSquare className="w-4 h-4 flex-shrink-0 text-emerald-600 group-hover:text-emerald-700 transition-colors" />
+                <span className="max-w-0 opacity-0 overflow-hidden whitespace-nowrap text-xs font-semibold group-hover:max-w-[140px] group-hover:opacity-100 group-hover:ml-1.5 group-focus-visible:max-w-[140px] group-focus-visible:opacity-100 group-focus-visible:ml-1.5 transition-[max-width,opacity,margin] duration-300 ease-out">
+                  Suara Warga
+                </span>
+              </button>
+
+              {/* 6. Kamus APBD (Mentor Saran #2) */}
+              <button
+                onClick={() => setIsGlossaryOpen(true)}
+                className="group relative flex items-center h-8 px-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-white/80 transition-[background-color,color] duration-200 cursor-pointer"
+                title="Kamus Istilah APBD Warga"
+                aria-label="Kamus APBD"
+              >
+                <BookOpen className="w-4 h-4 flex-shrink-0 text-blue-600 group-hover:text-blue-700 transition-colors" />
+                <span className="max-w-0 opacity-0 overflow-hidden whitespace-nowrap text-xs font-semibold group-hover:max-w-[140px] group-hover:opacity-100 group-hover:ml-1.5 group-focus-visible:max-w-[140px] group-focus-visible:opacity-100 group-focus-visible:ml-1.5 transition-[max-width,opacity,margin] duration-300 ease-out">
+                  Kamus APBD
+                </span>
+              </button>
+
+              {/* 7. Mengapa ANGIN */}
               <button
                 onClick={() => {
                   if (activeView !== 'home') {
@@ -431,6 +488,18 @@ export default function App() {
             <Sliders className="w-3.5 h-3.5" />
             <span>Simulasi</span>
           </button>
+          <button
+            onClick={() => {
+              setFeedbackCategory('usulan');
+              setFeedbackProjectTitle(undefined);
+              setIsFeedbackOpen(true);
+            }}
+            className="flex-1 py-2 text-xs font-bold rounded-lg transition-colors min-h-[44px] flex items-center justify-center gap-1 cursor-pointer text-slate-600 hover:text-slate-900"
+            title="Kotak Suara Warga"
+          >
+            <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Aspirasi</span>
+          </button>
         </div>
       </header>
 
@@ -448,6 +517,11 @@ export default function App() {
               onNavigateHome={() => {
                 setActiveView('home');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onOpenFeedback={() => {
+                setFeedbackCategory('usulan');
+                setFeedbackProjectTitle(undefined);
+                setIsFeedbackOpen(true);
               }}
             />
           </main>
@@ -526,6 +600,18 @@ export default function App() {
               >
                 <Sliders className="w-4 h-4 text-emerald-400" />
                 <span>Simulasi Arsitek Kota</span>
+              </button>
+
+              <button 
+                onClick={() => {
+                  setFeedbackCategory('usulan');
+                  setFeedbackProjectTitle(undefined);
+                  setIsFeedbackOpen(true);
+                }}
+                className="inline-flex items-center justify-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-4 py-3 rounded-xl text-sm border border-emerald-200 transition-colors min-h-[44px] cursor-pointer"
+              >
+                <MessageSquare className="w-4 h-4 text-emerald-600" />
+                <span>Kotak Aspirasi Warga</span>
               </button>
             </div>
 

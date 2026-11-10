@@ -17,7 +17,7 @@ import {
   Layers, 
   Calendar, 
   Info, 
-  Sparkles,
+  HeartHandshake,
   ArrowRight
 } from 'lucide-react';
 
@@ -363,7 +363,7 @@ export const InteractiveBudgetCharts: React.FC<InteractiveBudgetChartsProps> = (
 
             <div className="space-y-2">
               <div className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                <HeartHandshake className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Dampak Nyata yang Dirasakan Warga:</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-700 bg-white p-3.5 rounded-xl border border-slate-200 leading-relaxed font-medium">

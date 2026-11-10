@@ -6,7 +6,7 @@ import {
   AlertTriangle, 
   CheckCircle2, 
   Clock, 
-  Sparkles, 
+  HeartHandshake, 
   ArrowRight, 
   ArrowLeft, 
   RotateCcw, 
@@ -498,7 +498,7 @@ export const BudgetFlowExplorer: React.FC<BudgetFlowExplorerProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-start gap-3.5">
                   <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-5 h-5" />
+                    <HeartHandshake className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
                     <div className="text-xs font-bold text-emerald-800">

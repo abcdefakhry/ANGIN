@@ -11,7 +11,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Sliders,
-  Sparkles,
   ChevronRight,
   Home,
   Workflow,
@@ -294,7 +293,7 @@ export default function App() {
                     ? 'bg-white text-slate-900 font-bold border border-slate-200' 
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
                 }`}
-                title="The City Architect: Simulasi APBD Warga"
+                title="Simulasi Alokasi APBD Warga"
                 aria-label="Simulasi Kota"
               >
                 <Sliders className={`w-4 h-4 flex-shrink-0 transition-colors ${activeView === 'simulator' ? 'text-emerald-600' : 'text-slate-500 group-hover:text-slate-900'}`} />
@@ -829,28 +828,28 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. SECTION THE REALITY GAP (Mengapa Harus Ada ANGIN?) */}
+      {/* 6. SECTION KOMPARASI DATA APBD */}
       <section id="reality-gap" className="border-y border-slate-200 bg-white py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <p className="text-sm font-semibold text-emerald-700 mb-2">
-              Keterbukaan data yang membumi
+            <p className="text-xs font-semibold text-emerald-800 uppercase tracking-wider mb-2">
+              Keterbukaan Data yang Membumi
             </p>
             <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               Mengubah Angka Birokrasi Jadi Bahasa Sehari-hari
             </h3>
-            <p className="text-sm text-slate-600 mt-2">
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
               APBD adalah uang warga Jakarta. Setiap rupiah harus terbuka dan terasa manfaatnya langsung bagi kehidupan sehari-hari.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
             {/* Sisi Kiri: Cara Lama */}
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-7 flex flex-col justify-between">
+            <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-6 sm:p-7 flex flex-col justify-between shadow-2xs">
               <div>
-                <div className="inline-flex items-center gap-1.5 bg-red-100 text-red-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full mb-3">
-                  <AlertCircle className="w-3.5 h-3.5" />
-                  <span>Laporan Konvensional</span>
+                <div className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-full border border-slate-200 mb-3">
+                  <AlertCircle className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Format Konvensional</span>
                 </div>
                 <h4 className="text-lg font-bold text-slate-900 mb-2">Dokumen PDF 400+ Halaman</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
@@ -859,15 +858,15 @@ export default function App() {
               </div>
 
               <div className="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 italic">
-                "Warga sulit mengawasi karena bahasa laporan dibuat untuk auditor, bukan untuk rakyat."
+                "Warga sulit mengawasi karena bahasa laporan dibuat untuk auditor, bukan untuk masyarakat pembayar pajak."
               </div>
             </div>
 
             {/* Sisi Kanan: Cara ANGIN */}
-            <div className="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-6 sm:p-7 flex flex-col justify-between">
+            <div className="bg-white border border-emerald-300/80 rounded-2xl p-6 sm:p-7 flex flex-col justify-between shadow-[0_4px_20px_-4px_rgba(5,150,105,0.08)] relative overflow-hidden">
               <div>
-                <div className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full mb-3">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200 mb-3">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Pendekatan ANGIN</span>
                 </div>
                 <h4 className="text-lg font-bold text-slate-900 mb-2">Rupiah Nyata hingga Titik Peta</h4>
@@ -876,8 +875,8 @@ export default function App() {
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-emerald-200 text-xs font-semibold text-emerald-800 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-emerald-600" />
+              <div className="mt-6 pt-4 border-t border-slate-100 text-xs font-semibold text-emerald-800 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 <span>100% Data Resmi Pemprov DKI Jakarta (Tahun 2026)</span>
               </div>
             </div>

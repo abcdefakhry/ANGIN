@@ -7,7 +7,7 @@ import {
   HelpCircle, 
   ThumbsUp, 
   MapPin, 
-  Sparkles, 
+  Lightbulb, 
   MessageSquare, 
   Filter, 
   Check, 
@@ -398,7 +398,7 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-amber-500" />
+            <MessageSquare className="w-4 h-4 text-emerald-600" />
             <span>Radar Aspirasi Warga ({aspirations.length})</span>
           </button>
         </div>
@@ -461,7 +461,7 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
                           : 'bg-white border-slate-200 hover:bg-slate-50'
                       }`}
                     >
-                      <Sparkles className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <Lightbulb className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
                       <div>
                         <div className="font-bold text-slate-900">Usulan Anggaran</div>
                         <div className="text-[10px] text-slate-500">Usul fasilitas baru / rehab</div>

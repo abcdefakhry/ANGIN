@@ -1,7 +1,6 @@
 import React, { useState, useId, useMemo } from 'react';
 import { 
   RotateCcw, 
-  Sparkles, 
   Car, 
   Wind, 
   GraduationCap, 
@@ -42,7 +41,7 @@ export default function CityArchitectSimulator({
   onNavigateHome,
   onNavigateExplorer,
 }: CityArchitectSimulatorProps) {
-  const manifestoCardId = useId();
+  const recommendationCardId = useId();
   // Initial official DKI Jakarta 2026 APBD distribution
   const initialSectors: SectorBudget[] = [
     {
@@ -196,11 +195,11 @@ export default function CityArchitectSimulator({
     return Math.round((diff / 10.9) * 100);
   }, [kesBudget]);
 
-  // Export Manifesto PNG
-  const exportManifesto = async () => {
+  // Export Recommendation PNG
+  const exportRecommendation = async () => {
     setIsExporting(true);
     try {
-      const card = document.getElementById(manifestoCardId);
+      const card = document.getElementById(recommendationCardId);
       if (!card) return;
 
       const canvas = await html2canvas(card, {
@@ -212,7 +211,7 @@ export default function CityArchitectSimulator({
       const image = canvas.toDataURL('image/png');
       const link = document.createElement('a');
       link.href = image;
-      link.download = `Manifesto-Anggaran-Warga-ANGIN-${new Date().toISOString().slice(0, 10)}.png`;
+      link.download = `Rancangan-Anggaran-Warga-ANGIN-${new Date().toISOString().slice(0, 10)}.png`;
       link.click();
 
       confetti({
@@ -221,15 +220,15 @@ export default function CityArchitectSimulator({
         origin: { y: 0.8 },
       });
     } catch (err) {
-      console.error('Gagal mengekspor manifesto:', err);
+      console.error('Gagal mengekspor gambar rekomendasi:', err);
     } finally {
       setIsExporting(false);
     }
   };
 
-  // Copy Manifesto Text
-  const copyManifestoText = () => {
-    const text = `[MANIFESTO ANGGARAN WARGA JAKARTA 2026 - ANGIN.id]
+  // Copy Recommendation Text
+  const copyRecommendationText = () => {
+    const text = `[RANCANGAN ANGGARAN WARGA JAKARTA 2026 - ANGIN.id]
 Total Alokasi Rancangan: Rp ${totalAllocated} T (Status: ${budgetDelta === 0 ? 'Seimbang 100%' : budgetDelta > 0 ? `Defisit +Rp ${budgetDelta} T` : `Sisa Kas -Rp ${Math.abs(budgetDelta)} T`})
 
 Rincian Prioritas Warga:
@@ -260,24 +259,24 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
           <div className="flex items-center gap-2 mb-2">
             <button
               onClick={onNavigateHome}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Kembali ke Beranda</span>
             </button>
             <span className="text-slate-300">•</span>
-            <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
-              <Sparkles className="w-3 h-3" />
-              <span>Architects of Change Simulator</span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              <span>Simulasi Alokasi Warga</span>
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-            The City Architect: Simulasi APBD Alternatif Warga
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-[-0.02em]">
+            Rancang Prioritas APBD DKI Jakarta 2026
           </h1>
           <p className="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
-            Jika Anda dipercaya merancang arah pembangunan DKI Jakarta, bagaimana Anda membagi uang pajak warga sebesar{' '}
-            <strong className="text-slate-900 font-bold tabular-nums">Rp 84,2 Triliun</strong>? Geser anggaran sektor di bawah dan amati proyeksi dampaknya secara langsung.
+            Jika kamu memegang kendali atas alokasi anggaran belanja daerah sebesar{' '}
+            <strong className="text-slate-900 font-bold tabular-nums">Rp 84,2 Triliun</strong>, sektor mana yang ingin kamu prioritaskan? Geser anggaran sektor di bawah dan amati proyeksi dampaknya secara langsung.
           </p>
         </div>
 
@@ -285,38 +284,38 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => applyPreset('default')}
-            className={`px-3 py-2 rounded-xl text-xs font-bold border transition-colors flex items-center gap-1.5 cursor-pointer min-h-[40px] ${
+            className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all active:scale-[0.98] flex items-center gap-1.5 cursor-pointer min-h-[40px] ${
               activePreset === 'default'
-                ? 'bg-slate-900 text-white border-slate-900'
+                ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                 : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
             }`}
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset Status Quo</span>
+            <span>Alokasi Resmi 2026</span>
           </button>
 
           <button
             onClick={() => applyPreset('eco_transit')}
-            className={`px-3 py-2 rounded-xl text-xs font-bold border transition-colors flex items-center gap-1.5 cursor-pointer min-h-[40px] ${
+            className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all active:scale-[0.98] flex items-center gap-1.5 cursor-pointer min-h-[40px] ${
               activePreset === 'eco_transit'
-                ? 'bg-emerald-600 text-white border-emerald-600'
+                ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
                 : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
             }`}
           >
             <TreePine className="w-3.5 h-3.5" />
-            <span>Skenario Hijau & Transit</span>
+            <span>Fokus Transportasi &amp; Lingkungan</span>
           </button>
 
           <button
             onClick={() => applyPreset('human_first')}
-            className={`px-3 py-2 rounded-xl text-xs font-bold border transition-colors flex items-center gap-1.5 cursor-pointer min-h-[40px] ${
+            className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all active:scale-[0.98] flex items-center gap-1.5 cursor-pointer min-h-[40px] ${
               activePreset === 'human_first'
-                ? 'bg-blue-600 text-white border-blue-600'
+                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                 : 'bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100'
             }`}
           >
             <GraduationCap className="w-3.5 h-3.5" />
-            <span>Skenario Investasi Manusia</span>
+            <span>Fokus Pendidikan &amp; Bansos</span>
           </button>
         </div>
       </div>
@@ -560,7 +559,7 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
         </div>
       </div>
 
-      {/* MANIFESTO CARD EXPORT SECTION */}
+      {/* RECOMMENDATION CARD EXPORT SECTION */}
       <div className="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
@@ -569,61 +568,61 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
               <span>Aksi Nyata Warga Jakarta</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
-              Terbitkan Manifesto Anggaran Rancangan Anda
+              Simpan &amp; Bagikan Hasil Rancangan Anggaran Warga
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-              Jadikan hasil simulasi ini sebagai bahan advokasi publik untuk Musyawarah Perencanaan Pembangunan (Musrenbang) atau suarakan di media sosial untuk mendorong transparansi belanja kota.
+              Jadikan hasil simulasi ini sebagai bahan masukan warga dalam pra-Musyawarah Perencanaan Pembangunan (Musrenbang) atau suarakan di media sosial untuk mendorong transparansi belanja kota.
             </p>
           </div>
 
           <div className="flex items-center gap-2.5 flex-shrink-0">
             <button
-              onClick={copyManifestoText}
-              className="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer min-h-[44px]"
+              onClick={copyRecommendationText}
+              className="bg-slate-800 hover:bg-slate-700 active:scale-[0.98] text-white text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer min-h-[44px]"
             >
               <Share2 className="w-3.5 h-3.5 text-emerald-400" />
               <span>{copySuccess ? 'Tersalin ke Clipboard!' : 'Salin Teks Advokasi'}</span>
             </button>
 
             <button
-              onClick={exportManifesto}
+              onClick={exportRecommendation}
               disabled={isExporting}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer min-h-[44px] disabled:opacity-50"
+              className="bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer min-h-[44px] disabled:opacity-50"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>{isExporting ? 'Memproses Gambar...' : 'Unduh Kartu Manifesto (PNG)'}</span>
+              <span>{isExporting ? 'Memproses Gambar...' : 'Unduh Lembar Rekomendasi (PNG)'}</span>
             </button>
           </div>
         </div>
 
-        {/* Printable / Capturable Visual Manifesto Card */}
+        {/* Printable / Capturable Visual Recommendation Card */}
         <div 
-          id={manifestoCardId}
-          className="bg-white text-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 space-y-6"
+          id={recommendationCardId}
+          className="bg-white text-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6"
         >
           {/* Header Card */}
           <div className="flex items-start justify-between border-b border-slate-200 pb-5">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-extrabold text-base tracking-tight text-slate-900">ANGIN.id</span>
-                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
-                  Manifesto Anggaran Partisipatif
+                <span className="font-bold text-base tracking-tight text-slate-900">ANGIN.id</span>
+                <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  Rancangan Anggaran Partisipatif
                 </span>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                 Prioritas Pembangunan DKI Jakarta 2026 Pilihan Warga
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Disusun oleh Warga Jakarta sebagai <em>Architects of Change</em> melalui platform ANGIN.
+                Disusun oleh Warga Jakarta melalui simulasi anggaran publik di platform ANGIN.
               </p>
             </div>
 
             <div className="text-right">
-              <div className="text-xs font-bold text-slate-500">Pagu Total</div>
+              <div className="text-xs font-medium text-slate-500">Pagu Total</div>
               <div className="text-xl font-bold text-slate-900 tabular-nums font-mono">
                 Rp {totalAllocated.toFixed(1)} T
               </div>
-              <div className="text-[10px] text-slate-400">
+              <div className="text-xs text-slate-400">
                 {budgetDelta === 0 ? 'Seimbang 100%' : budgetDelta > 0 ? `Defisit +Rp ${budgetDelta} T` : `Surplus Kas Rp ${Math.abs(budgetDelta)} T`}
               </div>
             </div>
@@ -632,12 +631,12 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
           {/* Allocation Breakdown Table */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {sectors.map((s) => (
-              <div key={s.id} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                <div className="text-[11px] font-bold text-slate-700 truncate">{s.name}</div>
-                <div className="text-sm font-bold text-slate-900 tabular-nums font-mono mt-1">
+              <div key={s.id} className="p-3.5 bg-slate-50/80 rounded-xl border border-slate-200/70">
+                <div className="text-xs font-semibold text-slate-700 truncate">{s.name}</div>
+                <div className="text-base font-bold text-slate-900 tabular-nums font-mono mt-1">
                   Rp {s.currentBudget.toFixed(1)} T
                 </div>
-                <div className="text-[10px] text-slate-500 tabular-nums">
+                <div className="text-xs text-slate-500 tabular-nums font-mono">
                   {((s.currentBudget / TOTAL_APBD) * 100).toFixed(1)}% dari total APBD
                 </div>
               </div>
@@ -645,31 +644,31 @@ Dibuat melalui simulator partisipatif ANGIN (Anggaran Indonesia) #SuaraWargaANGI
           </div>
 
           {/* Projected Outcomes Grid */}
-          <div className="bg-emerald-50/70 border border-emerald-200/60 rounded-xl p-4">
+          <div className="bg-emerald-50/70 border border-emerald-200/70 rounded-xl p-4">
             <div className="text-xs font-bold text-emerald-900 mb-2">
-              Proyeksi Dampak Sosial & Kualitas Hidup Warga:
+              Proyeksi Dampak Sosial &amp; Kualitas Hidup Warga:
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-emerald-950">
               <div>
-                <span className="text-slate-600 block text-[11px]">Indeks Kemacetan:</span>
-                <strong className="text-sm font-bold tabular-nums text-emerald-900">{trafficIndex}%</strong>
-                <span className="text-[10px] text-slate-500 block">Baseline Jakarta: 53%</span>
+                <span className="text-slate-600 block text-xs">Indeks Kemacetan:</span>
+                <strong className="text-sm font-bold tabular-nums font-mono text-emerald-900">{trafficIndex}%</strong>
+                <span className="text-xs text-slate-500 block">Baseline Jakarta: 53%</span>
               </div>
               <div>
-                <span className="text-slate-600 block text-[11px]">Kualitas Udara (AQI):</span>
-                <strong className="text-sm font-bold tabular-nums text-emerald-900">{aqiIndex}</strong>
-                <span className="text-[10px] text-slate-500 block">Baseline Jakarta: 142</span>
+                <span className="text-slate-600 block text-xs">Kualitas Udara (AQI):</span>
+                <strong className="text-sm font-bold tabular-nums font-mono text-emerald-900">{aqiIndex}</strong>
+                <span className="text-xs text-slate-500 block">Baseline Jakarta: 142</span>
               </div>
               <div>
-                <span className="text-slate-600 block text-[11px]">Fasilitas Warga vs Operasional Kantor:</span>
-                <strong className="text-sm font-bold tabular-nums text-emerald-900">{publicSpendingRatio}% : {100 - publicSpendingRatio}%</strong>
-                <span className="text-[10px] text-slate-500 block">Alokasi langsung ke warga</span>
+                <span className="text-slate-600 block text-xs">Fasilitas Warga vs Operasional Kantor:</span>
+                <strong className="text-sm font-bold tabular-nums font-mono text-emerald-900">{publicSpendingRatio}% : {100 - publicSpendingRatio}%</strong>
+                <span className="text-xs text-slate-500 block">Alokasi langsung ke warga</span>
               </div>
             </div>
           </div>
 
           {/* Footer Card */}
-          <div className="flex items-center justify-between text-[10px] text-slate-400 pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-100">
             <span>Diterbitkan melalui <strong>angin.id</strong> • Hak Inisiatif Keterbukaan Publik</span>
             <span>Web In Action (WIA) 2026</span>
           </div>

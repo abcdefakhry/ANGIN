@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, BookOpen, Search, Sparkles, ArrowRight } from 'lucide-react';
+import { X, BookOpen, Search, HelpCircle, ArrowRight } from 'lucide-react';
 
 interface GlossaryTerm {
   term: string;
@@ -176,7 +176,7 @@ export const BudgetGlossaryModal: React.FC<BudgetGlossaryModalProps> = ({
                 {/* Plain definition */}
                 <div className="bg-white p-3 rounded-lg border border-slate-200/80 space-y-1">
                   <div className="text-[11px] font-bold text-emerald-800 flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                    <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Maksudnya dalam Bahasa Warga:</span>
                   </div>
                   <p className="text-xs text-slate-700 leading-relaxed font-medium">

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import confetti from 'canvas-confetti';
-import { Download, X, Check, Share2, ShieldCheck, Sparkles } from 'lucide-react';
+import { Download, X, Check, Share2, ShieldCheck, Receipt } from 'lucide-react';
 
 interface CivicReceiptModalProps {
   isOpen: boolean;
@@ -104,12 +104,12 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
 
         {/* Modal Header */}
         <div className="text-center mb-4">
-          <div className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full mb-1">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Civic Receipt Generator</span>
+          <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-emerald-200 mb-1">
+            <Receipt className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Kalkulator Struk Warga</span>
           </div>
           <h3 className="text-lg font-bold text-slate-900">Struk Resmi Kontribusi Warga</h3>
-          <p className="text-xs text-slate-500">Bukti visual kontribusi pajakmu untuk pembangunan kota</p>
+          <p className="text-xs text-slate-500">Bukti visual alokasi rupiah pajakmu untuk pembangunan kota</p>
         </div>
 
         {/* RECEIPT PAPER CONTAINER (Target html2canvas) */}
@@ -126,7 +126,7 @@ export const CivicReceiptModal: React.FC<CivicReceiptModalProps> = ({
               ANGIN.ID
             </div>
             <div className="text-[10px] text-slate-500 tracking-wider">
-              PORTAL KETERBUKAAN APBD &amp; CITIZEN RECEIPT
+              PORTAL KETERBUKAAN APBD &amp; STRUK PAJAK WARGA
             </div>
             <div className="text-[9px] text-slate-400 mt-1">
               www.angin.id • Jakarta, Indonesia

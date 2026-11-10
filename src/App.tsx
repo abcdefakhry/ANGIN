@@ -590,28 +590,31 @@ export default function App() {
                 <MapPin className="w-4 h-4 text-emerald-600" />
                 <span>Kawal Proyek di Peta</span>
               </button>
+            </div>
 
-              <button 
+            {/* Quick Action Link Pills (Tasteful Civic Instruments) */}
+            <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+              <span className="text-slate-400 font-medium mr-1">Fitur cepat:</span>
+              <button
                 onClick={() => {
                   setActiveView('simulator');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 active:scale-[0.98] hover:-translate-y-0.5 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-all shadow-sm hover:shadow-md min-h-[44px] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200/80 active:scale-[0.98] text-slate-700 font-medium transition-all cursor-pointer"
               >
-                <Sliders className="w-4 h-4 text-emerald-400" />
-                <span>Simulasi Arsitek Kota</span>
+                <Sliders className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Simulasi Anggaran</span>
               </button>
-
-              <button 
+              <button
                 onClick={() => {
                   setFeedbackCategory('usulan');
                   setFeedbackProjectTitle(undefined);
                   setIsFeedbackOpen(true);
                 }}
-                className="inline-flex items-center justify-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 active:scale-[0.98] hover:-translate-y-0.5 text-emerald-800 font-semibold px-4 py-3 rounded-xl text-sm border border-emerald-200 transition-all min-h-[44px] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100/80 active:scale-[0.98] text-emerald-800 font-medium transition-all cursor-pointer"
               >
-                <MessageSquare className="w-4 h-4 text-emerald-600" />
-                <span>Kotak Aspirasi Warga</span>
+                <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Kotak Suara Warga</span>
               </button>
             </div>
 
@@ -624,27 +627,37 @@ export default function App() {
 
           {/* Right Column: Hero Interactive Simulator Card */}
           <div className="lg:col-span-6">
-            <div data-ui="tax-simulator" className="bg-white rounded-2xl p-5 sm:p-7 border border-slate-200">
+            <div data-ui="tax-simulator" className="relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)]">
               
-              <div className="flex items-center justify-between">
-                <h2 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight">
-                  Simulasi Cepat Alokasi Pajak Anda
-                </h2>
-                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              {/* Card Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div>
+                  <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+                    Simulasi Cepat Alokasi Pajak Anda
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Geser nominal untuk melihat ke mana uangmu dialokasikan
+                  </p>
+                </div>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                   Interaktif
                 </span>
               </div>
 
               {/* Slider Input Row */}
               <div className="mt-5 space-y-3">
-                <div className="flex items-center justify-between text-xs sm:text-sm font-medium">
-                  <span className="text-slate-600">Gaji / Pengeluaran Bulanan:</span>
-                  <span className="text-slate-900 font-extrabold text-sm sm:text-base bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200 tabular-nums">
-                    {formatRupiah(income)} <span className="text-xs font-normal text-slate-500">/ bln</span>
-                  </span>
+                <div className="flex items-baseline justify-between">
+                  <span className="text-xs font-semibold text-slate-600">Gaji / Pengeluaran Bulanan:</span>
+                  <div className="text-right">
+                    <span className="font-mono font-bold text-2xl sm:text-3xl text-slate-900 tracking-tight tabular-nums">
+                      {formatRupiah(income)}
+                    </span>
+                    <span className="text-xs font-medium text-slate-400 ml-1">/ bln</span>
+                  </div>
                 </div>
 
-                <div className="relative pt-1">
+                <div className="relative pt-1.5">
                   <input
                     type="range"
                     min="2000000"
@@ -652,10 +665,10 @@ export default function App() {
                     step="500000"
                     value={income}
                     onChange={(e) => setIncome(Number(e.target.value))}
-                    className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600 focus:outline-none"
+                    className="w-full h-2.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-emerald-600 focus:outline-none border border-slate-200/60"
                     aria-label="Slider Gaji Bulanan"
                   />
-                  <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-medium">
+                  <div className="flex justify-between text-xs text-slate-400 mt-1.5 font-mono tabular-nums">
                     <span>Rp 2 Juta</span>
                     <span>Rp 10 Juta</span>
                     <span>Rp 20 Juta</span>
@@ -664,35 +677,38 @@ export default function App() {
               </div>
 
               {/* 3 Metrics Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mt-5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
                 
                 {/* Metric 1 */}
-                <div className="bg-slate-50 rounded-xl p-3 border border-slate-200 flex sm:flex-col justify-between items-center sm:items-start transition-colors">
-                  <div className="order-2 sm:order-1 font-bold text-sm sm:text-base text-slate-900 tabular-nums">
+                <div className="bg-slate-50/80 hover:bg-slate-100/60 rounded-xl p-3.5 border border-slate-200/70 transition-all flex sm:flex-col justify-between items-center sm:items-start group">
+                  <div className="order-2 sm:order-1 font-mono font-bold text-base sm:text-lg text-slate-900 tracking-tight tabular-nums">
                     {formatRupiah(perbaikanJalan)}
                   </div>
-                  <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-2">
-                    Penambalan Jalan
+                  <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-1.5 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-600 flex-shrink-0"></span>
+                    <span>Penambalan Jalan</span>
                   </div>
                 </div>
 
                 {/* Metric 2 */}
-                <div className="bg-slate-50 rounded-xl p-3 border border-slate-200 flex sm:flex-col justify-between items-center sm:items-start transition-colors">
-                  <div className="order-2 sm:order-1 font-bold text-sm sm:text-base text-slate-900 tabular-nums">
+                <div className="bg-slate-50/80 hover:bg-slate-100/60 rounded-xl p-3.5 border border-slate-200/70 transition-all flex sm:flex-col justify-between items-center sm:items-start group">
+                  <div className="order-2 sm:order-1 font-mono font-bold text-base sm:text-lg text-slate-900 tracking-tight tabular-nums">
                     {formatRupiah(subsidiPuskesmas)}
                   </div>
-                  <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-2">
-                    Subsidi Puskesmas
+                  <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-1.5 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-slate-800 flex-shrink-0"></span>
+                    <span>Subsidi Puskesmas</span>
                   </div>
                 </div>
 
                 {/* Metric 3 */}
-                <div className="bg-amber-50 rounded-xl p-3 border border-amber-200 flex sm:flex-col justify-between items-center sm:items-start transition-colors">
-                  <div className="order-2 sm:order-1 font-bold text-sm sm:text-base text-slate-900 tabular-nums">
+                <div className="bg-slate-50/80 hover:bg-slate-100/60 rounded-xl p-3.5 border border-slate-200/70 transition-all flex sm:flex-col justify-between items-center sm:items-start group">
+                  <div className="order-2 sm:order-1 font-mono font-bold text-base sm:text-lg text-slate-900 tracking-tight tabular-nums">
                     {formatRupiah(subsidiTransportasi)}
                   </div>
-                  <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-2">
-                    Subsidi Bus &amp; MRT
+                  <div className="order-1 sm:order-2 text-xs text-slate-600 font-medium sm:mt-1.5 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-amber-500 flex-shrink-0"></span>
+                    <span>Subsidi Bus &amp; MRT</span>
                   </div>
                 </div>
 
@@ -702,24 +718,24 @@ export default function App() {
               <div className="mt-5 pt-1">
                 <div className="flex justify-between items-center text-xs font-semibold text-slate-700 mb-2">
                   <span>Proporsi 3 Sektor Fasilitas:</span>
-                  <span className="text-slate-500 tabular-nums font-semibold text-[11px]">{formatRupiah(totalTrio)} / bln</span>
+                  <span className="text-slate-500 font-mono font-semibold text-xs tabular-nums">
+                    {formatRupiah(totalTrio)} <span className="font-sans font-normal text-slate-400">/ bln</span>
+                  </span>
                 </div>
-                <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden flex">
+                <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden flex gap-0.5 p-0.5 border border-slate-200/60">
                   <div 
                     style={{ width: `${(perbaikanJalan / totalTrio) * 100}%` }} 
-                    className="bg-emerald-600 h-full transition-[width] duration-300"
+                    className="bg-emerald-600 h-full rounded-l-full transition-[width] duration-300"
                     title={`Jalan: ${formatRupiah(perbaikanJalan)}`}
                   ></div>
-                  <div style={{ width: '2px' }} className="bg-white h-full"></div>
                   <div 
                     style={{ width: `${(subsidiPuskesmas / totalTrio) * 100}%` }} 
                     className="bg-slate-800 h-full transition-[width] duration-300"
                     title={`Puskesmas: ${formatRupiah(subsidiPuskesmas)}`}
                   ></div>
-                  <div style={{ width: '2px' }} className="bg-white h-full"></div>
                   <div 
                     style={{ width: `${(subsidiTransportasi / totalTrio) * 100}%` }} 
-                    className="bg-amber-500 h-full transition-[width] duration-300"
+                    className="bg-amber-500 h-full rounded-r-full transition-[width] duration-300"
                     title={`Transportasi: ${formatRupiah(subsidiTransportasi)}`}
                   ></div>
                 </div>
@@ -728,59 +744,60 @@ export default function App() {
               {/* Expandable Section: Lihat Sektor Lainnya (Zero Empty State - Celah 2.2) */}
               <div className="mt-4 pt-3 border-t border-slate-100">
                 <button
+                  type="button"
                   onClick={() => setShowOtherSectors(!showOtherSectors)}
-                  className="w-full flex items-center justify-between text-xs font-semibold text-emerald-700 hover:text-emerald-800 transition py-2 cursor-pointer min-h-[44px]"
+                  className="w-full flex items-center justify-between text-xs font-semibold text-slate-700 hover:text-emerald-700 transition py-2 px-1 rounded-lg cursor-pointer min-h-[44px]"
                 >
                   <span className="flex items-center gap-1.5">
-                    <Sliders className="w-3.5 h-3.5" />
+                    <Sliders className="w-3.5 h-3.5 text-emerald-600" />
                     <span>{showOtherSectors ? 'Sembunyikan Sektor Lainnya' : 'Buka Rincian 6 Sektor APBD Lengkap (100% / Rp 84,2 T)'}</span>
                   </span>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showOtherSectors ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform text-slate-400 ${showOtherSectors ? 'rotate-180 text-emerald-600' : ''}`} />
                 </button>
 
                 {showOtherSectors && (
-                  <div className="mt-2 p-3.5 bg-slate-50 rounded-xl space-y-2.5 text-xs border border-slate-200/80 animate-in fade-in duration-200">
-                    <div className="text-[11px] text-slate-500 font-medium pb-1 border-b border-slate-200 flex justify-between">
+                  <div className="mt-2 p-3 bg-slate-50/70 rounded-xl space-y-2 text-xs border border-slate-200/70 animate-in fade-in duration-200">
+                    <div className="text-xs text-slate-500 font-medium pb-2 border-b border-slate-200/60 flex justify-between">
                       <span>Porsi 6 Sektor Utama Anggaran DKI:</span>
-                      <span className="font-bold text-slate-700">Total 100% (Rp 84,2 T)</span>
+                      <span className="font-mono font-bold text-slate-800">Total 100% (Rp 84,2 T)</span>
                     </div>
 
                     {apbdData.sectors.map((sec) => (
                       <div 
                         key={sec.id} 
                         onClick={() => setSelectedSectorId(selectedSectorId === sec.id ? null : sec.id)}
-                        className={`p-2 rounded-lg border transition cursor-pointer ${
+                        className={`p-2.5 rounded-lg border transition cursor-pointer ${
                           selectedSectorId === sec.id 
                             ? 'bg-white border-emerald-300 shadow-xs' 
-                            : 'bg-white/60 border-slate-200/60 hover:bg-white'
+                            : 'bg-white/80 border-slate-200/60 hover:bg-white'
                         }`}
                       >
                         <div className="flex justify-between items-center">
-                          <span className="text-slate-800 font-bold flex items-center gap-2">
+                          <span className="text-slate-800 font-semibold flex items-center gap-2">
                             <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: sec.color }}></span>
                             <span>{sec.name}</span>
                           </span>
                           <div className="flex items-center gap-2">
-                            <span className="font-extrabold text-slate-900">{sec.percentage}%</span>
+                            <span className="font-mono font-bold text-slate-900 text-xs tabular-nums">{sec.percentage}%</span>
                             <ChevronRight className={`w-3 h-3 text-slate-400 transition-transform ${selectedSectorId === sec.id ? 'rotate-90' : ''}`} />
                           </div>
                         </div>
 
                         {/* Sub-Programs Detail if Active */}
                         {selectedSectorId === sec.id && (
-                          <div className="mt-2 pt-2 border-t border-slate-100 text-[11px] space-y-1.5 text-slate-600">
+                          <div className="mt-2.5 pt-2 border-t border-slate-100 text-xs space-y-1.5 text-slate-600">
                             <p className="italic text-slate-500">{sec.description}</p>
                             {sec.sub_programs.length > 0 ? (
-                              <div className="space-y-1 pt-1">
+                              <div className="space-y-1.5 pt-1">
                                 {sec.sub_programs.map((sub) => (
-                                  <div key={sub.id} className="flex justify-between bg-slate-50 p-1.5 rounded">
+                                  <div key={sub.id} className="flex justify-between bg-slate-50 p-2 rounded-md">
                                     <span className="font-medium text-slate-700">• {sub.name}</span>
-                                    <span className="font-bold text-slate-900">{formatRupiah(sub.budget)}</span>
+                                    <span className="font-mono font-bold text-slate-900 tabular-nums">{formatRupiah(sub.budget)}</span>
                                   </div>
                                 ))}
                               </div>
                             ) : (
-                              <div className="text-[10px] text-slate-400">Alokasi reguler APBD 2026</div>
+                              <div className="text-xs text-slate-400">Alokasi reguler APBD 2026</div>
                             )}
                           </div>
                         )}
@@ -794,7 +811,7 @@ export default function App() {
               <div className="mt-5">
                 <button
                   onClick={() => setIsReceiptOpen(true)}
-                  className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-3.5 px-4 rounded-xl transition-colors cursor-pointer min-h-[44px]"
+                  className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-[0.98] hover:-translate-y-0.5 text-white text-sm font-semibold py-3.5 px-4 rounded-xl transition-all shadow-sm hover:shadow-md cursor-pointer min-h-[44px]"
                 >
                   <Receipt className="w-4 h-4 text-emerald-400" />
                   <span>Cetak Struk Pajak Kasir Saya</span>
@@ -802,7 +819,7 @@ export default function App() {
               </div>
 
               {/* Catatan Transparansi Formula (Footnote Disclosure Sesuai Celah 2.4) */}
-              <div className="mt-4 pt-3 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed">
+              <div className="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-400 leading-relaxed">
                 <strong className="text-slate-500 font-semibold">Cara Hitung Kontribusi Pajak:</strong> Angka ini dihitung dari pajak konsumsi harian (seperti makan di restoran 10%), pajak motor/mobil, dan bagi hasil pajak penghasilan warga yang dikembalikan ke kas kota Jakarta.
               </div>
 

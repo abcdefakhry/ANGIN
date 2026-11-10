@@ -19,7 +19,8 @@ import {
   UploadCloud,
   Trash2,
   ZoomIn,
-  Loader2
+  Loader2,
+  RotateCcw
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -45,7 +46,8 @@ interface CitizenFeedbackModalProps {
   defaultProjectTitle?: string;
 }
 
-const STORAGE_KEY = 'angin_citizen_aspirations_v1';
+const STORAGE_KEY = 'angin_citizen_aspirations_v2';
+const LEGACY_STORAGE_KEY = 'angin_citizen_aspirations_v1';
 
 const INITIAL_ASPIRATIONS: CitizenFeedbackItem[] = [
   {
@@ -170,8 +172,18 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
   const [activeTab, setActiveTab] = useState<'submit' | 'feed'>('submit');
   const [aspirations, setAspirations] = useState<CitizenFeedbackItem[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) return JSON.parse(saved);
+      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as CitizenFeedbackItem[];
+        // Backfill imageUrl from INITIAL_ASPIRATIONS if missing for matching initial dummy items
+        return parsed.map((item) => {
+          const initMatch = INITIAL_ASPIRATIONS.find((init) => init.id === item.id);
+          if (initMatch?.imageUrl && !item.imageUrl) {
+            return { ...item, imageUrl: initMatch.imageUrl };
+          }
+          return item;
+        });
+      }
     } catch {
       // Fallback
     }
@@ -205,10 +217,20 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(aspirations));
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
     } catch {
       // ignore storage errors
     }
   }, [aspirations]);
+
+  const handleResetToDefault = () => {
+    setAspirations(INITIAL_ASPIRATIONS);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_ASPIRATIONS));
+    } catch {
+      // ignore
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -657,9 +679,20 @@ export const CitizenFeedbackModal: React.FC<CitizenFeedbackModalProps> = ({
           <div className="space-y-4">
             {/* Filter Bar */}
             <div className="flex flex-wrap items-center justify-between gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs">
-              <div className="flex items-center gap-1.5">
-                <Filter className="w-3.5 h-3.5 text-slate-400" />
-                <span className="font-semibold text-slate-600 text-[11px]">Filter:</span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  <Filter className="w-3.5 h-3.5 text-slate-400" />
+                  <span className="font-semibold text-slate-600 text-[11px]">Filter:</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleResetToDefault}
+                  className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-emerald-700 transition cursor-pointer"
+                  title="Muat ulang 4 data aspirasi bawaan lengkap dengan foto"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset Data Demo</span>
+                </button>
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
